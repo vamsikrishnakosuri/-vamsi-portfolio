@@ -1,152 +1,165 @@
+import { useEffect } from 'react';
 import './App.css';
 
 function App() {
+  useEffect(() => {
+    // Add scroll animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        }
+      });
+    });
+
+    document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       {/* Hero Section */}
-      <section className="bg-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <h1 className="text-5xl font-bold text-gray-900 mb-4">Vamsi Krishna Kosuri</h1>
-            <p className="text-xl text-gray-600 mb-4">Ph.D. Student &amp; Research Assistant, University of North Texas</p>
-            <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-8">
-              Innovative and detail-oriented student researcher with hands-on experience enhancing accessibility and usability in programming tools. Demonstrated expertise in improving user experiences by implementing code navigation and audio cues as part of the Google Blockly team. Strong technical skills and a user-centric approach to developing inclusive technologies, with a proven ability to collaborate effectively in multidisciplinary environments.
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-gradient"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center animate-on-scroll">
+            <h1 className="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+              Vamsi Krishna Kosuri
+            </h1>
+            <p className="text-2xl text-gray-300 mb-8">Ph.D. Student & Research Assistant</p>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-12">
+              Innovative researcher enhancing accessibility in programming tools through code navigation and audio cues.
             </p>
-            <div className="flex justify-center gap-4">
-              <a href="#projects" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">View Projects</a>
-              <a href="#contact" className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition">Contact Me</a>
+            <div className="flex justify-center gap-6">
+              <a href="#projects" className="px-8 py-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition-all duration-300 transform hover:scale-105">
+                View Projects
+              </a>
+              <a href="#contact" className="px-8 py-3 rounded-full border border-gray-600 hover:border-gray-400 transition-all duration-300 transform hover:scale-105">
+                Contact Me
+              </a>
             </div>
           </div>
         </div>
       </section>
 
       {/* About & Education Section */}
-      <section id="about" className="py-20">
+      <section id="about" className="py-32 relative">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">About & Education</h2>
-          <div className="max-w-3xl mx-auto text-gray-600 space-y-4">
-            <div>
-              <h3 className="font-semibold text-lg">Ph.D. in Computer Science and Engineering</h3>
-              <p>University of North Texas, Aug 2023 - Present (Current CGPA: 4.0)</p>
+          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+            About & Education
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-2xl font-semibold mb-4 text-blue-400">Ph.D. in Computer Science</h3>
+              <p className="text-gray-300">University of North Texas</p>
+              <p className="text-gray-400">Aug 2023 - Present (CGPA: 4.0)</p>
             </div>
-            <div>
-              <h3 className="font-semibold text-lg">M.S. in Computer Science</h3>
-              <p>University of North Texas, Jan 2022 - May 2023 (Final CGPA: 3.70)</p>
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-2xl font-semibold mb-4 text-purple-400">M.S. in Computer Science</h3>
+              <p className="text-gray-300">University of North Texas</p>
+              <p className="text-gray-400">Jan 2022 - May 2023 (CGPA: 3.70)</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Experience Section */}
-      <section id="experience" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Experience</h2>
-          <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="font-bold text-xl mb-2">Teaching Assistant</h3>
-              <p className="text-gray-700 mb-2">University of North Texas, Jan 2023 - Dec 2024</p>
-              <ul className="list-disc list-inside text-gray-600 space-y-1">
-                <li>Guided students in Human-Computer Interaction (HCI), Assembly Language, Cyber Security, and Secure E-Commerce.</li>
-                <li>Supported hands-on learning in usability, interaction design, system security, and e-commerce technologies.</li>
+      <section id="experience" className="py-32 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/10 to-transparent"></div>
+        <div className="container mx-auto px-4 relative">
+          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+            Experience
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-2xl font-semibold mb-4 text-purple-400">Teaching Assistant</h3>
+              <p className="text-gray-300 mb-4">University of North Texas</p>
+              <p className="text-gray-400">Jan 2023 - Dec 2024</p>
+              <ul className="mt-4 space-y-2 text-gray-300">
+                <li>• Human-Computer Interaction (HCI)</li>
+                <li>• Assembly Language</li>
+                <li>• Foundations of Cyber Security</li>
+                <li>• Secure E-Commerce</li>
               </ul>
             </div>
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="font-bold text-xl mb-2">Research Assistant</h3>
-              <p className="text-gray-700 mb-2">University of North Texas, Jan 2025 - Present</p>
-              <ul className="list-disc list-inside text-gray-600 space-y-1">
-                <li>Enhancing Google Blockly with code navigation and audio cues for accessibility.</li>
-                <li>Designing user-friendly features for diverse audiences in visual programming tools.</li>
-                <li>Collaborating with a multidisciplinary team to deliver accessibility-focused solutions.</li>
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-2xl font-semibold mb-4 text-pink-400">Research Assistant</h3>
+              <p className="text-gray-300 mb-4">University of North Texas</p>
+              <p className="text-gray-400">Jan 2025 - Present</p>
+              <ul className="mt-4 space-y-2 text-gray-300">
+                <li>• Google Blockly Accessibility</li>
+                <li>• Code Navigation & Audio Cues</li>
+                <li>• User Experience Design</li>
+                <li>• Multidisciplinary Collaboration</li>
               </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Awards & Recognitions */}
-      <section id="awards" className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Awards & Recognitions</h2>
-          <div className="max-w-2xl mx-auto text-gray-600 space-y-4">
-            <div className="bg-white rounded-lg shadow p-4">
-              <h3 className="font-semibold">First Prize for Project in INFO 5900: Virtual Reality and its Applications</h3>
-              <p>University of North Texas, May 2024</p>
-              <p className="mt-2">Awarded a $500 prize for outstanding performance in developing a Virtual Reality application for mental health diagnostics.</p>
-              <a href="https://ssharma.ci.unt.edu/vrgroupprojects2024" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">View Project</a>
             </div>
           </div>
         </div>
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20 bg-gray-50">
+      <section id="projects" className="py-32 relative">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-xl font-bold mb-2">Virtual Reality for Mental Health Diagnostics</h3>
-              <p className="text-gray-600 mb-4">Developed a VR application for mental health diagnostics, awarded first prize in INFO 5900. <a href="https://ssharma.ci.unt.edu/vrgroupprojects2024" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Project Link</a></p>
+          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-blue-500">
+            Projects
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-2xl font-semibold mb-4 text-pink-400">VR Mental Health Diagnostics</h3>
+              <p className="text-gray-300 mb-4">First Prize in INFO 5900</p>
+              <p className="text-gray-400 mb-6">Awarded $500 for outstanding VR application development</p>
+              <a href="https://ssharma.ci.unt.edu/vrgroupprojects2024"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-6 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 transition-all duration-300">
+                View Project
+              </a>
             </div>
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-xl font-bold mb-2">Google Blockly Accessibility Enhancements</h3>
-              <p className="text-gray-600 mb-4">Implemented code navigation and audio cues to improve accessibility for users, including those with visual impairments.</p>
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-2xl font-semibold mb-4 text-blue-400">Google Blockly Enhancements</h3>
+              <p className="text-gray-300 mb-4">Accessibility Research</p>
+              <p className="text-gray-400 mb-6">Implementing code navigation and audio cues for improved accessibility</p>
+              <a href="#"
+                className="inline-block px-6 py-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition-all duration-300">
+                Learn More
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Skills & Certifications */}
-      <section id="skills" className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Skills & Certifications</h2>
-          <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="font-semibold mb-2">Key Skills</h3>
-              <ul className="list-disc list-inside text-gray-600 space-y-1">
-                <li>Programming: Python, JavaScript, C#, HTML, CSS</li>
-                <li>Visual Design: Canva, Photoshop, Pixlr, Illustrator</li>
-                <li>Interactive Design: Figma, Sketch, Adobe XD</li>
-                <li>Technical: NLP, Data Analysis, Accessibility Design</li>
-                <li>Project Management: JIRA, Notion, Slack</li>
-                <li>Motion/3D: Blender, After Effects, 3ds Max</li>
-                <li>Research: Experiment Design, Statistical Analysis, Academic Presentation</li>
-                <li>UX/UI, Wireframing, Prototyping, Problem Solving, Time Management</li>
+      {/* Skills Section */}
+      <section id="skills" className="py-32 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/10 to-transparent"></div>
+        <div className="container mx-auto px-4 relative">
+          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+            Skills & Expertise
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-xl font-semibold mb-4 text-blue-400">Technical</h3>
+              <ul className="space-y-2 text-gray-300">
+                <li>• Python, JavaScript, C#</li>
+                <li>• HTML, CSS</li>
+                <li>• NLP, Data Analysis</li>
+                <li>• Accessibility Design</li>
               </ul>
             </div>
-            <div>
-              <h3 className="font-semibold mb-2">Certifications</h3>
-              <ul className="list-disc list-inside text-gray-600 space-y-1">
-                <li>UX Foundations: Research - LinkedIn</li>
-                <li>Figma for UX Research - LinkedIn</li>
-                <li>Figma for UX Design - LinkedIn</li>
-                <li>UX Foundations: Usability Testing - LinkedIn</li>
-                <li>Interaction Design Foundations - LinkedIn</li>
-                <li>Unity Essentials Pathway - Unity</li>
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-xl font-semibold mb-4 text-purple-400">Design</h3>
+              <ul className="space-y-2 text-gray-300">
+                <li>• Figma, Sketch, Adobe XD</li>
+                <li>• Photoshop, Illustrator</li>
+                <li>• Blender, After Effects</li>
+                <li>• UX/UI Design</li>
               </ul>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Languages & Interests */}
-      <section id="languages" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Languages & Interests</h2>
-          <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="font-semibold mb-2">Languages</h3>
-              <ul className="list-disc list-inside text-gray-600 space-y-1">
-                <li>English: Fluent (Read, Write, Speak)</li>
-                <li>Telugu: Native (Read, Write, Speak)</li>
-                <li>Hindi: Proficient in Speaking and Reading</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Hobbies & Interests</h3>
-              <ul className="list-disc list-inside text-gray-600 space-y-1">
-                <li>Drawing: Passionate about creating visual art, exploring different mediums and techniques.</li>
-                <li>In-Depth Research: Enthusiastic about delving deep into topics and gaining comprehensive understanding.</li>
-                <li>Cooking: Enjoy experimenting with new recipes and cuisines.</li>
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-xl font-semibold mb-4 text-pink-400">Research</h3>
+              <ul className="space-y-2 text-gray-300">
+                <li>• Experiment Design</li>
+                <li>• Statistical Analysis</li>
+                <li>• Academic Presentation</li>
+                <li>• Project Management</li>
               </ul>
             </div>
           </div>
@@ -154,50 +167,57 @@ function App() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20">
+      <section id="contact" className="py-32 relative">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Get In Touch</h2>
+          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+            Get In Touch
+          </h2>
           <div className="max-w-2xl mx-auto">
-            <form className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
+            <form className="space-y-6 animate-on-scroll">
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8">
+                <div className="space-y-6">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-300">Name</label>
+                    <input
+                      type="text"
+                      id="name"
+                      className="mt-1 block w-full rounded-lg bg-gray-700/50 border-gray-600 text-white focus:border-purple-500 focus:ring-purple-500"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-300">Email</label>
+                    <input
+                      type="email"
+                      id="email"
+                      className="mt-1 block w-full rounded-lg bg-gray-700/50 border-gray-600 text-white focus:border-purple-500 focus:ring-purple-500"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-300">Message</label>
+                    <textarea
+                      id="message"
+                      rows="4"
+                      className="mt-1 block w-full rounded-lg bg-gray-700/50 border-gray-600 text-white focus:border-purple-500 focus:ring-purple-500"
+                    ></textarea>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full px-8 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105"
+                  >
+                    Send Message
+                  </button>
+                </div>
               </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
-                <textarea
-                  id="message"
-                  rows="4"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
-              >
-                Send Message
-              </button>
             </form>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p>© 2024 Vamsi Krishna Kosuri. All rights reserved.</p>
+      <footer className="py-8 relative">
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <p className="text-gray-400">© 2024 Vamsi Krishna Kosuri. All rights reserved.</p>
         </div>
       </footer>
     </div>
