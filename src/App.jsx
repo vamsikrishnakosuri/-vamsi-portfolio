@@ -17,6 +17,26 @@ function App() {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+      {/* Navigation */}
+      <nav className="fixed top-0 right-0 z-50 p-6">
+        <a
+          href="https://vamsikrishnakosuri.hashnode.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 transition-all duration-300 flex items-center gap-2 group"
+        >
+          <span>My Blogs</span>
+          <svg
+            className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+      </nav>
+
       {/* Hero Section */}
       <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-gradient"></div>
@@ -284,6 +304,81 @@ function App() {
                 </div>
               </div>
             </form>
+          </div>
+        </div>
+      </section>
+
+      {/* Blog Section */}
+      <section id="blogs" className="py-32 relative w-full">
+        <div className="w-full px-4">
+          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 animate-fade-in">
+            Latest Articles
+          </h2>
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center mr-4">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold text-purple-400">AI & Accessibility</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  Exploring the intersection of artificial intelligence and accessibility in modern computing.
+                </p>
+                <a
+                  href="https://vamsikrishnakosuri.hashnode.dev"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-400 hover:text-purple-300 transition-colors duration-300 inline-flex items-center gap-2"
+                >
+                  Read More
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
+
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/20">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center mr-4">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold text-pink-400">HCI Research</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  Insights into human-computer interaction research and its impact on user experience.
+                </p>
+                <a
+                  href="https://vamsikrishnakosuri.hashnode.dev"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-pink-400 hover:text-pink-300 transition-colors duration-300 inline-flex items-center gap-2"
+                >
+                  Read More
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <div className="text-center mt-12">
+              <a
+                href="https://vamsikrishnakosuri.hashnode.dev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 transition-all duration-300"
+              >
+                View All Articles
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
       </section>
