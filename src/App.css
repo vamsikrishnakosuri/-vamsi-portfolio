@@ -108,8 +108,9 @@ section {
 body {
   font-family: 'Inter', sans-serif;
   margin: 0;
-  min-width: 320px;
+  min-width: 100vw;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Custom styles for form inputs */
@@ -118,11 +119,12 @@ textarea {
   @apply border border-gray-300 rounded-md px-3 py-2;
 }
 
-/* Container max-width */
+/* Container styles */
 .container {
-  max-width: 1200px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
 
 /* Responsive text */
@@ -134,12 +136,17 @@ textarea {
   h2 {
     font-size: 2rem;
   }
+
+  .container {
+    padding: 0 1rem;
+  }
 }
 
+/* Remove the root max-width constraint */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   text-align: center;
 }
 

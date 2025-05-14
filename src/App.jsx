@@ -16,11 +16,11 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-gradient"></div>
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="w-full px-4 relative z-10">
           <div className="text-center animate-on-scroll">
             <h1 className="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
               Vamsi Krishna Kosuri
@@ -42,12 +42,12 @@ function App() {
       </section>
 
       {/* About & Education Section */}
-      <section id="about" className="py-32 relative">
-        <div className="container mx-auto px-4">
+      <section id="about" className="py-32 relative w-full">
+        <div className="w-full px-4">
           <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
             About & Education
           </h2>
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
               <h3 className="text-2xl font-semibold mb-4 text-blue-400">Ph.D. in Computer Science</h3>
               <p className="text-gray-300">University of North Texas</p>
@@ -63,13 +63,13 @@ function App() {
       </section>
 
       {/* Experience Section */}
-      <section id="experience" className="py-32 relative">
+      <section id="experience" className="py-32 relative w-full">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/10 to-transparent"></div>
-        <div className="container mx-auto px-4 relative">
+        <div className="w-full px-4 relative">
           <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
             Experience
           </h2>
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
               <h3 className="text-2xl font-semibold mb-4 text-purple-400">Teaching Assistant</h3>
               <p className="text-gray-300 mb-4">University of North Texas</p>
@@ -97,12 +97,12 @@ function App() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-32 relative">
-        <div className="container mx-auto px-4">
+      <section id="projects" className="py-32 relative w-full">
+        <div className="w-full px-4">
           <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-blue-500">
             Projects
           </h2>
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
               <h3 className="text-2xl font-semibold mb-4 text-pink-400">VR Mental Health Diagnostics</h3>
               <p className="text-gray-300 mb-4">First Prize in INFO 5900</p>
@@ -128,13 +128,13 @@ function App() {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-32 relative">
+      <section id="skills" className="py-32 relative w-full">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/10 to-transparent"></div>
-        <div className="container mx-auto px-4 relative">
+        <div className="w-full px-4 relative">
           <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
             Skills & Expertise
           </h2>
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
             <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
               <h3 className="text-xl font-semibold mb-4 text-blue-400">Technical</h3>
               <ul className="space-y-2 text-gray-300">
@@ -167,12 +167,12 @@ function App() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-32 relative">
-        <div className="container mx-auto px-4">
+      <section id="contact" className="py-32 relative w-full">
+        <div className="w-full px-4">
           <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
             Get In Touch
           </h2>
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-3xl mx-auto">
             <form className="space-y-6 animate-on-scroll">
               <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8">
                 <div className="space-y-6">
@@ -214,9 +214,9 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 relative">
+      <footer className="py-8 relative w-full">
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
-        <div className="container mx-auto px-4 text-center relative z-10">
+        <div className="w-full px-4 text-center relative z-10">
           <p className="text-gray-400">© 2024 Vamsi Krishna Kosuri. All rights reserved.</p>
         </div>
       </footer>
