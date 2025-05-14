@@ -174,7 +174,7 @@ function App() {
           </h2>
           <div className="max-w-3xl mx-auto">
             <form
-              action="https://formsubmit.co/kosurivamsi5@gmail.com"
+              action="https://formsubmit.co/4562fdd6f09fcb170230e601a2d0ec39"
               method="POST"
               className="space-y-6 animate-on-scroll"
             >
