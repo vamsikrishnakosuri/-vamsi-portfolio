@@ -13,23 +13,33 @@ function App() {
     });
 
     document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
+
+    // Add parallax effect to hero section
+    const handleParallax = (e) => {
+      const hero = document.querySelector('.hero-section');
+      const scrolled = window.pageYOffset;
+      hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+    };
+
+    window.addEventListener('scroll', handleParallax);
+    return () => window.removeEventListener('scroll', handleParallax);
   }, []);
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       {/* Hero Section */}
-      <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+      <section className="hero-section relative min-h-screen w-full flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-gradient"></div>
         <div className="w-full px-4 relative z-10">
           <div className="text-center animate-on-scroll">
-            <h1 className="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+            <h1 className="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 animate-fade-in">
               Vamsi Krishna Kosuri
             </h1>
-            <p className="text-2xl text-gray-300 mb-8">Ph.D. Student & Research Assistant</p>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-12">
+            <p className="text-2xl text-gray-300 mb-8 animate-slide-up">Ph.D. Student & Research Assistant</p>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-12 animate-slide-up delay-200">
               Innovative researcher enhancing accessibility in programming tools through code navigation and audio cues.
             </p>
-            <div className="flex justify-center gap-6">
+            <div className="flex justify-center gap-6 animate-slide-up delay-300">
               <a href="#projects" className="px-8 py-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition-all duration-300 transform hover:scale-105">
                 View Projects
               </a>
@@ -44,16 +54,16 @@ function App() {
       {/* About & Education Section */}
       <section id="about" className="py-32 relative w-full">
         <div className="w-full px-4">
-          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 animate-fade-in">
             About & Education
           </h2>
           <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20">
               <h3 className="text-2xl font-semibold mb-4 text-blue-400">Ph.D. in Computer Science</h3>
               <p className="text-gray-300">University of North Texas</p>
               <p className="text-gray-400">Aug 2023 - Present (CGPA: 4.0)</p>
             </div>
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20">
               <h3 className="text-2xl font-semibold mb-4 text-purple-400">M.S. in Computer Science</h3>
               <p className="text-gray-300">University of North Texas</p>
               <p className="text-gray-400">Jan 2022 - May 2023 (CGPA: 3.70)</p>
@@ -66,11 +76,11 @@ function App() {
       <section id="experience" className="py-32 relative w-full">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/10 to-transparent"></div>
         <div className="w-full px-4 relative">
-          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 animate-fade-in">
             Experience
           </h2>
           <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20">
               <h3 className="text-2xl font-semibold mb-4 text-purple-400">Teaching Assistant</h3>
               <p className="text-gray-300 mb-4">University of North Texas</p>
               <p className="text-gray-400">Jan 2023 - Dec 2024</p>
@@ -81,7 +91,7 @@ function App() {
                 <li>• Secure E-Commerce</li>
               </ul>
             </div>
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/20">
               <h3 className="text-2xl font-semibold mb-4 text-pink-400">Research Assistant</h3>
               <p className="text-gray-300 mb-4">University of North Texas</p>
               <p className="text-gray-400">Jan 2025 - Present</p>
@@ -99,11 +109,11 @@ function App() {
       {/* Projects Section */}
       <section id="projects" className="py-32 relative w-full">
         <div className="w-full px-4">
-          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-blue-500">
+          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-blue-500 animate-fade-in">
             Projects
           </h2>
           <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/20">
               <h3 className="text-2xl font-semibold mb-4 text-pink-400">VR Mental Health Diagnostics</h3>
               <p className="text-gray-300 mb-4">First Prize in INFO 5900</p>
               <p className="text-gray-400 mb-6">Awarded $500 for outstanding VR application development</p>
@@ -114,11 +124,13 @@ function App() {
                 View Project
               </a>
             </div>
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20">
               <h3 className="text-2xl font-semibold mb-4 text-blue-400">Google Blockly Enhancements</h3>
               <p className="text-gray-300 mb-4">Accessibility Research</p>
               <p className="text-gray-400 mb-6">Implementing code navigation and audio cues for improved accessibility</p>
-              <a href="#"
+              <a href="https://developers.google.com/blockly/accessibility"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block px-6 py-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition-all duration-300">
                 Learn More
               </a>
@@ -131,11 +143,11 @@ function App() {
       <section id="skills" className="py-32 relative w-full">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/10 to-transparent"></div>
         <div className="w-full px-4 relative">
-          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 animate-fade-in">
             Skills & Expertise
           </h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20">
               <h3 className="text-xl font-semibold mb-4 text-blue-400">Technical</h3>
               <ul className="space-y-2 text-gray-300">
                 <li>• Python, JavaScript, C#</li>
@@ -144,7 +156,7 @@ function App() {
                 <li>• Accessibility Design</li>
               </ul>
             </div>
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20">
               <h3 className="text-xl font-semibold mb-4 text-purple-400">Design</h3>
               <ul className="space-y-2 text-gray-300">
                 <li>• Figma, Sketch, Adobe XD</li>
@@ -153,7 +165,7 @@ function App() {
                 <li>• UX/UI Design</li>
               </ul>
             </div>
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/20">
               <h3 className="text-xl font-semibold mb-4 text-pink-400">Research</h3>
               <ul className="space-y-2 text-gray-300">
                 <li>• Experiment Design</li>
@@ -169,7 +181,7 @@ function App() {
       {/* Contact Section */}
       <section id="contact" className="py-32 relative w-full">
         <div className="w-full px-4">
-          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+          <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 animate-fade-in">
             Get In Touch
           </h2>
           <div className="max-w-3xl mx-auto">
@@ -187,7 +199,7 @@ function App() {
               {/* Specify redirect after submission */}
               <input type="hidden" name="_next" value="https://vamsikrishnakosuri.com/thanks" />
 
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8">
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300">
                 <div className="space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-300">Name</label>
