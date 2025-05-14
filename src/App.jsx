@@ -20,9 +20,7 @@ function App() {
       {/* Navigation */}
       <nav className="fixed top-0 right-0 z-50 p-6">
         <a
-          href="https://vamsikrishnakosuri.hashnode.dev"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="#blogs"
           className="px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 transition-all duration-300 flex items-center gap-2 group"
         >
           <span>My Blogs</span>
@@ -329,9 +327,7 @@ function App() {
                   Exploring the intersection of artificial intelligence and accessibility in modern computing.
                 </p>
                 <a
-                  href="https://vamsikrishnakosuri.hashnode.dev"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#blogs"
                   className="text-purple-400 hover:text-purple-300 transition-colors duration-300 inline-flex items-center gap-2"
                 >
                   Read More
@@ -354,9 +350,7 @@ function App() {
                   Insights into human-computer interaction research and its impact on user experience.
                 </p>
                 <a
-                  href="https://vamsikrishnakosuri.hashnode.dev"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#blogs"
                   className="text-pink-400 hover:text-pink-300 transition-colors duration-300 inline-flex items-center gap-2"
                 >
                   Read More
@@ -368,9 +362,7 @@ function App() {
             </div>
             <div className="text-center mt-12">
               <a
-                href="https://vamsikrishnakosuri.hashnode.dev"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#blogs"
                 className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 transition-all duration-300"
               >
                 View All Articles
