@@ -41,6 +41,60 @@ function App() {
         </div>
       </section>
 
+      {/* Tech Passion Section */}
+      <section className="py-32 relative w-full overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent"></div>
+        <div className="w-full px-4 relative">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              {/* AI Section */}
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20">
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center mr-4">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-semibold text-blue-400">Artificial Intelligence</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  My fascination with AI stems from its potential to transform human-computer interaction.
+                  I'm particularly passionate about making AI more accessible and intuitive through
+                  innovative interface design and natural language processing.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-sm">Machine Learning</span>
+                  <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-sm">NLP</span>
+                  <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-sm">Neural Networks</span>
+                </div>
+              </div>
+
+              {/* HCI Section */}
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20">
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center mr-4">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-semibold text-purple-400">Human-Computer Interaction</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  HCI is where technology meets humanity. I'm dedicated to creating interfaces that are
+                  not just functional, but delightful to use. My research focuses on making technology
+                  more accessible and intuitive for everyone.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-sm">UX Design</span>
+                  <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-sm">Accessibility</span>
+                  <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-sm">User Research</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* About & Education Section */}
       <section id="about" className="py-32 relative w-full">
         <div className="w-full px-4">
