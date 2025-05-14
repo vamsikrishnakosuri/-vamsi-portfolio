@@ -187,7 +187,7 @@ function App() {
               <input type="hidden" name="_captcha" value="false" />
 
               {/* Specify redirect after submission */}
-              <input type="hidden" name="_next" value="https://vamsikrishnakosuri.com/thanks" />
+              <input type="hidden" name="_next" value="https://vamsikrishnakosuri.com" />
 
               <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8">
                 <div className="space-y-6">
