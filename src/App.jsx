@@ -40,10 +40,10 @@ function App() {
               Innovative researcher enhancing accessibility in programming tools through code navigation and audio cues.
             </p>
             <div className="flex justify-center gap-6 animate-slide-up delay-300">
-              <a href="#projects" className="px-8 py-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition-all duration-300 transform hover:scale-105">
+              <a href="#projects" className="px-8 py-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300">
                 View Projects
               </a>
-              <a href="#contact" className="px-8 py-3 rounded-full border border-gray-600 hover:border-gray-400 transition-all duration-300 transform hover:scale-105">
+              <a href="#contact" className="px-8 py-3 rounded-full border border-gray-600 transition-all duration-300">
                 Contact Me
               </a>
             </div>
@@ -199,7 +199,7 @@ function App() {
               {/* Specify redirect after submission */}
               <input type="hidden" name="_next" value="https://vamsikrishnakosuri.com/thanks" />
 
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300">
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8">
                 <div className="space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-300">Name</label>
@@ -233,7 +233,7 @@ function App() {
                   </div>
                   <button
                     type="submit"
-                    className="w-full px-8 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105"
+                    className="w-full px-8 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300"
                   >
                     Send Message
                   </button>
