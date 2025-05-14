@@ -13,22 +13,12 @@ function App() {
     });
 
     document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
-
-    // Add parallax effect to hero section
-    const handleParallax = (e) => {
-      const hero = document.querySelector('.hero-section');
-      const scrolled = window.pageYOffset;
-      hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-    };
-
-    window.addEventListener('scroll', handleParallax);
-    return () => window.removeEventListener('scroll', handleParallax);
   }, []);
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       {/* Hero Section */}
-      <section className="hero-section relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-gradient"></div>
         <div className="w-full px-4 relative z-10">
           <div className="text-center animate-on-scroll">
