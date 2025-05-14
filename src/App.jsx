@@ -173,14 +173,29 @@ function App() {
             Get In Touch
           </h2>
           <div className="max-w-3xl mx-auto">
-            <form className="space-y-6 animate-on-scroll">
+            <form
+              action="https://formsubmit.co/vamsikrishnakosuri@gmail.com"
+              method="POST"
+              className="space-y-6 animate-on-scroll"
+            >
+              {/* Honeypot to prevent spam */}
+              <input type="text" name="_honey" style={{ display: 'none' }} />
+
+              {/* Disable Captcha */}
+              <input type="hidden" name="_captcha" value="false" />
+
+              {/* Specify redirect after submission */}
+              <input type="hidden" name="_next" value="https://vamsikrishnakosuri.com/thanks" />
+
               <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8">
                 <div className="space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-300">Name</label>
                     <input
                       type="text"
+                      name="name"
                       id="name"
+                      required
                       className="mt-1 block w-full rounded-lg bg-gray-700/50 border-gray-600 text-white focus:border-purple-500 focus:ring-purple-500"
                     />
                   </div>
@@ -188,7 +203,9 @@ function App() {
                     <label htmlFor="email" className="block text-sm font-medium text-gray-300">Email</label>
                     <input
                       type="email"
+                      name="email"
                       id="email"
+                      required
                       className="mt-1 block w-full rounded-lg bg-gray-700/50 border-gray-600 text-white focus:border-purple-500 focus:ring-purple-500"
                     />
                   </div>
@@ -196,7 +213,9 @@ function App() {
                     <label htmlFor="message" className="block text-sm font-medium text-gray-300">Message</label>
                     <textarea
                       id="message"
+                      name="message"
                       rows="4"
+                      required
                       className="mt-1 block w-full rounded-lg bg-gray-700/50 border-gray-600 text-white focus:border-purple-500 focus:ring-purple-500"
                     ></textarea>
                   </div>
