@@ -156,7 +156,7 @@ button:focus-visible {
   position: relative;
   border-radius: 1rem;
   z-index: 1;
-  background: transparent;
+  background: #fff;
   transition: box-shadow 0.3s;
   overflow: visible;
 }
