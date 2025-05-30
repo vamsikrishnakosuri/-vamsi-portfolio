@@ -14,7 +14,7 @@ const sectionVariant = {
 
 function App() {
   return (
-    <div className="animated-bg min-h-screen flex flex-col items-center justify-center font-sans">
+    <div className="animated-bg min-h-screen w-full flex flex-col items-center justify-center font-sans">
       {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0, y: 40 }}
@@ -22,44 +22,45 @@ function App() {
         transition={{ duration: 1, type: 'spring', bounce: 0.2 }}
         className="flex flex-col items-center justify-center min-h-[80vh] w-full px-4 sm:px-6 md:px-8"
       >
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1, delay: 0.2, type: 'spring', bounce: 0.4 }}
-          className="animated-gradient-border mb-8 rounded-full"
-          style={{ width: 180, height: 180 }}
-        >
-          <img
-            src={profileImg}
-            alt="Profile"
-            className="rounded-full object-cover w-full h-full border-4 border-white shadow-xl"
-          />
-        </motion.div>
-        <motion.h1
-          className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4 }}
-        >
-          Hello, I'm Vamsi
-        </motion.h1>
-        <motion.p
-          className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.6 }}
-        >
-          PhD Student in Computer Science, specializing in Human-Computer Interaction (HCI) & XR. Passionate about UI/UX design, research, and creating innovative, user-centered experiences.
-        </motion.p>
-        <div className="animated-gradient-border rounded-full p-[3px] mb-2">
-          <motion.a
-            href="#about"
-            whileHover={{ scale: 1.07, boxShadow: '0 8px 32px rgba(236,72,153,0.15)' }}
-            className="button-gradient-hover px-10 py-4 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition relative overflow-hidden group block"
-            style={{ minWidth: 180, textAlign: 'center' }}
+        <div className="w-full max-w-2xl mx-auto flex flex-col items-center justify-center">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1, delay: 0.2, type: 'spring', bounce: 0.4 }}
+            className="animated-gradient-border mb-8 rounded-full"
+            style={{ width: 180, height: 180 }}
           >
-            <span className="relative z-10">Learn More</span>
-          </motion.a>
+            <img
+              src={profileImg}
+              alt="Profile"
+              className="rounded-full object-cover w-full h-full border-4 border-white shadow-xl"
+            />
+          </motion.div>
+          <motion.h1
+            className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.4 }}
+          >
+            Hello, I'm Vamsi
+          </motion.h1>
+          <motion.p
+            className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.6 }}
+          >
+            PhD Student in Computer Science, specializing in Human-Computer Interaction (HCI) & XR. Passionate about UI/UX design, research, and creating innovative, user-centered experiences.
+          </motion.p>
+          <div className="animated-gradient-border rounded-full p-[3px] mb-2 w-full flex justify-center">
+            <motion.a
+              href="#about"
+              whileHover={{ scale: 1.07, boxShadow: '0 8px 32px rgba(236,72,153,0.15)' }}
+              className="button-gradient-hover px-10 py-4 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition relative overflow-hidden group block w-full max-w-xs text-center"
+            >
+              <span className="relative z-10">Learn More</span>
+            </motion.a>
+          </div>
         </div>
       </motion.section>
 
