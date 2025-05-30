@@ -20,7 +20,7 @@ function App() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, type: 'spring', bounce: 0.2 }}
-        className="flex flex-col items-center justify-center min-h-[80vh] w-full px-4"
+        className="flex flex-col items-center justify-center min-h-[80vh] w-full px-4 sm:px-6 md:px-8"
       >
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
@@ -51,17 +51,16 @@ function App() {
         >
           PhD Student in Computer Science, specializing in Human-Computer Interaction (HCI) & XR. Passionate about UI/UX design, research, and creating innovative, user-centered experiences.
         </motion.p>
-        <motion.a
-          href="#about"
-          whileHover={{ scale: 1.07, boxShadow: '0 8px 32px rgba(236,72,153,0.15)' }}
-          className="px-10 py-4 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition relative overflow-hidden group"
-          style={{
-            borderImage: 'linear-gradient(90deg, #22c55e, #fde047, #f472b6, #a78bfa) 1',
-          }}
-        >
-          <span className="relative z-10">Learn More</span>
-          <span className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-gradient-to-r group-hover:from-green-400 group-hover:via-yellow-400 group-hover:via-pink-400 group-hover:to-purple-500 transition-all duration-500"></span>
-        </motion.a>
+        <div className="animated-gradient-border rounded-full p-[3px] mb-2">
+          <motion.a
+            href="#about"
+            whileHover={{ scale: 1.07, boxShadow: '0 8px 32px rgba(236,72,153,0.15)' }}
+            className="px-10 py-4 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition relative overflow-hidden group block"
+            style={{ minWidth: 180, textAlign: 'center' }}
+          >
+            <span className="relative z-10">Learn More</span>
+          </motion.a>
+        </div>
       </motion.section>
 
       {/* About Section */}

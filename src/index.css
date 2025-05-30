@@ -84,21 +84,28 @@ button:focus-visible {
 .animated-gradient-border {
   position: relative;
   z-index: 1;
+  display: inline-block;
+  border-radius: 9999px;
 }
 
 .animated-gradient-border::before {
   content: '';
   position: absolute;
-  inset: -6px;
+  inset: 0;
   z-index: -1;
   border-radius: 9999px;
+  padding: 3px;
   background: conic-gradient(from 0deg,
       #22c55e,
       #fde047,
       #f472b6,
       #a78bfa,
       #22c55e);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   animation: spin 3s linear infinite;
+  pointer-events: none;
 }
 
 @keyframes spin {
