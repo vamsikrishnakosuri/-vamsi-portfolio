@@ -14,7 +14,7 @@ const sectionVariant = {
 };
 
 const goodSkills = [
-  'Python', 'Canva', 'Photoshop', 'Pixlr', 'Figma', 'Sketch', 'Data Analysis', 'Notion', 'Slack', '3ds Max', 'Blender', 'Unity3D', 'PPTs', 'UI/UX Design', 'Prompt Engineering', 'AI Agents', 'HTML', 'CSS'
+  'Python', 'Canva', 'Photoshop', 'Pixlr', 'Figma', 'Sketch', 'Data Analysis', 'Notion', 'Slack', '3ds Max', 'Blender', 'Unity3D', 'PPTs', 'UI/UX Design', 'Prompt Engineering', 'AI Agents', 'HTML', 'CSS', 'AI'
 ];
 const allSkills = [
   { category: 'Programming Languages', skills: ['Python', 'JavaScript', 'C#', 'HTML', 'CSS'] },
@@ -42,10 +42,13 @@ const skillLevels = {
   'PPTs': 95,
   'UI/UX Design': 90,
   'Prompt Engineering': 85,
-  'AI Agents': 80
+  'AI Agents': 80,
+  'HTML': 90,
+  'CSS': 90,
+  'AI': 95
 };
 const skillTaglines = {
-  'Python': 'Expert! 🐍',
+  'Python': 'Expert!',
   'Canva': 'Design Pro!',
   'Photoshop': 'Pixel Perfect!',
   'Pixlr': 'Photo Wizard!',
@@ -60,7 +63,10 @@ const skillTaglines = {
   'PPTs': 'Presentation King!',
   'UI/UX Design': 'User-Centric!',
   'Prompt Engineering': 'Prompt Genius!',
-  'AI Agents': 'AI Tinkerer!'
+  'AI Agents': 'AI Tinkerer!',
+  'HTML': 'Web Wizard!',
+  'CSS': 'Style Master!',
+  'AI': 'AI Pro!'
 };
 const funnyTaglines = [
   'Still leveling up! 🚀',
@@ -114,7 +120,7 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.6 }}
           >
-            PhD Student in Computer Science, specializing in Human-Computer Interaction (HCI) & XR. Passionate about UI/UX design, research, and creating innovative, user-centered experiences.
+            PhD Student in Computer Science, specializing in Human-Computer Interaction (HCI). I'm passionate about <span className="bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent font-bold">AI</span>, UI/UX design, research, and creating innovative, user-centered experiences.
           </motion.p>
           <div className="animated-gradient-border rounded-full mb-2" style={{ padding: 2, display: 'inline-block' }}>
             <motion.a
