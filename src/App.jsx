@@ -14,15 +14,15 @@ const sectionVariant = {
 
 function App() {
   return (
-    <div className="animated-bg min-h-screen w-full flex flex-col items-center justify-center font-sans">
+    <div className="animated-bg min-h-screen w-full flex flex-col">
       {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, type: 'spring', bounce: 0.2 }}
-        className="flex flex-col items-center justify-center min-h-[80vh] w-full px-4 sm:px-6 md:px-8"
+        className="flex flex-col items-center justify-center min-h-screen w-full px-4"
       >
-        <div className="w-full max-w-2xl mx-auto flex flex-col items-center justify-center">
+        <div className="w-full max-w-2xl mx-auto flex flex-col items-center justify-center text-center">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -52,11 +52,11 @@ function App() {
           >
             PhD Student in Computer Science, specializing in Human-Computer Interaction (HCI) & XR. Passionate about UI/UX design, research, and creating innovative, user-centered experiences.
           </motion.p>
-          <div className="animated-gradient-border rounded-full p-[3px] mb-2 w-full flex justify-center">
+          <div className="animated-gradient-border rounded-full mb-2" style={{ padding: 2, display: 'inline-block' }}>
             <motion.a
               href="#about"
               whileHover={{ scale: 1.07, boxShadow: '0 8px 32px rgba(236,72,153,0.15)' }}
-              className="button-gradient-hover px-10 py-4 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition relative overflow-hidden group block w-full max-w-xs text-center"
+              className="button-gradient-hover px-10 py-4 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition relative overflow-hidden group block min-w-[180px] text-center"
             >
               <span className="relative z-10">Learn More</span>
             </motion.a>
