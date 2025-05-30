@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import './index.css';
 import profileImg from './profile.png';
+import { useState } from 'react';
 
 const heroVariant = {
   hidden: { opacity: 0, y: 40 },
@@ -12,7 +13,85 @@ const sectionVariant = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
+const goodSkills = [
+  'Python', 'Canva', 'Photoshop', 'Pixlr', 'Figma', 'Sketch', 'Data Analysis', 'Notion', 'Slack', '3ds Max', 'Blender', 'Unity3D', 'PPTs', 'UI/UX Design', 'Prompt Engineering', 'AI Agents'
+];
+const allSkills = [
+  { category: 'Programming Languages', skills: ['Python', 'JavaScript', 'C#', 'HTML', 'CSS'] },
+  { category: 'Visual Design Tools', skills: ['Canva', 'Photoshop', 'Pixlr', 'Illustrator'] },
+  { category: 'Interactive Design', skills: ['Figma', 'Sketch', 'Adobe XD'] },
+  { category: 'Technical Expertise', skills: ['Natural Language Processing', 'Data Analysis', 'Accessibility Design Principles'] },
+  { category: 'Project Management', skills: ['JIRA', 'Notion', 'Slack'] },
+  { category: 'Motion Design & 3D Modeling', skills: ['Blender', 'After Effects', '3ds Max'] },
+  { category: 'Research & Academic', skills: ['Experiment Design', 'Statistical Analysis', 'Academic Presentation'] },
+  { category: 'Additional', skills: ['UI/UX Design', 'Wireframing', 'Prototyping', 'Problem Solving', 'Organizational and Time Management Skills', 'Prompt Engineering', 'AI Agents', 'PPTs', 'Unity3D'] }
+];
+const skillLevels = {
+  'Python': 95,
+  'Canva': 90,
+  'Photoshop': 85,
+  'Pixlr': 80,
+  'Figma': 90,
+  'Sketch': 85,
+  'Data Analysis': 90,
+  'Notion': 90,
+  'Slack': 85,
+  '3ds Max': 80,
+  'Blender': 80,
+  'Unity3D': 85,
+  'PPTs': 95,
+  'UI/UX Design': 90,
+  'Prompt Engineering': 85,
+  'AI Agents': 80
+};
+const skillTaglines = {
+  'Python': 'Expert! 🐍',
+  'Canva': 'Design Pro!',
+  'Photoshop': 'Pixel Perfect!',
+  'Pixlr': 'Photo Wizard!',
+  'Figma': 'UI/UX Pro!',
+  'Sketch': 'Vector Master!',
+  'Data Analysis': 'Data Cruncher!',
+  'Notion': 'Productivity Guru!',
+  'Slack': 'Team Player!',
+  '3ds Max': '3D Artist!',
+  'Blender': 'Animation Ace!',
+  'Unity3D': 'Game Dev!',
+  'PPTs': 'Presentation King!',
+  'UI/UX Design': 'User-Centric!',
+  'Prompt Engineering': 'Prompt Genius!',
+  'AI Agents': 'AI Tinkerer!'
+};
+const funnyTaglines = [
+  'Still leveling up! 🚀',
+  'Work in progress…',
+  'Learning every day!',
+  'On my way to mastery!',
+  'Stay tuned for more!'
+];
+const getRandomFunnyTagline = () => funnyTaglines[Math.floor(Math.random() * funnyTaglines.length)];
+
+function StarRating({ count }) {
+  return (
+    <span className="ml-2 text-yellow-400">
+      {'★'.repeat(count)}{'☆'.repeat(5 - count)}
+    </span>
+  );
+}
+
 function App() {
+  const [activeSkill, setActiveSkill] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const handleSkillClick = (skill) => {
+    if (activeSkill === skill && showPopup) {
+      setShowPopup(false);
+      setTimeout(() => setActiveSkill(null), 300);
+    } else {
+      setActiveSkill(skill);
+      setShowPopup(true);
+    }
+  };
+
   return (
     <div className="animated-bg min-h-screen w-screen flex flex-col">
       <div className="flex-1 flex items-center justify-center w-full">
@@ -95,6 +174,60 @@ function App() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Skills Section */}
+      <section id="skills" className="w-full flex flex-col items-center justify-center py-16">
+        <div className="w-full max-w-3xl mx-auto bg-white/80 rounded-2xl shadow-lg p-8 mb-8 hover-glow">
+          <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Skills</h2>
+          {allSkills.map((group) => (
+            <div key={group.category} className="mb-6">
+              <h3 className="text-xl font-semibold mb-2 text-gray-700">{group.category}</h3>
+              <div className="flex flex-wrap gap-3">
+                {group.skills.map((skill) => (
+                  <div
+                    key={skill}
+                    className={`relative cursor-pointer px-4 py-2 rounded-full bg-gray-100 text-gray-800 font-medium shadow-sm transition hover:scale-105 hover-glow border border-transparent ${activeSkill === skill && showPopup ? 'z-20' : ''}`}
+                    onClick={() => handleSkillClick(skill)}
+                  >
+                    {skill}
+                    {/* Popup animation */}
+                    {activeSkill === skill && showPopup && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: -10 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute left-1/2 -translate-x-1/2 -top-16 min-w-[180px] bg-white border border-yellow-300 rounded-xl shadow-lg p-4 flex flex-col items-center"
+                      >
+                        {goodSkills.includes(skill) ? (
+                          <>
+                            <div className="w-full flex items-center mb-2">
+                              <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${skillLevels[skill] || 80}%` }}
+                                  transition={{ duration: 0.7 }}
+                                  className="h-2 bg-yellow-400 rounded-full"
+                                />
+                              </div>
+                              <StarRating count={Math.round((skillLevels[skill] || 80) / 20)} />
+                            </div>
+                            <div className="text-sm font-semibold text-yellow-600">{skillTaglines[skill]}</div>
+                          </>
+                        ) : (
+                          <div className="text-sm font-semibold text-purple-500 flex items-center gap-2">
+                            {getRandomFunnyTagline()} <span>😅</span>
+                          </div>
+                        )}
+                      </motion.div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
