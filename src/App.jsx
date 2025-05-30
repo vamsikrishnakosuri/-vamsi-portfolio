@@ -55,7 +55,7 @@ function App() {
           <motion.a
             href="#about"
             whileHover={{ scale: 1.07, boxShadow: '0 8px 32px rgba(236,72,153,0.15)' }}
-            className="px-10 py-4 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition relative overflow-hidden group block"
+            className="button-gradient-hover px-10 py-4 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition relative overflow-hidden group block"
             style={{ minWidth: 180, textAlign: 'center' }}
           >
             <span className="relative z-10">Learn More</span>
