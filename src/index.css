@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -33,6 +35,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background: #f8fafc;
+  color: #22223b;
 }
 
 h1 {
@@ -73,5 +78,49 @@ button:focus-visible {
 
   button {
     background-color: #f9f9f9;
+  }
+}
+
+.animated-gradient-border {
+  position: relative;
+  z-index: 1;
+}
+
+.animated-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  z-index: -1;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg,
+      #22c55e,
+      #fde047,
+      #f472b6,
+      #a78bfa,
+      #22c55e);
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+.animated-bg {
+  background: linear-gradient(120deg, #f8fafc 60%, #f472b6 100%, #a78bfa 100%);
+  background-size: 200% 200%;
+  animation: bgmove 8s ease-in-out infinite;
+}
+
+@keyframes bgmove {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
   }
 }

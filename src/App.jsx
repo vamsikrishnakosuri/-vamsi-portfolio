@@ -14,39 +14,53 @@ const sectionVariant = {
 
 function App() {
   return (
-    <div className="bg-white min-h-screen font-sans text-gray-900">
+    <div className="animated-bg min-h-screen flex flex-col items-center justify-center font-sans">
       {/* Hero Section */}
       <motion.section
-        variants={heroVariant}
-        initial="hidden"
-        animate="visible"
-        className="flex flex-col items-center justify-center min-h-screen px-4"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, type: 'spring', bounce: 0.2 }}
+        className="flex flex-col items-center justify-center min-h-[80vh] w-full px-4"
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-          className="mb-6 rounded-full p-1 bg-gradient-to-tr from-pink-500 via-yellow-400 to-blue-500 shadow-lg"
-          style={{ width: 160, height: 160 }}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1, delay: 0.2, type: 'spring', bounce: 0.4 }}
+          className="animated-gradient-border mb-8 rounded-full"
+          style={{ width: 180, height: 180 }}
         >
           <img
             src={profileImg}
             alt="Profile"
-            className="rounded-full object-cover w-full h-full border-4 border-white shadow-md"
+            className="rounded-full object-cover w-full h-full border-4 border-white shadow-xl"
           />
         </motion.div>
-        <motion.h1 className="text-5xl md:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-r from-pink-500 via-yellow-400 to-blue-500 bg-clip-text text-transparent" whileHover={{ scale: 1.03 }}>
+        <motion.h1
+          className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.4 }}
+        >
           Hello, I'm Vamsi
         </motion.h1>
-        <motion.p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+        <motion.p
+          className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6 }}
+        >
           PhD Student in Computer Science, specializing in Human-Computer Interaction (HCI) & XR. Passionate about UI/UX design, research, and creating innovative, user-centered experiences.
         </motion.p>
         <motion.a
           href="#about"
-          whileHover={{ scale: 1.05 }}
-          className="px-8 py-3 bg-black text-white rounded-full shadow-lg hover:bg-gray-800 transition text-lg border-2 border-transparent hover:border-gradient-to-r hover:from-pink-500 hover:via-yellow-400 hover:to-blue-500"
+          whileHover={{ scale: 1.07, boxShadow: '0 8px 32px rgba(236,72,153,0.15)' }}
+          className="px-10 py-4 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition relative overflow-hidden group"
+          style={{
+            borderImage: 'linear-gradient(90deg, #22c55e, #fde047, #f472b6, #a78bfa) 1',
+          }}
         >
-          Learn More
+          <span className="relative z-10">Learn More</span>
+          <span className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-gradient-to-r group-hover:from-green-400 group-hover:via-yellow-400 group-hover:via-pink-400 group-hover:to-purple-500 transition-all duration-500"></span>
         </motion.a>
       </motion.section>
 
