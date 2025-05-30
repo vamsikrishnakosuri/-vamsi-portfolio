@@ -115,24 +115,48 @@ function App() {
       </motion.section>
 
       {/* Contact Section */}
-      <motion.section
-        id="contact"
-        variants={sectionVariant}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        className="max-w-3xl mx-auto py-16 px-4 text-center"
-      >
-        <h2 className="text-3xl font-semibold mb-4">Contact</h2>
-        <p className="text-lg text-gray-700 mb-6">
-          Want to connect or collaborate? Reach out via email or find me on social media!
-        </p>
-        <div className="flex justify-center space-x-6">
-          <a href="mailto:vamsi@email.com" className="text-black hover:text-blue-600 text-2xl transition">✉️</a>
-          <a href="https://www.linkedin.com/in/vamsikrishnakosuri/" target="_blank" rel="noopener noreferrer" className="text-black hover:text-blue-600 text-2xl transition">in</a>
-          {/* Add more social links as needed */}
+      <section id="contact" className="w-full flex flex-col items-center justify-center py-24 bg-transparent">
+        <div className="w-full max-w-xl mx-auto bg-white/80 rounded-2xl shadow-lg p-8 text-center">
+          <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Contact Me</h2>
+          <form
+            action="https://formsubmit.co/kosurivamsi5@gmail.com"
+            method="POST"
+            className="flex flex-col gap-6"
+          >
+            {/* Redirect after submission */}
+            <input type="hidden" name="_next" value="https://www.vamsikrishnakosuri.com/?contact=success" />
+            {/* Disable Captcha */}
+            <input type="hidden" name="_captcha" value="false" />
+            <input
+              type="text"
+              name="name"
+              placeholder="Your Name"
+              required
+              className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Your Email"
+              required
+              className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            />
+            <textarea
+              name="message"
+              placeholder="Your Message"
+              rows={5}
+              required
+              className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            ></textarea>
+            <button
+              type="submit"
+              className="button-gradient-hover px-8 py-3 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition hover:scale-105"
+            >
+              Send Message
+            </button>
+          </form>
         </div>
-      </motion.section>
+      </section>
 
       {/* Footer */}
       <footer className="text-center text-gray-400 py-8 text-sm">
