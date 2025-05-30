@@ -99,216 +99,204 @@ function App() {
   }, []);
 
   return (
-    <div className="relative">
-      {/* Animated moving gradient background */}
-      <div
-        className="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none"
-        style={{
-          transform: `translateY(${-bgOffset}px)`,
-          transition: 'transform 0.2s cubic-bezier(0.4,0,0.2,1)',
-        }}
-      >
-        <div className="absolute left-1/2 top-1/3 w-[120vw] h-[80vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl opacity-60 bg-gradient-to-tr from-green-300 via-yellow-200 via-pink-200 to-purple-300" />
+    <div className="dotted-bg min-h-screen w-screen flex flex-col">
+      <div className="flex-1 flex items-center justify-center w-full">
+        <div className="w-full max-w-2xl mx-auto flex flex-col items-center justify-center text-center px-4">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1, delay: 0.2, type: 'spring', bounce: 0.4 }}
+            className="animated-gradient-border mb-8 rounded-full"
+            style={{ width: 180, height: 180 }}
+          >
+            <img
+              src={profileImg}
+              alt="Profile"
+              className="rounded-full object-cover w-full h-full border-4 border-white shadow-xl"
+            />
+          </motion.div>
+          <motion.h1
+            className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.4 }}
+          >
+            Hello, I'm Vamsi
+          </motion.h1>
+          <motion.p
+            className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.6 }}
+          >
+            PhD Student in Computer Science, specializing in Human-Computer Interaction (HCI). I'm passionate about <span className="bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent font-bold">AI</span>, UI/UX design, research, and creating innovative, user-centered experiences.
+          </motion.p>
+          <div className="animated-gradient-border rounded-full mb-2" style={{ padding: 2, display: 'inline-block' }}>
+            <motion.a
+              href="#about"
+              whileHover={{ scale: 1.07, boxShadow: '0 8px 32px rgba(236,72,153,0.15)' }}
+              className="button-gradient-hover px-10 py-4 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition relative overflow-hidden group block min-w-[180px] text-center"
+            >
+              <span className="relative z-10">Learn More</span>
+            </motion.a>
+          </div>
+        </div>
       </div>
-      <div className="animated-bg min-h-screen w-screen flex flex-col">
-        <div className="flex-1 flex items-center justify-center w-full">
-          <div className="w-full max-w-2xl mx-auto flex flex-col items-center justify-center text-center px-4">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.2, type: 'spring', bounce: 0.4 }}
-              className="animated-gradient-border mb-8 rounded-full"
-              style={{ width: 180, height: 180 }}
-            >
-              <img
-                src={profileImg}
-                alt="Profile"
-                className="rounded-full object-cover w-full h-full border-4 border-white shadow-xl"
-              />
-            </motion.div>
-            <motion.h1
-              className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent text-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.4 }}
-            >
-              Hello, I'm Vamsi
-            </motion.h1>
-            <motion.p
-              className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl text-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.6 }}
-            >
-              PhD Student in Computer Science, specializing in Human-Computer Interaction (HCI). I'm passionate about <span className="bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent font-bold">AI</span>, UI/UX design, research, and creating innovative, user-centered experiences.
-            </motion.p>
-            <div className="animated-gradient-border rounded-full mb-2" style={{ padding: 2, display: 'inline-block' }}>
-              <motion.a
-                href="#about"
-                whileHover={{ scale: 1.07, boxShadow: '0 8px 32px rgba(236,72,153,0.15)' }}
-                className="button-gradient-hover px-10 py-4 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition relative overflow-hidden group block min-w-[180px] text-center"
-              >
-                <span className="relative z-10">Learn More</span>
-              </motion.a>
+
+      {/* About Section */}
+      <section id="about" className="w-full flex flex-col items-center justify-center py-16">
+        <div className="w-full max-w-2xl mx-auto bg-white/80 shadow-lg p-8 mb-8 gradient-border-hover">
+          <h2 className="text-3xl font-bold mb-4">About Me</h2>
+          <p className="text-lg text-gray-700 mb-4">
+            I'm currently pursuing my PhD in Human-Computer Interaction (HCI), focusing on the intersection of technology and user experience. My current project involves Unity game development—fun and challenging! I'm passionate about AI, UI/UX design and always seeking projects that help my portfolio stand out (because why blend in when you can shine?).
+          </p>
+          <p className="text-lg text-gray-700 mb-4">
+            With a solid foundation in front-end technologies, my knowledge is diverse—almost like a buffet of skills, but everything on the menu is delicious. Variety <span className="italic">is</span> the spice of life!
+          </p>
+        </div>
+      </section>
+
+      {/* Experience Section */}
+      <section id="experience" className="w-full flex flex-col items-center justify-center py-16">
+        <div className="w-full max-w-2xl mx-auto bg-white/80 shadow-lg p-8 mb-8 gradient-border-hover">
+          <h2 className="text-3xl font-bold mb-6">Experience</h2>
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-50">
+              <h3 className="text-xl font-bold mb-1">Research Assistant at Google Blockly</h3>
+              <p className="text-gray-700">
+                Improving the coding experience by enhancing code navigation and integrating audio cues for accessibility. Building inclusive tools that empower users to engage with technology effectively.
+              </p>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-50">
+              <h3 className="text-xl font-bold mb-1">Teaching Assistant Roles at UNT</h3>
+              <ul className="list-disc ml-6 text-gray-700">
+                <li>Human-Computer Interaction (HCI): Usability, interaction design, user-centered research.</li>
+                <li>Assembly Language: Low-level programming, computer architecture.</li>
+                <li>Foundations of Cyber Security: System security, vulnerabilities, cryptography.</li>
+                <li>Secure E-Commerce: Payment systems, transaction protocols, infrastructure.</li>
+              </ul>
+              <p className="mt-2 text-gray-700">
+                These roles honed my communication and mentorship skills while deepening my technical expertise.
+              </p>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* About Section */}
-        <section id="about" className="w-full flex flex-col items-center justify-center py-16">
-          <div className="w-full max-w-2xl mx-auto bg-white/80 shadow-lg p-8 mb-8 gradient-border-hover">
-            <h2 className="text-3xl font-bold mb-4">About Me</h2>
-            <p className="text-lg text-gray-700 mb-4">
-              I'm currently pursuing my PhD in Human-Computer Interaction (HCI), focusing on the intersection of technology and user experience. My current project involves Unity game development—fun and challenging! I'm passionate about AI, UI/UX design and always seeking projects that help my portfolio stand out (because why blend in when you can shine?).
-            </p>
-            <p className="text-lg text-gray-700 mb-4">
-              With a solid foundation in front-end technologies, my knowledge is diverse—almost like a buffet of skills, but everything on the menu is delicious. Variety <span className="italic">is</span> the spice of life!
-            </p>
-          </div>
-        </section>
-
-        {/* Experience Section */}
-        <section id="experience" className="w-full flex flex-col items-center justify-center py-16">
-          <div className="w-full max-w-2xl mx-auto bg-white/80 shadow-lg p-8 mb-8 gradient-border-hover">
-            <h2 className="text-3xl font-bold mb-6">Experience</h2>
-            <div className="space-y-6">
-              <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-50">
-                <h3 className="text-xl font-bold mb-1">Research Assistant at Google Blockly</h3>
-                <p className="text-gray-700">
-                  Improving the coding experience by enhancing code navigation and integrating audio cues for accessibility. Building inclusive tools that empower users to engage with technology effectively.
-                </p>
-              </div>
-              <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-50">
-                <h3 className="text-xl font-bold mb-1">Teaching Assistant Roles at UNT</h3>
-                <ul className="list-disc ml-6 text-gray-700">
-                  <li>Human-Computer Interaction (HCI): Usability, interaction design, user-centered research.</li>
-                  <li>Assembly Language: Low-level programming, computer architecture.</li>
-                  <li>Foundations of Cyber Security: System security, vulnerabilities, cryptography.</li>
-                  <li>Secure E-Commerce: Payment systems, transaction protocols, infrastructure.</li>
-                </ul>
-                <p className="mt-2 text-gray-700">
-                  These roles honed my communication and mentorship skills while deepening my technical expertise.
-                </p>
+      {/* Skills Section */}
+      <section id="skills" className="w-full flex flex-col items-center justify-center py-16">
+        <div className="w-full max-w-3xl mx-auto bg-white/80 shadow-lg p-8 mb-8 gradient-border-hover">
+          <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Skills</h2>
+          {allSkills.map((group) => (
+            <div key={group.category} className="mb-6">
+              <h3 className="text-xl font-semibold mb-2 text-gray-700">{group.category}</h3>
+              <div className="flex flex-wrap gap-3">
+                {group.skills.map((skill) => (
+                  <div
+                    key={skill}
+                    className={`relative cursor-pointer px-4 py-2 rounded-full border border-gray-200 shadow-sm bg-white transition hover:bg-yellow-50 ${activeSkill === skill && showPopup ? 'z-20' : ''}`}
+                    onMouseEnter={() => { setActiveSkill(skill); setShowPopup(true); }}
+                    onMouseLeave={() => { setShowPopup(false); setTimeout(() => setActiveSkill(null), 200); }}
+                  >
+                    {skill}
+                    {/* Popup animation */}
+                    {activeSkill === skill && showPopup && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: -10 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute left-1/2 -translate-x-1/2 -top-16 min-w-[180px] bg-white border border-yellow-300 rounded-xl shadow-lg p-4 flex flex-col items-center"
+                      >
+                        {goodSkills.includes(skill) ? (
+                          <>
+                            <div className="w-full flex items-center mb-2">
+                              <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${skillLevels[skill] || 80}%` }}
+                                  transition={{ duration: 0.7 }}
+                                  className="h-2 bg-yellow-400 rounded-full"
+                                />
+                              </div>
+                              <StarRating count={Math.round((skillLevels[skill] || 80) / 20)} />
+                            </div>
+                            <div className="text-sm font-semibold text-yellow-600">{skillTaglines[skill]}</div>
+                          </>
+                        ) : (
+                          <div className="text-sm font-semibold text-purple-500 flex items-center gap-2">
+                            {getRandomFunnyTagline()} <span>😅</span>
+                          </div>
+                        )}
+                      </motion.div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </section>
 
-        {/* Skills Section */}
-        <section id="skills" className="w-full flex flex-col items-center justify-center py-16">
-          <div className="w-full max-w-3xl mx-auto bg-white/80 shadow-lg p-8 mb-8 gradient-border-hover">
-            <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Skills</h2>
-            {allSkills.map((group) => (
-              <div key={group.category} className="mb-6">
-                <h3 className="text-xl font-semibold mb-2 text-gray-700">{group.category}</h3>
-                <div className="flex flex-wrap gap-3">
-                  {group.skills.map((skill) => (
-                    <div
-                      key={skill}
-                      className={`relative cursor-pointer px-4 py-2 rounded-full border border-gray-200 shadow-sm bg-white transition hover:bg-yellow-50 ${activeSkill === skill && showPopup ? 'z-20' : ''}`}
-                      onMouseEnter={() => { setActiveSkill(skill); setShowPopup(true); }}
-                      onMouseLeave={() => { setShowPopup(false); setTimeout(() => setActiveSkill(null), 200); }}
-                    >
-                      {skill}
-                      {/* Popup animation */}
-                      {activeSkill === skill && showPopup && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: -10 }}
-                          exit={{ opacity: 0, y: 10 }}
-                          transition={{ duration: 0.3 }}
-                          className="absolute left-1/2 -translate-x-1/2 -top-16 min-w-[180px] bg-white border border-yellow-300 rounded-xl shadow-lg p-4 flex flex-col items-center"
-                        >
-                          {goodSkills.includes(skill) ? (
-                            <>
-                              <div className="w-full flex items-center mb-2">
-                                <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
-                                  <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${skillLevels[skill] || 80}%` }}
-                                    transition={{ duration: 0.7 }}
-                                    className="h-2 bg-yellow-400 rounded-full"
-                                  />
-                                </div>
-                                <StarRating count={Math.round((skillLevels[skill] || 80) / 20)} />
-                              </div>
-                              <div className="text-sm font-semibold text-yellow-600">{skillTaglines[skill]}</div>
-                            </>
-                          ) : (
-                            <div className="text-sm font-semibold text-purple-500 flex items-center gap-2">
-                              {getRandomFunnyTagline()} <span>😅</span>
-                            </div>
-                          )}
-                        </motion.div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Contact Section */}
-        <section id="contact" className="w-full flex flex-col items-center justify-center py-24 bg-transparent">
-          <div className="w-full max-w-xl mx-auto bg-white/80 shadow-lg p-8 text-center gradient-border-hover">
-            <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Contact Me</h2>
-            <form
-              action="https://formsubmit.co/kosurivamsi5@gmail.com"
-              method="POST"
-              className="flex flex-col gap-6"
+      {/* Contact Section */}
+      <section id="contact" className="w-full flex flex-col items-center justify-center py-24 bg-transparent">
+        <div className="w-full max-w-xl mx-auto bg-white/80 shadow-lg p-8 text-center gradient-border-hover">
+          <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Contact Me</h2>
+          <form
+            action="https://formsubmit.co/kosurivamsi5@gmail.com"
+            method="POST"
+            className="flex flex-col gap-6"
+          >
+            {/* Redirect after submission */}
+            <input type="hidden" name="_next" value="https://www.vamsikrishnakosuri.com/?contact=success" />
+            {/* Disable Captcha */}
+            <input type="hidden" name="_captcha" value="false" />
+            <input
+              type="text"
+              name="name"
+              placeholder="Your Name"
+              required
+              className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Your Email"
+              required
+              className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            />
+            <textarea
+              name="message"
+              placeholder="Your Message"
+              rows={5}
+              required
+              className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            ></textarea>
+            <button
+              type="submit"
+              className="button-gradient-hover px-8 py-3 bg-white text-gray-900 rounded-full shadow-lg border border-gray-300 text-lg font-semibold transition hover:scale-105"
+              onClick={async (e) => {
+                if (typeof window !== 'undefined') {
+                  const confetti = (await import('canvas-confetti')).default;
+                  confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#22c55e', '#fde047', '#f472b6', '#a78bfa'],
+                  });
+                }
+              }}
             >
-              {/* Redirect after submission */}
-              <input type="hidden" name="_next" value="https://www.vamsikrishnakosuri.com/?contact=success" />
-              {/* Disable Captcha */}
-              <input type="hidden" name="_captcha" value="false" />
-              <input
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                required
-                className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Your Email"
-                required
-                className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
-              />
-              <textarea
-                name="message"
-                placeholder="Your Message"
-                rows={5}
-                required
-                className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
-              ></textarea>
-              <button
-                type="submit"
-                className="button-gradient-hover px-8 py-3 bg-white text-gray-900 rounded-full shadow-lg border border-gray-300 text-lg font-semibold transition hover:scale-105"
-                onClick={async (e) => {
-                  if (typeof window !== 'undefined') {
-                    const confetti = (await import('canvas-confetti')).default;
-                    confetti({
-                      particleCount: 80,
-                      spread: 70,
-                      origin: { y: 0.6 },
-                      colors: ['#22c55e', '#fde047', '#f472b6', '#a78bfa'],
-                    });
-                  }
-                }}
-              >
-                Send Message
-              </button>
-            </form>
-          </div>
-        </section>
+              Send Message
+            </button>
+          </form>
+        </div>
+      </section>
 
-        {/* Footer */}
-        <footer className="text-center text-gray-400 py-8 text-sm">
-          &copy; {new Date().getFullYear()} Vamsi Krishna Kosuri
-        </footer>
-      </div>
+      {/* Footer */}
+      <footer className="text-center text-gray-400 py-8 text-sm">
+        &copy; {new Date().getFullYear()} Vamsi Krishna Kosuri
+      </footer>
     </div>
   );
 }

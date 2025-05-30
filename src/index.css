@@ -182,3 +182,9 @@ button:focus-visible {
 .gradient-border-hover:hover::before {
   opacity: 1;
 }
+
+.dotted-bg {
+  background-color: #fff;
+  background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="%23cbd5e1"/></svg>');
+  background-size: 20px 20px;
+}
