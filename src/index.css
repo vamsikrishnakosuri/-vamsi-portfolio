@@ -141,10 +141,13 @@ button:focus-visible {
 .hover-glow {
   transition: box-shadow 0.3s, border 0.3s, border-image 0.3s;
   border: 2px solid transparent;
+  border-radius: 1rem;
+  overflow: hidden;
 }
 
 .hover-glow:hover {
   box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.10), 0 4px 24px 0 rgba(167, 139, 250, 0.08);
   border-image: linear-gradient(90deg, #22c55e, #fde047, #f472b6, #a78bfa) 1;
   border-radius: 1rem;
+  overflow: hidden;
 }

@@ -14,7 +14,7 @@ const sectionVariant = {
 };
 
 const goodSkills = [
-  'Python', 'Canva', 'Photoshop', 'Pixlr', 'Figma', 'Sketch', 'Data Analysis', 'Notion', 'Slack', '3ds Max', 'Blender', 'Unity3D', 'PPTs', 'UI/UX Design', 'Prompt Engineering', 'AI Agents'
+  'Python', 'Canva', 'Photoshop', 'Pixlr', 'Figma', 'Sketch', 'Data Analysis', 'Notion', 'Slack', '3ds Max', 'Blender', 'Unity3D', 'PPTs', 'UI/UX Design', 'Prompt Engineering', 'AI Agents', 'HTML', 'CSS'
 ];
 const allSkills = [
   { category: 'Programming Languages', skills: ['Python', 'JavaScript', 'C#', 'HTML', 'CSS'] },
@@ -82,15 +82,6 @@ function StarRating({ count }) {
 function App() {
   const [activeSkill, setActiveSkill] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-  const handleSkillClick = (skill) => {
-    if (activeSkill === skill && showPopup) {
-      setShowPopup(false);
-      setTimeout(() => setActiveSkill(null), 300);
-    } else {
-      setActiveSkill(skill);
-      setShowPopup(true);
-    }
-  };
 
   return (
     <div className="animated-bg min-h-screen w-screen flex flex-col">
@@ -139,7 +130,7 @@ function App() {
 
       {/* About Section */}
       <section id="about" className="w-full flex flex-col items-center justify-center py-16">
-        <div className="w-full max-w-2xl mx-auto bg-white/80 rounded-2xl shadow-lg p-8 mb-8 hover-glow">
+        <div className="w-full max-w-2xl mx-auto bg-white/80 shadow-lg p-8 mb-8 hover-glow">
           <h2 className="text-3xl font-bold mb-4">About Me</h2>
           <p className="text-lg text-gray-700 mb-4">
             I'm currently pursuing my PhD in Human-Computer Interaction (HCI), focusing on the intersection of technology and user experience. My current project involves Unity game development—fun and challenging! I'm passionate about UI/UX design and always seeking projects that help my portfolio stand out (because why blend in when you can shine?).
@@ -152,7 +143,7 @@ function App() {
 
       {/* Experience Section */}
       <section id="experience" className="w-full flex flex-col items-center justify-center py-16">
-        <div className="w-full max-w-2xl mx-auto bg-white/80 rounded-2xl shadow-lg p-8 mb-8 hover-glow">
+        <div className="w-full max-w-2xl mx-auto bg-white/80 shadow-lg p-8 mb-8 hover-glow">
           <h2 className="text-3xl font-bold mb-6">Experience</h2>
           <div className="space-y-6">
             <div className="bg-gray-50 rounded-xl p-6 shadow transition hover-glow">
@@ -179,7 +170,7 @@ function App() {
 
       {/* Skills Section */}
       <section id="skills" className="w-full flex flex-col items-center justify-center py-16">
-        <div className="w-full max-w-3xl mx-auto bg-white/80 rounded-2xl shadow-lg p-8 mb-8 hover-glow">
+        <div className="w-full max-w-3xl mx-auto bg-white/80 shadow-lg p-8 mb-8 hover-glow">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Skills</h2>
           {allSkills.map((group) => (
             <div key={group.category} className="mb-6">
@@ -189,7 +180,8 @@ function App() {
                   <div
                     key={skill}
                     className={`relative cursor-pointer px-4 py-2 rounded-full bg-gray-100 text-gray-800 font-medium shadow-sm transition hover:scale-105 hover-glow border border-transparent ${activeSkill === skill && showPopup ? 'z-20' : ''}`}
-                    onClick={() => handleSkillClick(skill)}
+                    onMouseEnter={() => { setActiveSkill(skill); setShowPopup(true); }}
+                    onMouseLeave={() => { setShowPopup(false); setTimeout(() => setActiveSkill(null), 200); }}
                   >
                     {skill}
                     {/* Popup animation */}
@@ -233,7 +225,7 @@ function App() {
 
       {/* Contact Section */}
       <section id="contact" className="w-full flex flex-col items-center justify-center py-24 bg-transparent">
-        <div className="w-full max-w-xl mx-auto bg-white/80 rounded-2xl shadow-lg p-8 text-center hover-glow">
+        <div className="w-full max-w-xl mx-auto bg-white/80 shadow-lg p-8 text-center hover-glow">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Contact Me</h2>
           <form
             action="https://formsubmit.co/kosurivamsi5@gmail.com"
