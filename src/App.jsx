@@ -59,64 +59,48 @@ function App() {
       </div>
 
       {/* About Section */}
-      <motion.section
-        id="about"
-        variants={sectionVariant}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        className="max-w-3xl mx-auto py-16 px-4"
-      >
-        <h2 className="text-3xl font-semibold mb-4">About Me</h2>
-        <p className="text-lg text-gray-700 mb-4">
-          I'm currently pursuing my PhD in Human-Computer Interaction (HCI), focusing on the intersection of technology and user experience. My current project involves Unity game development—fun and challenging! I'm passionate about UI/UX design and always seeking projects that help my portfolio stand out (because why blend in when you can shine?).
-        </p>
-        <p className="text-lg text-gray-700 mb-4">
-          With a solid foundation in front-end technologies, my knowledge is diverse—almost like a buffet of skills, but everything on the menu is delicious. Variety <span className="italic">is</span> the spice of life!
-        </p>
-      </motion.section>
+      <section id="about" className="w-full flex flex-col items-center justify-center py-16">
+        <div className="w-full max-w-2xl mx-auto bg-white/80 rounded-2xl shadow-lg p-8 mb-8 hover-glow">
+          <h2 className="text-3xl font-bold mb-4">About Me</h2>
+          <p className="text-lg text-gray-700 mb-4">
+            I'm currently pursuing my PhD in Human-Computer Interaction (HCI), focusing on the intersection of technology and user experience. My current project involves Unity game development—fun and challenging! I'm passionate about UI/UX design and always seeking projects that help my portfolio stand out (because why blend in when you can shine?).
+          </p>
+          <p className="text-lg text-gray-700 mb-4">
+            With a solid foundation in front-end technologies, my knowledge is diverse—almost like a buffet of skills, but everything on the menu is delicious. Variety <span className="italic">is</span> the spice of life!
+          </p>
+        </div>
+      </section>
 
       {/* Experience Section */}
-      <motion.section
-        id="experience"
-        variants={sectionVariant}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        className="max-w-3xl mx-auto py-16 px-4"
-      >
-        <h2 className="text-3xl font-semibold mb-6">Experience</h2>
-        <div className="space-y-6">
-          <motion.div
-            whileHover={{ scale: 1.02, boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }}
-            className="bg-gray-50 rounded-xl p-6 shadow transition"
-          >
-            <h3 className="text-xl font-bold mb-1">Research Assistant at Google Blockly</h3>
-            <p className="text-gray-700">
-              Improving the coding experience by enhancing code navigation and integrating audio cues for accessibility. Building inclusive tools that empower users to engage with technology effectively.
-            </p>
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.02, boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }}
-            className="bg-gray-50 rounded-xl p-6 shadow transition"
-          >
-            <h3 className="text-xl font-bold mb-1">Teaching Assistant Roles at UNT</h3>
-            <ul className="list-disc ml-6 text-gray-700">
-              <li>Human-Computer Interaction (HCI): Usability, interaction design, user-centered research.</li>
-              <li>Assembly Language: Low-level programming, computer architecture.</li>
-              <li>Foundations of Cyber Security: System security, vulnerabilities, cryptography.</li>
-              <li>Secure E-Commerce: Payment systems, transaction protocols, infrastructure.</li>
-            </ul>
-            <p className="mt-2 text-gray-700">
-              These roles honed my communication and mentorship skills while deepening my technical expertise.
-            </p>
-          </motion.div>
+      <section id="experience" className="w-full flex flex-col items-center justify-center py-16">
+        <div className="w-full max-w-2xl mx-auto bg-white/80 rounded-2xl shadow-lg p-8 mb-8 hover-glow">
+          <h2 className="text-3xl font-bold mb-6">Experience</h2>
+          <div className="space-y-6">
+            <div className="bg-gray-50 rounded-xl p-6 shadow transition hover-glow">
+              <h3 className="text-xl font-bold mb-1">Research Assistant at Google Blockly</h3>
+              <p className="text-gray-700">
+                Improving the coding experience by enhancing code navigation and integrating audio cues for accessibility. Building inclusive tools that empower users to engage with technology effectively.
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-xl p-6 shadow transition hover-glow">
+              <h3 className="text-xl font-bold mb-1">Teaching Assistant Roles at UNT</h3>
+              <ul className="list-disc ml-6 text-gray-700">
+                <li>Human-Computer Interaction (HCI): Usability, interaction design, user-centered research.</li>
+                <li>Assembly Language: Low-level programming, computer architecture.</li>
+                <li>Foundations of Cyber Security: System security, vulnerabilities, cryptography.</li>
+                <li>Secure E-Commerce: Payment systems, transaction protocols, infrastructure.</li>
+              </ul>
+              <p className="mt-2 text-gray-700">
+                These roles honed my communication and mentorship skills while deepening my technical expertise.
+              </p>
+            </div>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Contact Section */}
       <section id="contact" className="w-full flex flex-col items-center justify-center py-24 bg-transparent">
-        <div className="w-full max-w-xl mx-auto bg-white/80 rounded-2xl shadow-lg p-8 text-center">
+        <div className="w-full max-w-xl mx-auto bg-white/80 rounded-2xl shadow-lg p-8 text-center hover-glow">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Contact Me</h2>
           <form
             action="https://formsubmit.co/kosurivamsi5@gmail.com"
@@ -150,7 +134,7 @@ function App() {
             ></textarea>
             <button
               type="submit"
-              className="button-gradient-hover px-8 py-3 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition hover:scale-105"
+              className="button-gradient-hover hover-glow px-8 py-3 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition hover:scale-105"
               onClick={async (e) => {
                 if (typeof window !== 'undefined') {
                   const confetti = (await import('canvas-confetti')).default;
