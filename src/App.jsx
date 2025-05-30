@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import './index.css';
 import profileImg from './profile.png';
+import confetti from 'canvas-confetti';
 
 const heroVariant = {
   hidden: { opacity: 0, y: 40 },
@@ -151,6 +152,14 @@ function App() {
             <button
               type="submit"
               className="button-gradient-hover px-8 py-3 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition hover:scale-105"
+              onClick={() => {
+                confetti({
+                  particleCount: 80,
+                  spread: 70,
+                  origin: { y: 0.6 },
+                  colors: ['#22c55e', '#fde047', '#f472b6', '#a78bfa'],
+                });
+              }}
             >
               Send Message
             </button>
