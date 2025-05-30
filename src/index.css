@@ -151,3 +151,26 @@ button:focus-visible {
   border-radius: 1rem;
   overflow: hidden;
 }
+
+.gradient-border-hover {
+  position: relative;
+  border-radius: 1rem;
+  overflow: visible;
+  z-index: 1;
+  transition: box-shadow 0.3s;
+}
+
+.gradient-border-hover::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 1rem;
+  z-index: -1;
+  background: linear-gradient(90deg, #22c55e, #fde047, #f472b6, #a78bfa);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.gradient-border-hover:hover::before {
+  opacity: 1;
+}
