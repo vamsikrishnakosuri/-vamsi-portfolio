@@ -146,13 +146,13 @@ function App() {
         <div className="w-full max-w-2xl mx-auto bg-white/80 shadow-lg p-8 mb-8 gradient-border-hover">
           <h2 className="text-3xl font-bold mb-6">Experience</h2>
           <div className="space-y-6">
-            <div className="bg-gray-50 rounded-xl p-6 shadow transition hover-glow">
+            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-50">
               <h3 className="text-xl font-bold mb-1">Research Assistant at Google Blockly</h3>
               <p className="text-gray-700">
                 Improving the coding experience by enhancing code navigation and integrating audio cues for accessibility. Building inclusive tools that empower users to engage with technology effectively.
               </p>
             </div>
-            <div className="bg-gray-50 rounded-xl p-6 shadow transition hover-glow">
+            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-50">
               <h3 className="text-xl font-bold mb-1">Teaching Assistant Roles at UNT</h3>
               <ul className="list-disc ml-6 text-gray-700">
                 <li>Human-Computer Interaction (HCI): Usability, interaction design, user-centered research.</li>
@@ -179,7 +179,7 @@ function App() {
                 {group.skills.map((skill) => (
                   <div
                     key={skill}
-                    className={`relative cursor-pointer px-4 py-2 rounded-full bg-gray-100 text-gray-800 font-medium shadow-sm transition hover:scale-105 hover-glow border border-transparent ${activeSkill === skill && showPopup ? 'z-20' : ''}`}
+                    className={`relative cursor-pointer px-4 py-2 rounded-full border border-gray-200 shadow-sm bg-white transition hover:bg-yellow-50 ${activeSkill === skill && showPopup ? 'z-20' : ''}`}
                     onMouseEnter={() => { setActiveSkill(skill); setShowPopup(true); }}
                     onMouseLeave={() => { setShowPopup(false); setTimeout(() => setActiveSkill(null), 200); }}
                   >
