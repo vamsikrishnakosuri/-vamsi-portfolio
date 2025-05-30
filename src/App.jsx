@@ -145,7 +145,7 @@ function App() {
 
       {/* About Section */}
       <section id="about" className="w-full flex flex-col items-center justify-center py-16">
-        <div className="w-full max-w-2xl mx-auto bg-white/80 shadow-lg p-8 mb-8 gradient-border-hover">
+        <div className="w-full max-w-2xl mx-auto bg-white shadow-lg p-8 mb-8 gradient-border-hover">
           <h2 className="text-3xl font-bold mb-4">About Me</h2>
           <p className="text-lg text-gray-700 mb-4">
             I'm currently pursuing my PhD in Human-Computer Interaction (HCI), focusing on the intersection of technology and user experience. My current project involves Unity game development—fun and challenging! I'm passionate about AI, UI/UX design and always seeking projects that help my portfolio stand out (because why blend in when you can shine?).
@@ -158,7 +158,7 @@ function App() {
 
       {/* Experience Section */}
       <section id="experience" className="w-full flex flex-col items-center justify-center py-16">
-        <div className="w-full max-w-2xl mx-auto bg-white/80 shadow-lg p-8 mb-8 gradient-border-hover">
+        <div className="w-full max-w-2xl mx-auto bg-white shadow-lg p-8 mb-8 gradient-border-hover">
           <h2 className="text-3xl font-bold mb-6">Experience</h2>
           <div className="space-y-6">
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-50">
@@ -185,7 +185,7 @@ function App() {
 
       {/* Skills Section */}
       <section id="skills" className="w-full flex flex-col items-center justify-center py-16">
-        <div className="w-full max-w-3xl mx-auto bg-white/80 shadow-lg p-8 mb-8 gradient-border-hover">
+        <div className="w-full max-w-3xl mx-auto bg-white shadow-lg p-8 mb-8 gradient-border-hover">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Skills</h2>
           {allSkills.map((group) => (
             <div key={group.category} className="mb-6">
@@ -240,7 +240,7 @@ function App() {
 
       {/* Contact Section */}
       <section id="contact" className="w-full flex flex-col items-center justify-center py-24 bg-transparent">
-        <div className="w-full max-w-xl mx-auto bg-white/80 shadow-lg p-8 text-center gradient-border-hover">
+        <div className="w-full max-w-xl mx-auto bg-white shadow-lg p-8 text-center gradient-border-hover">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Contact Me</h2>
           <form
             action="https://formsubmit.co/kosurivamsi5@gmail.com"
