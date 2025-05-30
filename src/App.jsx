@@ -161,13 +161,13 @@ function App() {
         <div className="w-full max-w-2xl mx-auto bg-white shadow-lg p-8 mb-8 gradient-border-hover">
           <h2 className="text-3xl font-bold mb-6">Experience</h2>
           <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-50">
+            <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-100">
               <h3 className="text-xl font-bold mb-1">Research Assistant at Google Blockly</h3>
               <p className="text-gray-700">
                 Improving the coding experience by enhancing code navigation and integrating audio cues for accessibility. Building inclusive tools that empower users to engage with technology effectively.
               </p>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-50">
+            <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-100">
               <h3 className="text-xl font-bold mb-1">Teaching Assistant Roles at UNT</h3>
               <ul className="list-disc ml-6 text-gray-700">
                 <li>Human-Computer Interaction (HCI): Usability, interaction design, user-centered research.</li>
