@@ -139,7 +139,7 @@ function App() {
         <div className="w-full max-w-2xl mx-auto bg-white/80 shadow-lg p-8 mb-8 gradient-border-hover">
           <h2 className="text-3xl font-bold mb-4">About Me</h2>
           <p className="text-lg text-gray-700 mb-4">
-            I'm currently pursuing my PhD in Human-Computer Interaction (HCI), focusing on the intersection of technology and user experience. My current project involves Unity game development—fun and challenging! I'm passionate about UI/UX design and always seeking projects that help my portfolio stand out (because why blend in when you can shine?).
+            I'm currently pursuing my PhD in Human-Computer Interaction (HCI), focusing on the intersection of technology and user experience. My current project involves Unity game development—fun and challenging! I'm passionate about AI, UI/UX design and always seeking projects that help my portfolio stand out (because why blend in when you can shine?).
           </p>
           <p className="text-lg text-gray-700 mb-4">
             With a solid foundation in front-end technologies, my knowledge is diverse—almost like a buffet of skills, but everything on the menu is delicious. Variety <span className="italic">is</span> the spice of life!
@@ -265,7 +265,7 @@ function App() {
             ></textarea>
             <button
               type="submit"
-              className="button-gradient-hover hover-glow px-8 py-3 bg-white text-gray-900 rounded-full shadow-lg border-2 border-transparent text-lg font-semibold transition hover:scale-105"
+              className="button-gradient-hover px-8 py-3 bg-white text-gray-900 rounded-full shadow-lg border border-gray-300 text-lg font-semibold transition hover:scale-105"
               onClick={async (e) => {
                 if (typeof window !== 'undefined') {
                   const confetti = (await import('canvas-confetti')).default;
