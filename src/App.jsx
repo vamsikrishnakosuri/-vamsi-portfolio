@@ -89,17 +89,57 @@ function App() {
   const [activeSkill, setActiveSkill] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [bgOffset, setBgOffset] = useState(0);
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Check for saved theme preference or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      setDarkMode(true);
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    setDarkMode(!darkMode);
+    if (!darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
-      setBgOffset(window.scrollY * 0.3); // Adjust speed as needed
+      setBgOffset(window.scrollY * 0.3);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <div className="dotted-bg min-h-screen w-screen flex flex-col">
+    <div className="dotted-bg min-h-screen w-screen flex flex-col dark:bg-gray-900 dark:text-white transition-colors duration-200">
+      {/* Theme Toggle Button */}
+      <button
+        onClick={toggleTheme}
+        className="fixed top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 z-50"
+        aria-label="Toggle theme"
+      >
+        {darkMode ? (
+          <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        ) : (
+          <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        )}
+      </button>
+
       <div className="flex-1 flex items-center justify-center w-full">
         <div className="w-full max-w-2xl mx-auto flex flex-col items-center justify-center text-center px-4">
           <motion.div
@@ -145,12 +185,12 @@ function App() {
 
       {/* About Section */}
       <section id="about" className="w-full flex flex-col items-center justify-center py-16">
-        <div className="w-full max-w-2xl mx-auto bg-white shadow-lg p-8 mb-8 gradient-border-hover">
-          <h2 className="text-3xl font-bold mb-4">About Me</h2>
-          <p className="text-lg text-gray-700 mb-4">
+        <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 shadow-lg p-8 mb-8 gradient-border-hover">
+          <h2 className="text-3xl font-bold mb-4 dark:text-white">About Me</h2>
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">
             I'm currently pursuing my PhD in Human-Computer Interaction (HCI), focusing on the intersection of technology and user experience. My current project involves Unity game development—fun and challenging! I'm passionate about AI, UI/UX design and always seeking projects that help my portfolio stand out (because why blend in when you can shine?).
           </p>
-          <p className="text-lg text-gray-700 mb-4">
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">
             With a solid foundation in front-end technologies, my knowledge is diverse—almost like a buffet of skills, but everything on the menu is delicious. Variety <span className="italic">is</span> the spice of life!
           </p>
         </div>
@@ -158,24 +198,24 @@ function App() {
 
       {/* Experience Section */}
       <section id="experience" className="w-full flex flex-col items-center justify-center py-16">
-        <div className="w-full max-w-2xl mx-auto bg-white shadow-lg p-8 mb-8 gradient-border-hover">
-          <h2 className="text-3xl font-bold mb-6">Experience</h2>
+        <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 shadow-lg p-8 mb-8 gradient-border-hover">
+          <h2 className="text-3xl font-bold mb-6 dark:text-white">Experience</h2>
           <div className="space-y-6">
-            <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-100">
-              <h3 className="text-xl font-bold mb-1">Research Assistant at Google Blockly</h3>
-              <p className="text-gray-700">
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600 p-6 shadow-sm transition hover:bg-gray-100 dark:hover:bg-gray-600">
+              <h3 className="text-xl font-bold mb-1 dark:text-white">Research Assistant at Google Blockly</h3>
+              <p className="text-gray-700 dark:text-gray-300">
                 Improving the coding experience by enhancing code navigation and integrating audio cues for accessibility. Building inclusive tools that empower users to engage with technology effectively.
               </p>
             </div>
-            <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 shadow-sm transition hover:bg-gray-100">
-              <h3 className="text-xl font-bold mb-1">Teaching Assistant Roles at UNT</h3>
-              <ul className="list-disc ml-6 text-gray-700">
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600 p-6 shadow-sm transition hover:bg-gray-100 dark:hover:bg-gray-600">
+              <h3 className="text-xl font-bold mb-1 dark:text-white">Teaching Assistant Roles at UNT</h3>
+              <ul className="list-disc ml-6 text-gray-700 dark:text-gray-300">
                 <li>Human-Computer Interaction (HCI): Usability, interaction design, user-centered research.</li>
                 <li>Assembly Language: Low-level programming, computer architecture.</li>
                 <li>Foundations of Cyber Security: System security, vulnerabilities, cryptography.</li>
                 <li>Secure E-Commerce: Payment systems, transaction protocols, infrastructure.</li>
               </ul>
-              <p className="mt-2 text-gray-700">
+              <p className="mt-2 text-gray-700 dark:text-gray-300">
                 These roles honed my communication and mentorship skills while deepening my technical expertise.
               </p>
             </div>
@@ -185,16 +225,16 @@ function App() {
 
       {/* Skills Section */}
       <section id="skills" className="w-full flex flex-col items-center justify-center py-16">
-        <div className="w-full max-w-3xl mx-auto bg-white shadow-lg p-8 mb-8 gradient-border-hover">
+        <div className="w-full max-w-3xl mx-auto bg-white dark:bg-gray-800 shadow-lg p-8 mb-8 gradient-border-hover">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Skills</h2>
           {allSkills.map((group) => (
             <div key={group.category} className="mb-6">
-              <h3 className="text-xl font-semibold mb-2 text-gray-700">{group.category}</h3>
+              <h3 className="text-xl font-semibold mb-2 text-gray-700 dark:text-gray-300">{group.category}</h3>
               <div className="flex flex-wrap gap-3">
                 {group.skills.map((skill) => (
                   <div
                     key={skill}
-                    className={`relative cursor-pointer px-4 py-2 rounded-full border border-gray-200 shadow-sm bg-white transition hover:bg-yellow-50 ${activeSkill === skill && showPopup ? 'z-20' : ''}`}
+                    className={`relative cursor-pointer px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 shadow-sm bg-white dark:bg-gray-700 transition hover:bg-yellow-50 dark:hover:bg-gray-600 ${activeSkill === skill && showPopup ? 'z-20' : ''}`}
                     onMouseEnter={() => { setActiveSkill(skill); setShowPopup(true); }}
                     onMouseLeave={() => { setShowPopup(false); setTimeout(() => setActiveSkill(null), 200); }}
                   >
