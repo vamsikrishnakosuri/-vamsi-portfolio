@@ -122,43 +122,7 @@ function App() {
   }, []);
 
   return (
-    <div className="dotted-bg min-h-screen w-screen flex flex-col dark:bg-gray-900 dark:text-white transition-colors duration-200 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 pointer-events-none">
-        <motion.div
-          className="absolute top-20 left-20 opacity-10 dark:opacity-20"
-          animate={{
-            rotate: 360,
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        >
-          <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-purple-500">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-          </svg>
-        </motion.div>
-        <motion.div
-          className="absolute bottom-20 right-20 opacity-10 dark:opacity-20"
-          animate={{
-            rotate: -360,
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        >
-          <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-yellow-500">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-          </svg>
-        </motion.div>
-      </div>
-
+    <div className="dotted-bg min-h-screen w-screen flex flex-col dark:bg-gray-900 dark:text-white transition-colors duration-200">
       {/* Theme Toggle Button */}
       <button
         onClick={toggleTheme}
@@ -166,27 +130,13 @@ function App() {
         aria-label="Toggle theme"
       >
         {darkMode ? (
-          <motion.svg
-            className="w-6 h-6 text-yellow-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          >
+          <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-          </motion.svg>
+          </svg>
         ) : (
-          <motion.svg
-            className="w-6 h-6 text-gray-700"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          >
+          <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-          </motion.svg>
+          </svg>
         )}
       </button>
 
@@ -196,36 +146,13 @@ function App() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1, delay: 0.2, type: 'spring', bounce: 0.4 }}
-            className="animated-gradient-border mb-8 rounded-full relative group"
+            className="animated-gradient-border mb-8 rounded-full"
             style={{ width: 180, height: 180 }}
-            whileHover={{ scale: 1.05 }}
           >
-            <motion.div
-              className="absolute inset-0 rounded-full"
-              animate={{
-                rotate: 360,
-              }}
-              transition={{
-                duration: 20,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-            >
-              <svg width="100%" height="100%" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="48" fill="none" stroke="url(#gradient)" strokeWidth="2" />
-                <defs>
-                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#22c55e" />
-                    <stop offset="50%" stopColor="#fde047" />
-                    <stop offset="100%" stopColor="#f472b6" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </motion.div>
             <img
               src={profileImg}
               alt="Profile"
-              className="rounded-full object-cover w-full h-full border-4 border-white dark:border-gray-800 shadow-xl relative z-10"
+              className="rounded-full object-cover w-full h-full border-4 border-white dark:border-gray-800 shadow-xl"
             />
           </motion.div>
           <motion.h1
@@ -305,43 +232,26 @@ function App() {
               <h3 className="text-xl font-semibold mb-2 text-gray-700 dark:text-gray-300">{group.category}</h3>
               <div className="flex flex-wrap gap-3">
                 {group.skills.map((skill) => (
-                  <motion.div
+                  <div
                     key={skill}
                     className={`relative cursor-pointer px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 shadow-sm bg-white dark:bg-gray-700 transition hover:bg-yellow-50 dark:hover:bg-gray-600 ${activeSkill === skill && showPopup ? 'z-20' : ''}`}
                     onMouseEnter={() => { setActiveSkill(skill); setShowPopup(true); }}
                     onMouseLeave={() => { setShowPopup(false); setTimeout(() => setActiveSkill(null), 200); }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                   >
-                    <motion.div
-                      className="absolute -right-1 -top-1"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                    >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-yellow-500">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                      </svg>
-                    </motion.div>
                     <span className="text-gray-700 dark:text-gray-300">{skill}</span>
                     {/* Popup animation */}
                     {activeSkill === skill && showPopup && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: -10 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.3 }}
+                      <div
                         className="absolute left-1/2 -translate-x-1/2 -top-16 min-w-[180px] bg-white border border-yellow-300 rounded-xl shadow-lg p-4 flex flex-col items-center"
                       >
                         {goodSkills.includes(skill) ? (
                           <>
                             <div className="w-full flex items-center mb-2">
                               <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
-                                <motion.div
-                                  initial={{ width: 0 }}
-                                  animate={{ width: `${skillLevels[skill] || 80}%` }}
-                                  transition={{ duration: 0.7 }}
+                                <div
                                   className="h-2 bg-yellow-400 rounded-full"
-                                />
+                                  style={{ width: `${skillLevels[skill] || 80}%` }}
+                                ></div>
                               </div>
                               <StarRating count={Math.round((skillLevels[skill] || 80) / 20)} />
                             </div>
@@ -352,9 +262,9 @@ function App() {
                             {getRandomFunnyTagline()} <span>😅</span>
                           </div>
                         )}
-                      </motion.div>
+                      </div>
                     )}
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
