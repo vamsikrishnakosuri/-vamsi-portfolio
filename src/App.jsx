@@ -164,7 +164,7 @@ function App() {
             Hello, I'm Vamsi
           </motion.h1>
           <motion.p
-            className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl text-center"
+            className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.6 }}
@@ -280,7 +280,7 @@ function App() {
 
       {/* Contact Section */}
       <section id="contact" className="w-full flex flex-col items-center justify-center py-24 bg-transparent">
-        <div className="w-full max-w-xl mx-auto bg-white shadow-lg p-8 text-center gradient-border-hover">
+        <div className="w-full max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-lg p-8 text-center gradient-border-hover">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-yellow-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">Contact Me</h2>
           <form
             action="https://formsubmit.co/kosurivamsi5@gmail.com"
@@ -296,25 +296,25 @@ function App() {
               name="name"
               placeholder="Your Name"
               required
-              className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
             />
             <input
               type="email"
               name="email"
               placeholder="Your Email"
               required
-              className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
             />
             <textarea
               name="message"
               placeholder="Your Message"
               rows={5}
               required
-              className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
             ></textarea>
             <button
               type="submit"
-              className="button-gradient-hover px-8 py-3 bg-white text-gray-900 rounded-full shadow-lg border border-gray-300 text-lg font-semibold transition hover:scale-105"
+              className="button-gradient-hover px-8 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-full shadow-lg border border-gray-300 dark:border-gray-600 text-lg font-semibold transition hover:scale-105"
               onClick={async (e) => {
                 if (typeof window !== 'undefined') {
                   const confetti = (await import('canvas-confetti')).default;
