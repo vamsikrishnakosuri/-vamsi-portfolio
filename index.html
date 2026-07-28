@@ -228,7 +228,7 @@ canvas#game{ width:100%; height:180px; display:block; border-radius:12px; backgr
 .hero-left .thesis{ margin-top:0 }
 .hero-right{ display:flex; justify-content:center }
 .portrait{ width:300px; height:300px; border-radius:50%; padding:5px; background:var(--grad); box-shadow:var(--shadow); flex:none }
-.portrait img{ width:100%; height:100%; border-radius:50%; object-fit:cover; display:block; border:5px solid var(--paper); background:#fff }
+.pimg{ display:block; width:100%; height:100%; border-radius:50%; border:5px solid var(--paper); box-sizing:border-box; background-color:#fff; background-image:url(profile.jpg); background-repeat:no-repeat; background-size:270% auto; background-position:52% 30%; background-clip:padding-box; background-origin:padding-box }
 @media (max-width:880px){
   .hero-cols{ grid-template-columns:1fr; gap:30px }
   .hero-right{ order:-1; justify-content:flex-start }
@@ -282,7 +282,7 @@ canvas#game{ width:100%; height:180px; display:block; border-radius:12px; backgr
           <p class="kbd-hint">This whole site is set in <b>Atkinson Hyperlegible</b>, a typeface built for low-vision readers. Try it: press <span class="kbd">Tab</span> to see the focus ring.</p>
         </div>
         <div class="hero-right">
-          <div class="portrait"><img src="profile.jpg" alt="Portrait of Vamsi Krishna Kosuri" width="300" height="300"></div>
+          <div class="portrait"><span class="pimg" role="img" aria-label="Portrait of Vamsi Krishna Kosuri"></span></div>
         </div>
       </div>
     </div>
@@ -364,9 +364,28 @@ canvas#game{ width:100%; height:180px; display:block; border-radius:12px; backgr
         <article class="proj reveal">
           <div class="meta"><span class="role">Designer &amp; developer</span>Assistive tool<br>Ongoing</div>
           <div>
-            <h3>Screen-reader-first coding tutorials</h3>
-            <p>Interactive, keyboard-navigable tutorials that teach coding to blind and low-vision learners, built to work the moment a screen reader lands on them.</p>
-            <div class="tags"><span class="tag">Accessibility</span><span class="tag">Instructional design</span><span class="tag">JavaScript</span></div>
+            <h3>Accessible learning tools</h3>
+            <p>Building tools that make learning to code more accessible. More to share soon.</p>
+            <div class="tags"><span class="tag">Accessibility</span><span class="tag">In progress</span></div>
+          </div>
+        </article>
+
+        <article class="proj reveal">
+          <div class="meta"><span class="role">Full-stack build</span>Web app<br>Personal</div>
+          <div>
+            <h3>Strangers Connect</h3>
+            <p>A full-stack video-chat app that connects people worldwide in real time: peer-to-peer WebRTC video, Socket.io signalling, end-to-end encrypted messaging, and a responsive dark and light interface.</p>
+            <div class="tags"><span class="tag">WebRTC</span><span class="tag">Socket.io</span><span class="tag">Node.js</span><span class="tag">React</span></div>
+            <div class="plinks">
+              <a href="https://strangers-connect.vercel.app">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>
+                Live demo
+              </a>
+              <a href="https://github.com/vamsikrishnakosuri/StrangersConnect">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 8.8 21.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.4 4.6-4.6 4.9.3.3.6.9.6 1.8v2.7c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>
+                Source
+              </a>
+            </div>
           </div>
         </article>
 
