@@ -2,12 +2,12 @@
 // The AI key never leaves the server. Configure in Vercel → Project → Settings → Environment Variables:
 //   AI_API_KEY   (required)  your Hugging Face token (or Groq / OpenAI-compatible key)
 //   AI_BASE_URL  (optional)  default https://router.huggingface.co/v1   (Groq: https://api.groq.com/openai/v1)
-//   AI_MODEL     (optional)  default meta-llama/Llama-3.1-8B-Instruct   (Groq: llama-3.1-8b-instant)
+//   AI_MODEL     (optional)  default openai/gpt-oss-20b   (works on Groq and Hugging Face)
 
 import { KNOWLEDGE } from './knowledge.js';
 
 const BASE_URL = process.env.AI_BASE_URL || 'https://router.huggingface.co/v1';
-const MODEL = process.env.AI_MODEL || 'meta-llama/Llama-3.1-8B-Instruct';
+const MODEL = process.env.AI_MODEL || 'openai/gpt-oss-20b';
 
 const SYSTEM = `You are the assistant on Vamsi Krishna Kosuri's personal website. Your only job is to answer questions about Vamsi: his research, tools, publications, teaching, skills, background, and what he is looking for next.
 
@@ -54,8 +54,9 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: MODEL,
         messages: [{ role: 'system', content: SYSTEM }, ...messages],
-        max_tokens: 350,
+        max_tokens: 700,
         temperature: 0.3,
+        reasoning_effort: 'low',
       }),
     });
     const data = await r.json();
