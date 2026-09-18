@@ -168,6 +168,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .compose button{background:var(--cream);color:var(--pine);border:0;border-radius:999px;padding:0 18px;font-weight:700;cursor:pointer;font-family:var(--sans)}
 .compose button:disabled{opacity:.5;cursor:default}
 .typing{color:var(--mist);font-size:13px;padding:0 16px 8px}
+
+/* ===== pointer ===== */
+@media (hover:hover) and (pointer:fine){
+  html.cur,html.cur a,html.cur button,html.cur input,html.cur .bubble{cursor:none}
+  .cur-dot,.cur-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%);will-change:transform}
+  .cur-dot{width:5px;height:5px;background:var(--cream)}
+  .cur-ring{width:32px;height:32px;border:1px solid rgba(159,216,196,.6);transition:width .3s cubic-bezier(.22,1,.36,1),height .3s cubic-bezier(.22,1,.36,1),border-color .3s ease,background-color .3s ease}
+  html.cur-hover .cur-ring{width:52px;height:52px;border-color:var(--mint);background:rgba(159,216,196,.09)}
+  html.cur-down .cur-ring{width:24px;height:24px}
+  html.cur-out .cur-dot,html.cur-out .cur-ring{opacity:0}
+}
+@media (prefers-reduced-motion:reduce){.cur-ring{transition:none}}
 </style>
 </head>
 <body>
@@ -240,7 +252,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
         <div class="year">2024–now</div>
         <div>
           <h3>Accessible <em>Blockly</em> for blind and low-vision programmers</h3>
-          <p>Research Assistant work in the DiscoverABILITY Lab: an extension-based accessibility framework for Google Blockly with keyboard navigation and an audio cue system whose sounds change with nesting depth. Co-designed with teachers of students with visual impairments. Funded by Google's Blockly Accessibility Fund.</p>
+          <p>Research Assistant work in the DiscoverABILITY Lab: an extension-based accessibility framework for Google Blockly with keyboard navigation and an audio cue system whose sounds change with nesting depth. Funded by Google's Blockly Accessibility Fund.</p>
           <span class="tag">Screen readers</span><span class="tag">Audio design</span><span class="tag">Blockly</span>
           <div class="links" style="margin-top:12px"><a href="https://rubelhassan.github.io/eaf-blockly">Try the demo</a><a href="https://dl.acm.org/doi/pdf/10.1145/3786169.3788398">Read the paper (PDF)</a></div>
         </div>
@@ -278,12 +290,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
         <div class="meta"><a href="https://dl.acm.org/doi/pdf/10.1145/3786169.3788398">PDF</a> &nbsp; <a href="https://doi.org/10.1145/3786169.3788398">DOI</a> &nbsp; <a href="https://arxiv.org/abs/2601.10688">arXiv</a> &nbsp; <a href="https://rubelhassan.github.io/eaf-blockly">Live demo</a></div>
       </li>
       <li>
-        <div class="title">Accessible Block-Based Programming: A Co-Designed Prototype for Students with Visual Impairments</div>
-        <div class="meta">Co-design study with 11 teachers of students with visual impairments · <span class="status">Under review</span></div>
-      </li>
-      <li>
-        <div class="title">Survey of adults with ADHD on block-based programming</div>
-        <div class="meta"><span class="status">Under review · replace with the real title when you send it</span></div>
+        <div class="title">Papers under review</div>
+        <div class="meta"><span class="status">Two further papers on accessible block-based programming are currently under review. Details available on request once they are public.</span></div>
       </li>
     </ul>
   </div>
@@ -444,6 +452,26 @@ async function ask(text){
 }
 form.addEventListener('submit',e=>{e.preventDefault();const v=q.value;q.value='';ask(v);});
 document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>ask(b.dataset.q)));
+
+/* ---------- pointer ---------- */
+(function(){
+  if(!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
+  const h=document.documentElement; h.classList.add('cur');
+  const dot=document.createElement('div'), ring=document.createElement('div');
+  dot.className='cur-dot'; ring.className='cur-ring';
+  dot.setAttribute('aria-hidden','true'); ring.setAttribute('aria-hidden','true');
+  document.body.append(dot,ring);
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;h.classList.remove('cur-out');
+    dot.style.transform='translate('+mx+'px,'+my+'px) translate(-50%,-50%)';},{passive:true});
+  addEventListener('mousedown',()=>h.classList.add('cur-down'));
+  addEventListener('mouseup',()=>h.classList.remove('cur-down'));
+  document.addEventListener('mouseleave',()=>h.classList.add('cur-out'));
+  document.addEventListener('mouseover',e=>{h.classList.toggle('cur-hover',!!e.target.closest('a,button,input,.bubble'));});
+  (function loop(){const k=reduce?1:.16;rx+=(mx-rx)*k;ry+=(my-ry)*k;
+    ring.style.transform='translate('+rx+'px,'+ry+'px) translate(-50%,-50%)';requestAnimationFrame(loop);})();
+})();
 </script>
 </body>
 </html>

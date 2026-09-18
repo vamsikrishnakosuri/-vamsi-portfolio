@@ -14,7 +14,7 @@ Deployed on Vercel, served at https://www.vamsikrishnakosuri.com.
 |---|---|---|
 | `AI_API_KEY` | yes | — (Hugging Face fine-grained token with "Make calls to Inference Providers", or a Groq key) |
 | `AI_BASE_URL` | no | `https://router.huggingface.co/v1` (Groq: `https://api.groq.com/openai/v1`) |
-| `AI_MODEL` | no | `meta-llama/Llama-3.1-8B-Instruct` (Groq: `llama-3.1-8b-instant`) |
+| `AI_MODEL` | no | `openai/gpt-oss-20b` (works on both Groq and Hugging Face) |
 
 Redeploy after changing variables.
 
