@@ -25,13 +25,11 @@ FOCUSLY (dissertation tool)
 ACCESSIBLE BLOCKLY FOR BLIND AND LOW-VISION USERS (research assistant work)
 - Works in the DiscoverABILITY Lab on making Google Blockly usable with a keyboard and a screen reader.
 - Contributed to an extension-based accessibility framework for Blockly, and designed an audio cue system where sounds change with the nesting depth of blocks (for example, dive/surface water sounds).
-- A prototype was co-designed with 11 teachers of students with visual impairments (TVIs), targeting K-12 classrooms.
 - Also did accessible-PDF work (tagged headings, table headers, alt text) so the papers themselves are readable with screen readers.
 
 PUBLICATIONS
 - Mollik, Kosuri, Djalali, Ludi, Mountapmbeme (2026). "An Extension-Based Accessibility Framework for Making Blockly Accessible to Blind and Low-Vision Users." UISE '26, 1st International Workshop on User Interface and Experience for Software Engineering, Rio de Janeiro, Brazil, April 2026. ACM. DOI 10.1145/3786169.3788398. Also on arXiv (2601.10688). Vamsi is second author. PDF is open access at https://dl.acm.org/doi/pdf/10.1145/3786169.3788398 Summary: EAF is a plugin-style framework that adds keyboard navigation, screen-reader support (WAI-ARIA, tested with NVDA, JAWS, VoiceOver), a "3D" navigation model (left-right, up-down, in-out of nesting) using WASD+F/Q keys, stack labels and block numbers, stack jumping, and mode-based editing to Blockly without modifying the Blockly library. Evaluated with 177 integration test cases and interviews with 4 participants. Funded by Google's Blockly Accessibility Fund. Demo: https://rubelhassan.github.io/eaf-blockly
-- "Accessible Block-Based Programming: A Co-Designed Prototype for Students with Visual Impairments" — co-design study with 11 teachers of students with visual impairments (4 of them blind or low-vision). Currently under review; do not name the venue and do not claim it is published. Vamsi is second author.
-- A survey paper on how adults with ADHD experience block-based programming, currently under review.
+- Two further papers on accessible block-based programming are currently under review. Their titles, venues, and findings are not public yet, so do not name or describe them; say Vamsi can share details by email once they are public.
 
 TOOLS HE HAS SHIPPED
 - AI-AC (AI Accessibility Checker): a published Chrome extension (Manifest V3, JavaScript). It scans any website and reports a score for each disability profile rather than one flat list. A free local rules engine is mapped to WCAG 2.2; an optional AI vision pass reads a screenshot to catch text baked into images, meaning carried by colour alone, and mismatched alt text. Chrome Web Store: https://chromewebstore.google.com/detail/kkfchmjomomkiggchkodggcniklniika Source: https://github.com/vamsikrishnakosuri/ai-ac
