@@ -3,554 +3,474 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vamsi Krishna Kosuri — Accessibility &amp; HCI Researcher</title>
-<meta name="description" content="Vamsi Krishna Kosuri is a PhD student and HCI researcher designing and studying technology that works for everyone, with a focus on blind and low-vision users, neurodivergent learners, and inclusive computing education.">
+<title>Vamsi Krishna Kosuri — Accessibility & HCI Researcher</title>
+<meta name="description" content="Vamsi Krishna Kosuri is a PhD candidate in Computer Science at the University of North Texas researching accessible programming tools for blind, low-vision, and neurodivergent learners.">
+<link rel="canonical" href="https://www.vamsikrishnakosuri.com/">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Vamsi Krishna Kosuri — Accessibility & HCI Researcher">
+<meta property="og:description" content="Interfaces that work for the people they usually leave out. PhD candidate, University of North Texas.">
+<meta property="og:url" content="https://www.vamsikrishnakosuri.com/">
+<meta property="og:image" content="https://www.vamsikrishnakosuri.com/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%230F2622'/%3E%3Ccircle cx='32' cy='32' r='18' fill='%239FD8C4'/%3E%3Ccircle cx='26' cy='26' r='9' fill='%23F3EEE3' opacity='.9'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Vamsi Krishna Kosuri","url":"https://www.vamsikrishnakosuri.com/","image":"https://www.vamsikrishnakosuri.com/profile.jpg","jobTitle":"PhD Candidate, Computer Science","affiliation":{"@type":"CollegeOrUniversity","name":"University of North Texas"},"email":"mailto:kosurivamsi5@gmail.com","sameAs":["https://github.com/vamsikrishnakosuri"],"knowsAbout":["Accessibility","Human-Computer Interaction","Block-based programming","ADHD","Blind and low-vision users","WCAG 2.2"]}
+</script>
 <style>
 :root{
-  --paper:#ECEBE3; --surface:#F7F6F0; --raise:#FFFFFF;
-  --ink:#17181A; --muted:#575952; --faint:#7A7C73;
-  --line:#D6D4C7; --line-2:#C4C2B2;
-  --accent:#5B45D6; --accent-ink:#FFFFFF; --accent-soft:#E7E3FB;
-  --signal:#7C3AED;
-  --focus:#6D28D9;
-  --grad:linear-gradient(100deg,#0EA5A0 0%,#2563EB 36%,#7C3AED 66%,#DB2777 100%);
-  --shadow:0 1px 2px rgba(23,24,26,.05), 0 18px 40px rgba(23,24,26,.09);
+  --pine:#0F2622;      /* page */
+  --pine-2:#143029;    /* raised surfaces */
+  --pine-3:#1B3B32;    /* hover / borders */
+  --cream:#F3EEE3;     /* primary text */
+  --sand:#CFC4A8;      /* secondary text */
+  --mist:#8FA69B;      /* tertiary */
+  --mint:#9FD8C4;      /* accent, links, orb */
+  --line:rgba(243,238,227,.14);
+  --serif:"Instrument Serif", Georgia, "Times New Roman", serif;
+  --sans:"Atkinson Hyperlegible", system-ui, -apple-system, sans-serif;
+  --max:1120px;
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --paper:#141519; --surface:#1B1D22; --raise:#22252B;
-    --ink:#ECEBE3; --muted:#A6A79E; --faint:#83857C;
-    --line:#2C2E34; --line-2:#3A3D44;
-    --accent:#A78BFA; --accent-ink:#141519; --accent-soft:#241E3A;
-    --signal:#C4B5FD; --focus:#A78BFA;
-    --grad:linear-gradient(100deg,#2DD4BF 0%,#60A5FA 36%,#A78BFA 66%,#F472B6 100%);
-    --shadow:0 1px 2px rgba(0,0,0,.5), 0 22px 48px rgba(0,0,0,.5);
-  }
-}
-:root[data-theme="dark"]{
-  --paper:#141519; --surface:#1B1D22; --raise:#22252B;
-  --ink:#ECEBE3; --muted:#A6A79E; --faint:#83857C;
-  --line:#2C2E34; --line-2:#3A3D44;
-  --accent:#A78BFA; --accent-ink:#141519; --accent-soft:#241E3A;
-  --signal:#C4B5FD; --focus:#A78BFA;
-  --grad:linear-gradient(100deg,#2DD4BF 0%,#60A5FA 36%,#A78BFA 66%,#F472B6 100%);
-  --shadow:0 1px 2px rgba(0,0,0,.5), 0 22px 48px rgba(0,0,0,.5);
-}
-
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{animation:none!important; transition:none!important} }
-body{
-  margin:0; background:var(--paper); color:var(--ink);
-  font-family:"Atkinson Hyperlegible", system-ui, sans-serif;
-  font-size:18px; line-height:1.6; -webkit-font-smoothing:antialiased;
-}
-.mono{font-family:"JetBrains Mono", ui-monospace, monospace}
-
-/* the accessibility focus ring, made the signature of the site */
-a,button{color:inherit}
+html{scroll-behavior:smooth;background:var(--pine)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--pine);color:var(--cream);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--mint);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+a:hover{color:var(--cream)}
 :focus{outline:none}
-:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; border-radius:2px }
-
-a{color:var(--accent); text-decoration-thickness:2px; text-underline-offset:3px}
-a:hover{text-decoration-color:var(--signal)}
-
-.skip{
-  position:absolute; left:16px; top:-60px; z-index:100;
-  background:var(--ink); color:var(--paper); padding:10px 16px; border-radius:8px;
-  font-weight:700; text-decoration:none; transition:top .15s ease;
-}
-.skip:focus{ top:16px }
-
-.wrap{ width:min(1100px, 92vw); margin-inline:auto }
+:focus-visible{outline:2px solid var(--mint);outline-offset:4px;border-radius:2px}
+img{max-width:100%;display:block}
+h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.01em;margin:0}
+p{margin:0 0 1em}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+.skip{position:absolute;left:16px;top:-64px;z-index:100;background:var(--cream);color:var(--pine);padding:10px 16px;border-radius:6px;font-weight:700}
+.skip:focus{top:16px}
 
 /* header */
-header.site{
-  position:sticky; top:0; z-index:50;
-  background:color-mix(in srgb, var(--paper) 88%, transparent);
-  backdrop-filter:saturate(1.1) blur(8px);
-  border-bottom:1px solid var(--line);
-}
-.bar{ display:flex; align-items:center; gap:20px; height:66px }
-.wordmark{ display:flex; align-items:center; gap:11px; text-decoration:none; color:var(--ink); font-weight:700; letter-spacing:-.01em }
-.glyph{ width:34px; height:34px; flex:none; border-radius:9px; background:var(--accent); color:var(--accent-ink);
-  display:grid; place-items:center; font-weight:700; font-size:15px; font-family:"JetBrains Mono",monospace }
-.wordmark .nm{font-size:16px}
-nav.top{ margin-left:auto; display:flex; align-items:center; gap:4px }
-nav.top a{ color:var(--muted); text-decoration:none; padding:9px 12px; border-radius:8px; font-size:15px; font-weight:700 }
-nav.top a:hover{ color:var(--ink); background:var(--surface) }
-.iconbtn{ width:40px; height:40px; display:grid; place-items:center; border:1px solid var(--line-2); background:var(--surface);
-  border-radius:10px; cursor:pointer; color:var(--ink) }
-.iconbtn svg{ width:19px; height:19px }
-@media (max-width:760px){ nav.top a.hide-sm{ display:none } }
+header{position:sticky;top:0;z-index:20;background:linear-gradient(var(--pine) 70%,rgba(15,38,34,0));}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+.brand{font-family:var(--serif);font-size:22px;color:var(--cream);text-decoration:none}
+.nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0}
+.nav ul a{color:var(--sand);text-decoration:none;font-size:15px}
+.nav ul a:hover{color:var(--cream)}
+@media (max-width:720px){.nav ul{gap:16px}.nav ul li:nth-child(n+4){display:none}}
 
 /* hero */
-main{ display:block }
-section{ padding:88px 0; border-bottom:1px solid var(--line) }
-.hero{ padding:96px 0 84px; border-bottom:1px solid var(--line) }
-.eyebrow{ font-family:"JetBrains Mono",monospace; font-size:13px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--signal) }
-h1.name{
-  font-weight:700; letter-spacing:-.03em; line-height:1.02; text-wrap:balance;
-  font-size:clamp(44px, 8.5vw, 92px); margin:18px 0 0;
-}
-.thesis{ font-size:clamp(20px, 2.4vw, 27px); line-height:1.42; max-width:24ch; margin:26px 0 0; color:var(--ink) }
-.thesis b{ color:var(--accent); font-weight:700 }
-.metae{ display:flex; flex-wrap:wrap; gap:8px 10px; margin:30px 0 0 }
-.chip{ font-family:"JetBrains Mono",monospace; font-size:13px; color:var(--muted); border:1px solid var(--line-2);
-  background:var(--surface); padding:6px 11px; border-radius:999px }
-.cta-row{ display:flex; flex-wrap:wrap; gap:12px; margin:34px 0 0 }
-.btn{ display:inline-flex; align-items:center; gap:9px; min-height:48px; padding:0 20px; border-radius:11px;
-  font-weight:700; font-size:16px; text-decoration:none; cursor:pointer; border:1px solid transparent }
-.btn.solid{ background:var(--accent); color:var(--accent-ink) }
-.btn.solid:hover{ background:#4B37C8; color:#fff }
-:root[data-theme="dark"] .btn.solid:hover, :root:not([data-theme="light"]) .btn.solid:hover{ background:#C4B5FD; color:var(--accent-ink) }
-.btn.ghost{ background:var(--surface); border-color:var(--line-2); color:var(--ink) }
-.btn.ghost:hover{ border-color:var(--ink) }
-.btn svg{width:18px;height:18px}
-.kbd-hint{ margin:30px 0 0; font-family:"JetBrains Mono",monospace; font-size:13px; color:var(--faint) }
-.kbd{ display:inline-block; border:1px solid var(--line-2); border-bottom-width:2px; border-radius:6px; padding:1px 7px; color:var(--ink); background:var(--surface) }
+.hero{position:relative;min-height:calc(100vh - 72px);display:grid;place-items:center;text-align:center;padding:40px 0 80px;overflow:hidden}
+.hero-inner{position:relative;z-index:2;max-width:820px}
+.kicker{color:var(--sand);font-size:15px;margin-bottom:22px}
+.hero h1{font-size:clamp(46px,8vw,96px);line-height:1.02;color:var(--cream)}
+.hero h1 em{font-style:italic;color:var(--mint)}
+.hero p.lede{color:var(--sand);font-size:19px;max-width:560px;margin:28px auto 36px}
+.cta{display:inline-flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border-radius:999px;border:1px solid var(--line);color:var(--cream);text-decoration:none;font-size:15px;background:transparent;font-family:var(--sans);cursor:pointer}
+.btn.primary{background:var(--cream);color:var(--pine);border-color:var(--cream)}
+.btn.primary:hover{background:var(--mint);border-color:var(--mint)}
+.btn:hover{border-color:var(--cream);color:var(--cream)}
 
-/* section heads */
-.shead{ display:flex; align-items:baseline; gap:16px; margin:0 0 40px }
-.snum{ font-family:"JetBrains Mono",monospace; font-size:13px; color:var(--signal); font-weight:500; padding-top:6px }
-.shead h2{ font-size:clamp(28px,4vw,40px); font-weight:700; letter-spacing:-.02em; margin:0; line-height:1.1 }
-.shead p{ margin:6px 0 0; color:var(--muted); font-size:16px }
+/* floating question bubbles */
+.bubbles{position:absolute;inset:0;z-index:1;pointer-events:none}
+.bubble{position:absolute;pointer-events:auto;background:var(--pine-2);border:1px solid var(--line);color:var(--cream);padding:10px 14px;border-radius:14px;font-size:14px;font-family:var(--sans);cursor:pointer;text-align:left;max-width:240px;box-shadow:0 20px 40px rgba(0,0,0,.25);animation:float 7s ease-in-out infinite}
+.bubble small{display:block;color:var(--mist);font-size:11px;margin-bottom:4px}
+.bubble:hover{border-color:var(--mint);background:var(--pine-3)}
+.b1{left:5%;top:14%}.b2{right:5%;top:14%;animation-delay:-2s}.b3{left:9%;bottom:20%;animation-delay:-4s}.b4{right:9%;bottom:16%;animation-delay:-1s}.b5{left:38%;bottom:6%;animation-delay:-3s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media (max-width:900px){.bubble{display:none}.bubble.b1,.bubble.b4{display:block;max-width:180px}.b1{top:6%}.b4{bottom:4%}}
 
-/* focus areas */
-.focus-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px }
-.fcard{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:26px 24px 28px }
-.fcard .ic{ width:44px; height:44px; border-radius:11px; background:var(--accent-soft); color:var(--accent);
-  display:grid; place-items:center; margin-bottom:18px }
-.fcard .ic svg{ width:23px; height:23px }
-.fcard h3{ font-size:20px; margin:0 0 8px; letter-spacing:-.01em }
-.fcard p{ margin:0; color:var(--muted); font-size:15.5px; line-height:1.55 }
+/* sections */
+section{padding:110px 0;border-top:1px solid var(--line)}
+.sec-head{display:grid;grid-template-columns:1fr 2fr;gap:40px;margin-bottom:56px}
+.sec-head h2{font-size:clamp(36px,5vw,60px);line-height:1.05}
+.sec-head h2 em{color:var(--mint)}
+.sec-head p{color:var(--sand);font-size:18px;max-width:52ch;align-self:end;margin:0}
+@media (max-width:820px){.sec-head{grid-template-columns:1fr;gap:16px}}
 
-/* work */
-.work-list{ display:flex; flex-direction:column; gap:18px }
-.proj{ position:relative; display:grid; grid-template-columns:150px 1fr; gap:28px;
-  background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:28px 30px; transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease }
-.proj:hover{ transform:translateY(-3px); box-shadow:var(--shadow); border-color:var(--line-2) }
-.proj .meta{ font-family:"JetBrains Mono",monospace; font-size:12.5px; color:var(--faint); line-height:1.7 }
-.proj .meta .role{ color:var(--signal); display:block; margin-bottom:4px }
-.proj h3{ font-size:23px; margin:0 0 8px; letter-spacing:-.01em }
-.proj p{ margin:0; color:var(--muted); font-size:16px; line-height:1.55; max-width:64ch }
-.tags{ display:flex; flex-wrap:wrap; gap:7px; margin:16px 0 0 }
-.tag{ font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--muted); background:var(--paper);
-  border:1px solid var(--line); padding:4px 9px; border-radius:7px }
-.plinks{ display:flex; flex-wrap:wrap; gap:16px; margin:16px 0 0 }
-.plinks a{ font-weight:700; font-size:14.5px; display:inline-flex; align-items:center; gap:6px }
-.plinks a svg{ width:15px; height:15px }
-.badge{ display:inline-flex; align-items:center; gap:6px; font-family:"JetBrains Mono",monospace; font-size:11.5px; font-weight:700;
-  color:var(--accent); background:var(--accent-soft); border-radius:999px; padding:3px 10px; margin-left:10px; vertical-align:middle }
-@media (max-width:720px){ .proj{ grid-template-columns:1fr; gap:14px } }
+/* research threads */
+.threads{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.threads h3{font-size:30px;margin-bottom:12px}
+.threads p{color:var(--sand);margin:0}
+@media (max-width:820px){.threads{grid-template-columns:1fr}}
+
+/* work list */
+.work{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.work li{display:grid;grid-template-columns:130px 1fr;gap:28px;padding:34px 0;border-bottom:1px solid var(--line)}
+.work .year{color:var(--mist);font-size:15px;padding-top:8px}
+.work h3{font-size:34px;line-height:1.1;margin-bottom:10px}
+.work h3 em{color:var(--mint)}
+.work p{color:var(--sand);max-width:66ch;margin-bottom:12px}
+.work .links{display:flex;gap:18px;flex-wrap:wrap;font-size:15px}
+.work .tag{display:inline-block;color:var(--mist);font-size:13px;margin-right:12px}
+@media (max-width:640px){.work li{grid-template-columns:1fr;gap:6px}}
+
+/* publications */
+.pubs{list-style:none;margin:0;padding:0}
+.pubs li{padding:22px 0;border-bottom:1px solid var(--line);max-width:80ch}
+.pubs .title{font-family:var(--serif);font-size:26px;line-height:1.2;color:var(--cream)}
+.pubs .meta{color:var(--sand);margin-top:6px;font-size:15px}
+.pubs .meta strong{color:var(--cream);font-weight:400}
+.pubs .status{color:var(--mist)}
 
 /* teaching */
-.two{ display:grid; grid-template-columns:1fr 1fr; gap:56px }
-.rows{ display:flex; flex-direction:column }
-.row{ display:grid; grid-template-columns:1fr; gap:3px; padding:18px 0; border-top:1px solid var(--line) }
-.row:first-child{ border-top:0; padding-top:0 }
-.row .rt{ font-weight:700; font-size:17px }
-.row .rs{ color:var(--muted); font-size:15px }
-.row .rm{ font-family:"JetBrains Mono",monospace; font-size:12.5px; color:var(--faint); margin-top:2px }
+.teach{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.teach ul{list-style:none;margin:0;padding:0}
+.teach li{padding:14px 0;border-bottom:1px solid var(--line)}
+.teach li strong{display:block;font-weight:700}
+.teach li span{color:var(--sand);font-size:15px}
+.teach blockquote{margin:0;font-family:var(--serif);font-size:30px;line-height:1.25;color:var(--cream)}
+.teach blockquote em{color:var(--mint)}
+@media (max-width:820px){.teach{grid-template-columns:1fr}}
 
-/* about + skills */
-.about p{ font-size:18px; line-height:1.65; color:var(--ink); max-width:62ch; margin:0 0 18px }
-.skills{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:8px }
-.sk{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:18px 20px }
-.sk h4{ font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--signal); margin:0 0 10px; font-weight:700 }
-.sk .items{ display:flex; flex-wrap:wrap; gap:7px }
-.sk .items span{ font-size:14px; color:var(--muted); background:var(--paper); border:1px solid var(--line); padding:4px 10px; border-radius:8px }
+/* about */
+.about{display:grid;grid-template-columns:320px 1fr;gap:56px;align-items:start}
+.portrait{width:100%;aspect-ratio:4/5;border-radius:18px;object-fit:cover;object-position:50% 25%;border:1px solid var(--line)}
+.about .text p{color:var(--sand);font-size:18px;max-width:62ch}
+.about .text p:first-child{color:var(--cream);font-family:var(--serif);font-size:30px;line-height:1.25}
+.skills{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 32px;margin-top:32px}
+.skills h3{font-size:22px;margin-bottom:6px}
+.skills p{color:var(--sand);font-size:15px;margin:0}
+@media (max-width:820px){.about{grid-template-columns:1fr}.portrait{max-width:320px}}
 
 /* contact */
-.contact-in{ display:grid; grid-template-columns:1.1fr 1fr; gap:48px; align-items:start }
-.big-email{ font-size:clamp(24px,3.6vw,38px); font-weight:700; letter-spacing:-.02em; text-decoration:none; color:var(--ink); text-wrap:balance; display:inline-block }
-.big-email:hover{ color:var(--accent) }
-.cmeta{ display:flex; flex-direction:column; gap:14px; margin-top:26px }
-.cmeta .lab{ font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--faint) }
-.social{ display:flex; gap:10px; flex-wrap:wrap }
-.social a{ display:inline-flex; align-items:center; gap:9px; min-height:46px; padding:0 16px; border:1px solid var(--line-2);
-  background:var(--surface); border-radius:11px; text-decoration:none; color:var(--ink); font-weight:700; font-size:15px }
-.social a:hover{ border-color:var(--ink) }
-.social a svg{ width:18px; height:18px }
-@media (max-width:760px){ .contact-in{ grid-template-columns:1fr; gap:28px } .two{ grid-template-columns:1fr; gap:36px } .focus-grid{ grid-template-columns:1fr } .skills{ grid-template-columns:1fr } }
+.contact h2{font-size:clamp(40px,7vw,84px);line-height:1;margin-bottom:24px}
+.contact h2 em{color:var(--mint)}
+.contact .email{font-family:var(--serif);font-size:clamp(24px,4vw,40px);text-decoration-thickness:1px}
+.contact .row{display:flex;gap:28px;flex-wrap:wrap;margin-top:28px;color:var(--sand)}
 
-/* footer */
-footer{ padding:44px 0 60px }
-.foot{ display:flex; flex-wrap:wrap; gap:16px 28px; align-items:center; justify-content:space-between }
-.a11y-note{ font-family:"JetBrains Mono",monospace; font-size:12.5px; color:var(--faint); line-height:1.7; max-width:56ch }
-.a11y-note b{ color:var(--muted) }
+footer{padding:40px 0 120px;color:var(--mist);font-size:14px;border-top:1px solid var(--line)}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
-/* reveal on scroll */
-.reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease }
-.reveal.in{ opacity:1; transform:none }
+/* ===== assistant ===== */
+.orb-btn{position:fixed;right:22px;bottom:22px;z-index:40;width:74px;height:74px;border-radius:50%;border:0;padding:0;background:transparent;cursor:pointer;filter:drop-shadow(0 12px 30px rgba(159,216,196,.35))}
+.orb-btn canvas{width:74px;height:74px;border-radius:50%;display:block}
+.orb-btn span{position:absolute;inset:0;border-radius:50%}
+.orb-hint{position:fixed;right:106px;bottom:42px;z-index:40;background:var(--pine-2);border:1px solid var(--line);color:var(--cream);padding:8px 12px;border-radius:12px;font-size:13px;pointer-events:none;opacity:0;transition:opacity .3s}
+.orb-hint.show{opacity:1}
+.panel{position:fixed;right:22px;bottom:110px;z-index:41;width:min(420px,calc(100vw - 44px));height:min(600px,calc(100vh - 140px));background:var(--pine-2);border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.45);display:none;flex-direction:column;overflow:hidden}
+.panel[data-open="true"]{display:flex}
+.panel-head{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.panel-head canvas{width:38px;height:38px;border-radius:50%}
+.panel-head .t{flex:1}
+.panel-head strong{display:block;font-family:var(--serif);font-weight:400;font-size:20px}
+.panel-head small{color:var(--mist);font-size:12px}
+.panel-head button{background:transparent;border:0;color:var(--sand);font-size:22px;cursor:pointer;line-height:1;padding:4px 8px}
+.msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:88%;padding:10px 14px;border-radius:14px;font-size:15px;line-height:1.5;white-space:pre-wrap}
+.msg.ai{background:var(--pine);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.me{background:var(--cream);color:var(--pine);align-self:flex-end;border-bottom-right-radius:4px}
+.msg.err{color:var(--sand);border-style:dashed}
+.chips{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 10px}
+.chips button{background:transparent;border:1px solid var(--line);color:var(--sand);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;font-family:var(--sans)}
+.chips button:hover{border-color:var(--mint);color:var(--cream)}
+.compose{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+.compose input{flex:1;background:var(--pine);border:1px solid var(--line);color:var(--cream);border-radius:999px;padding:12px 16px;font-size:15px;font-family:var(--sans)}
+.compose button{background:var(--cream);color:var(--pine);border:0;border-radius:999px;padding:0 18px;font-weight:700;cursor:pointer;font-family:var(--sans)}
+.compose button:disabled{opacity:.5;cursor:default}
+.typing{color:var(--mist);font-size:13px;padding:0 16px 8px}
 
-/* ambient fluid gradient (slow, minimal) */
-.aurora{ position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none }
-.aurora i{ position:absolute; display:block; width:58vmax; height:58vmax; border-radius:50%; filter:blur(92px); opacity:.20; will-change:transform }
-.aurora .a1{ background:#7C3AED; top:-22vmax; left:-8vmax; animation:drift1 44s ease-in-out infinite alternate }
-.aurora .a2{ background:#22C3B6; bottom:-26vmax; right:-6vmax; animation:drift2 54s ease-in-out infinite alternate }
-.aurora .a3{ background:#EC4899; top:24vmax; right:24vmax; opacity:.13; animation:drift3 62s ease-in-out infinite alternate }
-:root[data-theme="dark"] .aurora i, :root:not([data-theme="light"]) .aurora i{ opacity:.26 }
-:root[data-theme="dark"] .aurora .a3, :root:not([data-theme="light"]) .aurora .a3{ opacity:.17 }
-@keyframes drift1{ to{ transform:translate(16vmax,12vmax) scale(1.15) } }
-@keyframes drift2{ to{ transform:translate(-14vmax,-10vmax) scale(1.2) } }
-@keyframes drift3{ to{ transform:translate(-18vmax,14vmax) scale(1.1) } }
-
-/* multicolor gradient signature */
-.glyph{ background:var(--grad) }
-h1.name{
-  background:var(--grad); background-size:220% auto;
-  -webkit-background-clip:text; background-clip:text;
-  -webkit-text-fill-color:transparent; color:transparent;
-  animation:gradslide 22s ease-in-out infinite alternate;
+/* ===== pointer ===== */
+@media (hover:hover) and (pointer:fine){
+  html.cur,html.cur a,html.cur button,html.cur input,html.cur .bubble{cursor:none}
+  .cur-dot,.cur-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%);will-change:transform}
+  .cur-dot{width:5px;height:5px;background:var(--cream)}
+  .cur-ring{width:32px;height:32px;border:1px solid rgba(159,216,196,.6);transition:width .3s cubic-bezier(.22,1,.36,1),height .3s cubic-bezier(.22,1,.36,1),border-color .3s ease,background-color .3s ease}
+  html.cur-hover .cur-ring{width:52px;height:52px;border-color:var(--mint);background:rgba(159,216,196,.09)}
+  html.cur-down .cur-ring{width:24px;height:24px}
+  html.cur-out .cur-dot,html.cur-out .cur-ring{opacity:0}
 }
-.thesis b{
-  background:var(--grad); background-size:220% auto;
-  -webkit-background-clip:text; background-clip:text;
-  -webkit-text-fill-color:transparent; color:transparent;
-  font-weight:700;
-}
-@keyframes gradslide{ from{ background-position:0 center } to{ background-position:120% center } }
-
-/* mini-game */
-.play-wrap{ background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:20px 20px 18px }
-.game-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px }
-.game-head .score{ font-family:"JetBrains Mono",monospace; font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums }
-.game-head .ghint{ font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--faint) }
-canvas#game{ width:100%; height:180px; display:block; border-radius:12px; background:var(--paper); border:1px solid var(--line); cursor:pointer; touch-action:manipulation }
-
-/* hero portrait */
-.hero-cols{ display:grid; grid-template-columns:1fr 300px; gap:52px; align-items:start; margin-top:28px }
-.hero-left{ min-width:0 }
-.hero-left .thesis{ margin-top:0 }
-.hero-right{ display:flex; justify-content:center }
-.portrait{ width:300px; height:300px; border-radius:50%; padding:5px; background:var(--grad); box-shadow:var(--shadow); flex:none }
-.pimg{ display:block; width:100%; height:100%; border-radius:50%; border:5px solid var(--paper); box-sizing:border-box; background-color:#fff; background-image:url(profile.jpg); background-repeat:no-repeat; background-size:270% auto; background-position:52% 30%; background-clip:padding-box; background-origin:padding-box }
-@media (max-width:880px){
-  .hero-cols{ grid-template-columns:1fr; gap:30px }
-  .hero-right{ order:-1; justify-content:flex-start }
-  .portrait{ width:150px; height:150px }
-}
+@media (prefers-reduced-motion:reduce){.cur-ring{transition:none}}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
 
-<header class="site">
-  <div class="wrap bar">
-    <a class="wordmark" href="#top" aria-label="Vamsi Krishna Kosuri, home">
-      <span class="glyph" aria-hidden="true">VK</span>
-      <span class="nm">Vamsi&nbsp;Krishna&nbsp;Kosuri</span>
-    </a>
-    <nav class="top" aria-label="Primary">
-      <a href="#research" class="hide-sm">Research</a>
-      <a href="#work">Work</a>
-      <a href="#teaching" class="hide-sm">Teaching</a>
-      <a href="#about" class="hide-sm">About</a>
-      <a href="#contact">Contact</a>
-      <button class="iconbtn" id="theme" type="button" aria-label="Switch colour theme">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
-      </button>
-    </nav>
-  </div>
+<header>
+  <nav class="wrap nav" aria-label="Primary">
+    <a class="brand" href="#top">Vamsi Krishna Kosuri</a>
+    <ul>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#teaching">Teaching</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 </header>
 
 <main id="main">
-  <!-- HERO -->
-  <section class="hero" id="top" aria-labelledby="name">
-    <div class="wrap">
-      <p class="eyebrow">Accessibility &amp; HCI Researcher</p>
-      <h1 class="name" id="name">Vamsi Krishna Kosuri</h1>
-      <div class="hero-cols">
-        <div class="hero-left">
-          <p class="thesis">I design and study technology that works for <b>everyone</b> — with a focus on blind and low-vision users, neurodivergent learners, and inclusive computing education.</p>
-          <div class="metae" aria-label="Affiliation">
-            <span class="chip">PhD Student, Computer Science</span>
-            <span class="chip">University of North Texas</span>
-            <span class="chip">Texas, USA</span>
-          </div>
-          <div class="cta-row">
-            <a class="btn solid" href="#work">View research &amp; projects
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-            <a class="btn ghost" href="#contact">Get in touch</a>
-          </div>
-          <p class="kbd-hint">This whole site is set in <b>Atkinson Hyperlegible</b>, a typeface built for low-vision readers. Try it: press <span class="kbd">Tab</span> to see the focus ring.</p>
+<section class="hero" id="top" style="border-top:0;padding-top:0">
+  <div class="bubbles" aria-hidden="true">
+    <button class="bubble b1" type="button" data-q="What does Vamsi research?" tabindex="-1"><small>Ask</small>What does Vamsi research?</button>
+    <button class="bubble b2" type="button" data-q="Has Vamsi shipped anything real?" tabindex="-1"><small>Ask</small>Has he shipped anything real?</button>
+    <button class="bubble b3" type="button" data-q="What is Focusly?" tabindex="-1"><small>Ask</small>What is Focusly?</button>
+    <button class="bubble b4" type="button" data-q="When does Vamsi graduate and what roles is he looking for?" tabindex="-1"><small>Ask</small>When does he graduate?</button>
+    <button class="bubble b5" type="button" data-q="Can Vamsi run a usability study with screen-reader users?" tabindex="-1"><small>Ask</small>Can he run a study with screen-reader users?</button>
+  </div>
+  <div class="hero-inner wrap">
+    <p class="kicker">Accessibility &amp; HCI researcher · PhD candidate, University of North Texas</p>
+    <h1>Interfaces that work for the people they <em>usually leave out.</em></h1>
+    <p class="lede">I design and study programming tools for blind and low-vision users and for learners with ADHD, then ship them so real people can use them.</p>
+    <div class="cta">
+      <a class="btn primary" href="#work">See the work</a>
+      <button class="btn" type="button" data-open-assistant>Ask my assistant</button>
+    </div>
+  </div>
+</section>
+
+<section id="research">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Three threads, <em>one question.</em></h2>
+      <p>How do we make computing usable for people it usually leaves out? I work on that question from three sides.</p>
+    </div>
+    <div class="threads">
+      <div><h3>Blind &amp; low-vision access</h3><p>Making block-based programming environments like Google Blockly work with keyboards, screen readers, and audio cues, so visual programming isn't only for sighted students.</p></div>
+      <div><h3>ADHD &amp; programming</h3><p>Studying how learners with ADHD experience programming, and building adaptive tools that reduce distraction and help with planning and debugging.</p></div>
+      <div><h3>Human-computer interaction</h3><p>The method behind both: co-design, surveys, usability studies, and qualitative analysis, so what gets built is grounded in how people really work.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Selected <em>work.</em></h2>
+      <p>Research tools and products I've built, studied, or shipped.</p>
+    </div>
+    <ul class="work">
+      <li>
+        <div class="year">2025–now</div>
+        <div>
+          <h3>Focusly, an <em>adaptive</em> block-based programming tool for learners with ADHD</h3>
+          <p>The core of my dissertation. Focusly adds a hint system, a task breaker, a progress summarizer, a focus timer, and a reward system on top of a block-based editor, each one shaped by survey data from adults with ADHD. A co-design study is underway.</p>
+          <span class="tag">ADHD</span><span class="tag">Adaptive UI</span><span class="tag">Co-design</span><span class="tag">JavaScript</span>
         </div>
-        <div class="hero-right">
-          <div class="portrait"><span class="pimg" role="img" aria-label="Portrait of Vamsi Krishna Kosuri"></span></div>
+      </li>
+      <li>
+        <div class="year">2024–now</div>
+        <div>
+          <h3>Accessible <em>Blockly</em> for blind and low-vision programmers</h3>
+          <p>Research Assistant work in the DiscoverABILITY Lab: an extension-based accessibility framework for Google Blockly with keyboard navigation and an audio cue system whose sounds change with nesting depth. Funded by Google's Blockly Accessibility Fund.</p>
+          <span class="tag">Screen readers</span><span class="tag">Audio design</span><span class="tag">Blockly</span>
+          <div class="links" style="margin-top:12px"><a href="https://rubelhassan.github.io/eaf-blockly">Try the demo</a><a href="https://dl.acm.org/doi/pdf/10.1145/3786169.3788398">Read the paper (PDF)</a></div>
         </div>
+      </li>
+      <li>
+        <div class="year">2026</div>
+        <div>
+          <h3>AI-AC, an <em>accessibility checker</em> for any website</h3>
+          <p>A published Chrome extension that scores a page per disability profile instead of one flat list. A local rules engine mapped to WCAG 2.2 runs free; an optional AI vision pass reads a screenshot the way a person sees it and catches text baked into images, meaning carried by colour alone, and mismatched alt text.</p>
+          <div class="links"><a href="https://chromewebstore.google.com/detail/kkfchmjomomkiggchkodggcniklniika">Chrome Web Store</a><a href="https://github.com/vamsikrishnakosuri/ai-ac">Source</a></div>
+        </div>
+      </li>
+      <li>
+        <div class="year">Personal</div>
+        <div>
+          <h3>Strangers Connect, <em>real-time</em> video chat</h3>
+          <p>A full-stack app that connects people worldwide: peer-to-peer WebRTC video, Socket.io signalling, end-to-end encrypted messaging, dark and light themes.</p>
+          <div class="links"><a href="https://strangers-connect.vercel.app">Live demo</a><a href="https://github.com/vamsikrishnakosuri/StrangersConnect">Source</a></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="publications">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Publications <em>&amp; papers.</em></h2>
+      <p>Peer-reviewed work and papers in the pipeline.</p>
+    </div>
+    <ul class="pubs">
+      <li>
+        <div class="title">An Extension-Based Accessibility Framework for Making Blockly Accessible to Blind and Low-Vision Users</div>
+        <div class="meta">Rubel Hassan Mollik, <strong>Vamsi Krishna Kosuri</strong>, Hans Djalali, Stephanie Ludi, Aboubakar Mountapmbeme · UISE '26, 1st International Workshop on User Interface and Experience for Software Engineering, Rio de Janeiro, April 2026 · ACM</div>
+        <div class="meta"><a href="https://dl.acm.org/doi/pdf/10.1145/3786169.3788398">PDF</a> &nbsp; <a href="https://doi.org/10.1145/3786169.3788398">DOI</a> &nbsp; <a href="https://arxiv.org/abs/2601.10688">arXiv</a> &nbsp; <a href="https://rubelhassan.github.io/eaf-blockly">Live demo</a></div>
+      </li>
+      <li>
+        <div class="title">Papers under review</div>
+        <div class="meta"><span class="status">Two further papers on accessible block-based programming are currently under review. Details available on request once they are public.</span></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="teaching">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Teaching <em>&amp; mentorship.</em></h2>
+      <p>University of North Texas, Department of Computer Science and Engineering.</p>
+    </div>
+    <div class="teach">
+      <ul>
+        <li><strong>Undergraduate research mentor, UR2PhD</strong><span>Guiding undergraduates through their first research projects in accessible computing.</span></li>
+        <li><strong>Teaching Assistant, Human-Computer Interaction</strong><span>Interaction design, evaluation, and usability.</span></li>
+        <li><strong>Teaching Assistant, Assembly Language</strong><span>Low-level programming, architecture, and debugging.</span></li>
+        <li><strong>Teaching Assistant, Cyber Security</strong><span>Security fundamentals and threat models.</span></li>
+        <li><strong>Teaching Assistant, Secure E-Commerce</strong><span>Trust, transactions, and safe web systems.</span></li>
+      </ul>
+      <blockquote>I care most about the moment something finally clicks for a learner who was told the subject <em>wasn't for them.</em></blockquote>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about">
+    <img class="portrait" src="profile.jpg" alt="Vamsi Krishna Kosuri" width="320" height="400">
+    <div class="text">
+      <p>I'm a fourth-year PhD candidate in Computer Science at the University of North Texas, advised by Dr. Stephanie Ludi in the DiscoverABILITY Lab. I expect to graduate in May 2027.</p>
+      <p>My research asks a stubborn question: the tools we build for programming and learning assume a certain kind of user, so what does it take to make them work for everyone else? That takes me from screen-reader semantics and audio interfaces to the lived experience of neurodivergent students, and to shipping real tools like AI-AC.</p>
+      <p>I move between research methods and engineering because good accessibility needs both: evidence about people, and software that actually runs. I'm from Visakhapatnam, India, and I speak Telugu and English.</p>
+      <div class="skills">
+        <div><h3>Accessibility</h3><p>WCAG 2.2, screen readers, keyboard navigation, audio interfaces, accessible PDF</p></div>
+        <div><h3>Research methods</h3><p>Co-design, surveys, usability testing, qualitative coding, experiment design, statistics</p></div>
+        <div><h3>Engineering</h3><p>JavaScript, Python, C#, HTML/CSS, Blockly, Chrome extensions, Unity3D</p></div>
+        <div><h3>Design</h3><p>Figma, Adobe XD, prototyping, interaction design</p></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- RESEARCH FOCUS -->
-  <section id="research" aria-labelledby="research-h">
-    <div class="wrap">
-      <div class="shead reveal">
-        <span class="snum">01</span>
-        <div><h2 id="research-h">What I work on</h2><p>Three threads, one question: how do we make computing usable for people it usually leaves out?</p></div>
-      </div>
-      <div class="focus-grid">
-        <div class="fcard reveal">
-          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16"/></svg></span>
-          <h3>Blind &amp; low-vision access</h3>
-          <p>Making programming and everyday tools usable for people who are blind or have low vision.</p>
-        </div>
-        <div class="fcard reveal">
-          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-4 12.7V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.3A7 7 0 0 0 12 2Z"/><path d="M9 21h6"/></svg></span>
-          <h3>Neurodivergence &amp; programming</h3>
-          <p>How neurodivergent people, including those with ADHD, experience programming and computing.</p>
-        </div>
-        <div class="fcard reveal">
-          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
-          <h3>Human-computer interaction</h3>
-          <p>The method behind both: studying how people really use technology, and designing for how they think and act.</p>
-        </div>
-      </div>
+<section id="contact" class="contact">
+  <div class="wrap">
+    <h2>Let's build something <em>everyone can use.</em></h2>
+    <a class="email" href="mailto:kosurivamsi5@gmail.com">kosurivamsi5@gmail.com</a>
+    <div class="row">
+      <span>Texas, USA</span>
+      <a href="https://github.com/vamsikrishnakosuri">GitHub</a>
+      <!-- Add these once you send me the links:
+      <a href="https://scholar.google.com/...">Google Scholar</a>
+      <a href="https://www.linkedin.com/in/...">LinkedIn</a>
+      <a href="/cv.pdf">CV (PDF)</a> -->
     </div>
-  </section>
-
-  <!-- SELECTED WORK -->
-  <section id="work" aria-labelledby="work-h">
-    <div class="wrap">
-      <div class="shead reveal">
-        <span class="snum">02</span>
-        <div><h2 id="work-h">Selected work</h2><p>Research and tools I have built and shipped.</p></div>
-      </div>
-      <div class="work-list">
-
-        <article class="proj reveal">
-          <div class="meta"><span class="role">Research Assistant</span>Google Blockly<br>Accessibility</div>
-          <div>
-            <h3>Accessible block-based programming</h3>
-            <p>Working on making Google Blockly more usable for blind and low-vision programmers.</p>
-            <div class="tags"><span class="tag">Accessibility</span><span class="tag">Blockly</span><span class="tag">HCI</span></div>
-          </div>
-        </article>
-
-        <article class="proj reveal">
-          <div class="meta"><span class="role">Creator</span>Chrome extension<br>2026</div>
-          <div>
-            <h3>AI-AC — AI Accessibility Checker <span class="badge">Published</span></h3>
-            <p>A published Chrome extension that scans any site and reports a score for each disability profile, not one flat list. A local rules engine (mapped to WCAG 2.2) runs for free; an optional AI vision pass reads a screenshot the way a person sees it, catching text baked into images, meaning carried by colour alone, and mismatched alt text.</p>
-            <div class="tags"><span class="tag">WCAG 2.2</span><span class="tag">Computer vision</span><span class="tag">Manifest V3</span><span class="tag">JavaScript</span></div>
-            <div class="plinks">
-              <a href="https://chromewebstore.google.com/detail/kkfchmjomomkiggchkodggcniklniika">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
-                Chrome Web Store
-              </a>
-              <a href="https://github.com/vamsikrishnakosuri/ai-ac">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 8.8 21.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.300-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.4 4.6-4.6 4.9.3.3.6.9.6 1.8v2.7c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>
-                Source
-              </a>
-            </div>
-          </div>
-        </article>
-
-        <article class="proj reveal">
-          <div class="meta"><span class="role">Researcher</span>HCI<br>Ongoing</div>
-          <div>
-            <h3>Neurodivergence &amp; programming</h3>
-            <p>Ongoing research on how neurodivergent people experience programming. More to share soon.</p>
-            <div class="tags"><span class="tag">HCI research</span><span class="tag">Neurodivergence</span></div>
-          </div>
-        </article>
-
-        <article class="proj reveal">
-          <div class="meta"><span class="role">Designer &amp; developer</span>Assistive tool<br>Ongoing</div>
-          <div>
-            <h3>Accessible learning tools</h3>
-            <p>Building tools that make learning to code more accessible. More to share soon.</p>
-            <div class="tags"><span class="tag">Accessibility</span><span class="tag">In progress</span></div>
-          </div>
-        </article>
-
-        <article class="proj reveal">
-          <div class="meta"><span class="role">Full-stack build</span>Web app<br>Personal</div>
-          <div>
-            <h3>Strangers Connect</h3>
-            <p>A full-stack video-chat app that connects people worldwide in real time: peer-to-peer WebRTC video, Socket.io signalling, end-to-end encrypted messaging, and a responsive dark and light interface.</p>
-            <div class="tags"><span class="tag">WebRTC</span><span class="tag">Socket.io</span><span class="tag">Node.js</span><span class="tag">React</span></div>
-            <div class="plinks">
-              <a href="https://strangers-connect.vercel.app">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>
-                Live demo
-              </a>
-              <a href="https://github.com/vamsikrishnakosuri/StrangersConnect">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 8.8 21.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.4 4.6-4.6 4.9.3.3.6.9.6 1.8v2.7c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>
-                Source
-              </a>
-            </div>
-          </div>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- TEACHING -->
-  <section id="teaching" aria-labelledby="teaching-h">
-    <div class="wrap">
-      <div class="shead reveal">
-        <span class="snum">03</span>
-        <div><h2 id="teaching-h">Teaching &amp; mentorship</h2><p>Roles at the University of North Texas and beyond.</p></div>
-      </div>
-      <div class="two">
-        <div class="rows reveal">
-          <div class="row"><span class="rt">Teaching Assistant, Human-Computer Interaction</span><span class="rs">Guiding students through interaction design, evaluation, and usability.</span><span class="rm">University of North Texas</span></div>
-          <div class="row"><span class="rt">Teaching Assistant, Assembly Language</span><span class="rs">Low-level programming, computer architecture, and debugging.</span><span class="rm">University of North Texas</span></div>
-          <div class="row"><span class="rt">Teaching Assistant, Cyber Security</span><span class="rs">Security fundamentals, threat models, and secure practice.</span><span class="rm">University of North Texas</span></div>
-          <div class="row"><span class="rt">Teaching Assistant, Secure E-Commerce</span><span class="rs">Trust, transactions, and safe web systems.</span><span class="rm">University of North Texas</span></div>
-        </div>
-        <div class="about reveal">
-          <p>Across four courses I have learned to explain hard ideas plainly, meet students where they are, and turn feedback into better materials, the same instincts that drive my accessibility research.</p>
-          <p>I care most about the moment something finally clicks for a learner who was told the subject was not for them.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about" aria-labelledby="about-h">
-    <div class="wrap">
-      <div class="shead reveal">
-        <span class="snum">04</span>
-        <div><h2 id="about-h">About</h2></div>
-      </div>
-      <div class="two">
-        <div class="about reveal">
-          <p>I am a PhD student in Computer Science, working at the intersection of human-computer interaction and accessibility. My research asks a stubborn question: the tools we build for programming, learning, and everyday web use assume a certain kind of user, so what does it take to make them work for everyone else?</p>
-          <p>That takes me from screen-reader semantics and audio interfaces, to the lived experience of neurodivergent students, to shipping real tools like AI-AC. I move between research methods and engineering because good accessibility needs both: evidence about people, and software that actually runs.</p>
-        </div>
-        <div class="reveal">
-          <div class="skills">
-            <div class="sk"><h4>Accessibility &amp; HCI</h4><div class="items"><span>WCAG 2.2</span><span>Screen readers</span><span>Keyboard nav</span><span>UX research</span><span>Usability testing</span></div></div>
-            <div class="sk"><h4>Research methods</h4><div class="items"><span>Experiment design</span><span>Statistical analysis</span><span>NLP</span><span>Survey design</span><span>Qualitative coding</span></div></div>
-            <div class="sk"><h4>Engineering</h4><div class="items"><span>Python</span><span>JavaScript</span><span>C#</span><span>HTML/CSS</span><span>Unity3D</span></div></div>
-            <div class="sk"><h4>Design</h4><div class="items"><span>Figma</span><span>Adobe XD</span><span>Prototyping</span><span>Interaction design</span></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact" aria-labelledby="contact-h">
-    <div class="wrap">
-      <div class="shead reveal">
-        <span class="snum">05</span>
-        <div><h2 id="contact-h">Let's work together</h2><p>Open to research collaborations, PhD and industry conversations, and accessibility work.</p></div>
-      </div>
-      <div class="contact-in">
-        <div class="reveal">
-          <a class="big-email" href="mailto:kosurivamsi5@gmail.com">kosurivamsi5@gmail.com</a>
-          <div class="cmeta">
-            <div><div class="lab">Based in</div>Texas, USA</div>
-          </div>
-        </div>
-        <div class="reveal">
-          <div class="lab" style="margin-bottom:12px">Find me</div>
-          <div class="social">
-            <a href="https://github.com/vamsikrishnakosuri">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 8.8 21.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.4 4.6-4.6 4.9.3.3.6.9.6 1.8v2.7c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>
-              GitHub
-            </a>
-            <a href="mailto:kosurivamsi5@gmail.com">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-              Email
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- MINI GAME -->
-  <section id="play" aria-labelledby="play-h">
-    <div class="wrap">
-      <div class="shead reveal">
-        <span class="snum">06</span>
-        <div><h2 id="play-h">Off the clock</h2><p>Made it this far? Jump the blocks. It speeds up.</p></div>
-      </div>
-      <div class="play-wrap reveal">
-        <div class="game-head">
-          <span class="score" id="score">Score 0 &middot; Best 0</span>
-          <span class="ghint">Space / &uarr; / tap to jump</span>
-        </div>
-        <canvas id="game" role="img" aria-label="A small jump-the-blocks game. Press space or tap to play."></canvas>
-      </div>
-    </div>
-  </section>
+  </div>
+</section>
 </main>
 
-<footer>
-  <div class="wrap foot">
-    <p class="a11y-note"><b>Built to demonstrate the work.</b> Set in Atkinson Hyperlegible. Designed to WCAG 2.2 AA: full keyboard support, visible focus, honoured reduced-motion and dark-mode preferences.</p>
-    <p class="a11y-note">© 2026 Vamsi Krishna Kosuri</p>
+<footer><div class="wrap"><span>© 2026 Vamsi Krishna Kosuri</span><span>Open to research collaborations and accessibility and UX research roles from May 2027.</span></div></footer>
+
+<!-- assistant -->
+<div class="orb-hint" id="orbHint">Ask me anything about Vamsi</div>
+<button class="orb-btn" id="orbBtn" type="button" aria-label="Open Vamsi's assistant" aria-expanded="false" aria-controls="panel"><canvas id="orbCanvas" width="148" height="148"></canvas></button>
+<div class="panel" id="panel" role="dialog" aria-label="Vamsi's assistant" data-open="false">
+  <div class="panel-head">
+    <canvas id="orbCanvasSmall" width="76" height="76" aria-hidden="true"></canvas>
+    <div class="t"><strong>Vamsi's assistant</strong><small>Answers questions about Vamsi's work only</small></div>
+    <button type="button" id="closePanel" aria-label="Close assistant">×</button>
   </div>
-</footer>
+  <div class="msgs" id="msgs" aria-live="polite">
+    <div class="msg ai">Hi, I'm Vamsi's assistant. Ask me about his research, tools, teaching, or what he's looking for next. I only answer questions about Vamsi.</div>
+  </div>
+  <div class="chips" id="chips">
+    <button type="button" data-q="Summarize Vamsi's research in two sentences.">Summarize his research</button>
+    <button type="button" data-q="What tools has Vamsi built?">Tools he built</button>
+    <button type="button" data-q="Why should I hire Vamsi for an accessibility role?">Why hire him?</button>
+  </div>
+  <div class="typing" id="typing" hidden>Thinking…</div>
+  <form class="compose" id="compose">
+    <input id="q" type="text" placeholder="Ask about Vamsi…" autocomplete="off" aria-label="Your question" maxlength="400">
+    <button type="submit" id="send">Send</button>
+  </form>
+</div>
 
 <script>
-(function(){
-  var root=document.documentElement, key="vkk-theme";
-  var saved=null; try{ saved=localStorage.getItem(key) }catch(e){}
-  if(saved){ root.setAttribute("data-theme", saved); }
-  document.getElementById("theme").addEventListener("click", function(){
-    var cur=root.getAttribute("data-theme");
-    if(!cur){ cur = matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light"; }
-    var next = cur==="dark" ? "light":"dark";
-    root.setAttribute("data-theme", next);
-    try{ localStorage.setItem(key, next) }catch(e){}
-  });
-  // scroll reveal (respects reduced motion)
-  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var els=[].slice.call(document.querySelectorAll(".reveal"));
-  if(reduce || !("IntersectionObserver" in window)){ els.forEach(function(el){el.classList.add("in")}); }
-  else{
-    var io=new IntersectionObserver(function(en){ en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } }); }, {threshold:.12, rootMargin:"0px 0px -8% 0px"});
-    els.forEach(function(el){ io.observe(el) });
-  }
-})();
+/* ---------- fluid orb (WebGL) ---------- */
+function makeOrb(canvas){
+  const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:false});
+  if(!gl){canvas.style.background='radial-gradient(circle at 35% 35%,#F3EEE3,#9FD8C4 45%,#0F2622 75%)';return;}
+  const vs=`attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
+  const fs=`precision highp float;uniform float t;uniform vec2 r;
+  vec3 hash3(vec3 p){p=vec3(dot(p,vec3(127.1,311.7,74.7)),dot(p,vec3(269.5,183.3,246.1)),dot(p,vec3(113.5,271.9,124.6)));return -1.+2.*fract(sin(p)*43758.5453123);}
+  float noise(vec3 p){vec3 i=floor(p),f=fract(p);vec3 u=f*f*(3.-2.*f);
+    return mix(mix(mix(dot(hash3(i+vec3(0,0,0)),f-vec3(0,0,0)),dot(hash3(i+vec3(1,0,0)),f-vec3(1,0,0)),u.x),
+                   mix(dot(hash3(i+vec3(0,1,0)),f-vec3(0,1,0)),dot(hash3(i+vec3(1,1,0)),f-vec3(1,1,0)),u.x),u.y),
+               mix(mix(dot(hash3(i+vec3(0,0,1)),f-vec3(0,0,1)),dot(hash3(i+vec3(1,0,1)),f-vec3(1,0,1)),u.x),
+                   mix(dot(hash3(i+vec3(0,1,1)),f-vec3(0,1,1)),dot(hash3(i+vec3(1,1,1)),f-vec3(1,1,1)),u.x),u.y),u.z);}
+  float fbm(vec3 p){float a=.5,s=0.;for(int i=0;i<5;i++){s+=a*noise(p);p*=2.02;a*=.5;}return s;}
+  void main(){
+    vec2 uv=(gl_FragCoord.xy-.5*r)/min(r.x,r.y)*2.;
+    float d=length(uv);
+    float edge=1.-smoothstep(.92,.99,d);
+    if(edge<=0.){gl_FragColor=vec4(0.);return;}
+    float z=sqrt(max(0.,1.-d*d));
+    vec3 n=vec3(uv,z);
+    float f1=fbm(n*1.6+vec3(0.,t*.25,t*.15));
+    float f2=fbm(n*2.8-vec3(t*.2,0.,t*.1)+f1);
+    vec3 cream=vec3(.953,.933,.890);
+    vec3 mint=vec3(.624,.847,.769);
+    vec3 teal=vec3(.18,.55,.52);
+    vec3 pine=vec3(.06,.15,.13);
+    vec3 col=mix(teal,mint,smoothstep(-.35,.35,f1));
+    col=mix(col,cream,smoothstep(-.1,.45,f2));
+    col=mix(col,vec3(.55,.80,.95),smoothstep(.15,.6,f1*.6-f2*.5)*.6);
+    float rim=pow(1.-z,1.8);
+    col=mix(col,teal*.6,rim*.7);
+    float spec=pow(max(0.,dot(n,normalize(vec3(-.5,.7,.6)))),18.);
+    col+=spec*.35;
+    gl_FragColor=vec4(col,edge);
+  }`;
+  function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
+  const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
+  const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+  const p=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(p);gl.vertexAttribPointer(p,2,gl.FLOAT,false,0,0);
+  const ut=gl.getUniformLocation(pr,'t'),ur=gl.getUniformLocation(pr,'r');
+  gl.viewport(0,0,canvas.width,canvas.height);gl.uniform2f(ur,canvas.width,canvas.height);
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let t0=performance.now();
+  function frame(now){gl.uniform1f(ut,(now-t0)/1000);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);if(!reduce)requestAnimationFrame(frame);}
+  requestAnimationFrame(frame);
+}
+makeOrb(document.getElementById('orbCanvas'));
+makeOrb(document.getElementById('orbCanvasSmall'));
 
-// minimal jump-the-blocks game
+/* ---------- assistant ---------- */
+const panel=document.getElementById('panel'),orbBtn=document.getElementById('orbBtn'),msgs=document.getElementById('msgs'),
+      form=document.getElementById('compose'),q=document.getElementById('q'),send=document.getElementById('send'),typing=document.getElementById('typing'),hint=document.getElementById('orbHint');
+const history=[];
+function open(){panel.dataset.open='true';orbBtn.setAttribute('aria-expanded','true');hint.classList.remove('show');setTimeout(()=>q.focus(),50);}
+function close(){panel.dataset.open='false';orbBtn.setAttribute('aria-expanded','false');orbBtn.focus();}
+orbBtn.addEventListener('click',()=>panel.dataset.open==='true'?close():open());
+document.getElementById('closePanel').addEventListener('click',close);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel.dataset.open==='true')close();});
+document.querySelectorAll('[data-open-assistant]').forEach(b=>b.addEventListener('click',open));
+setTimeout(()=>hint.classList.add('show'),2500);setTimeout(()=>hint.classList.remove('show'),8000);
+function add(role,text){const d=document.createElement('div');d.className='msg '+role;d.textContent=text;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d;}
+async function ask(text){
+  text=text.trim();if(!text)return;
+  open();add('me',text);history.push({role:'user',content:text});
+  send.disabled=true;typing.hidden=false;
+  try{
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history.slice(-8)})});
+    const data=await res.json();
+    if(!res.ok||!data.reply)throw new Error(data.error||'no reply');
+    add('ai',data.reply);history.push({role:'assistant',content:data.reply});
+  }catch(err){
+    add('ai err','The assistant is offline right now. Email kosurivamsi5@gmail.com and Vamsi will answer in person.');
+  }finally{send.disabled=false;typing.hidden=true;}
+}
+form.addEventListener('submit',e=>{e.preventDefault();const v=q.value;q.value='';ask(v);});
+document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>ask(b.dataset.q)));
+
+/* ---------- pointer ---------- */
 (function(){
-  var cv=document.getElementById("game"); if(!cv) return;
-  var ctx=cv.getContext("2d"), W=0,H=0,dpr=1;
-  var ground,player,obs,speed,score,best=0,spawn,state="idle",last=0;
-  function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim() }
-  function size(){ dpr=Math.min(2,window.devicePixelRatio||1); var r=cv.getBoundingClientRect(); W=r.width; H=r.height; cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); ground=H-34; if(player) player.y=Math.min(player.y,ground); draw(); }
-  function reset(){ player={x:52,s:26,y:H-34,vy:0,onG:true}; obs=[]; speed=3.4; score=0; spawn=60; setScore(); }
-  function setScore(){ var s=document.getElementById("score"); if(s) s.innerHTML="Score "+score+" &middot; Best "+best }
-  function rr(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath() }
-  function draw(){
-    if(!player) return;
-    ctx.clearRect(0,0,W,H);
-    ctx.strokeStyle=css("--line"); ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(0,ground+player.s/2+2); ctx.lineTo(W,ground+player.s/2+2); ctx.stroke();
-    rr(player.x-player.s/2,player.y-player.s/2,player.s,player.s,7); ctx.fillStyle=css("--accent"); ctx.fill();
-    ctx.fillStyle=css("--ink"); obs.forEach(function(o){ rr(o.x,ground+player.s/2-o.h,o.w,o.h,3); ctx.fill() });
-    if(state!=="run"){ ctx.fillStyle=css("--muted"); ctx.font='500 14px "JetBrains Mono", monospace'; ctx.textAlign="center";
-      ctx.fillText(state==="over"? ("Game over  ·  "+score+"  ·  Space / tap to retry") : "Press Space or tap to start", W/2, H/2); }
-  }
-  function jump(){ if(state==="run"){ if(player.onG){ player.vy=-9.6; player.onG=false } }
-    else { reset(); state="run"; last=performance.now(); requestAnimationFrame(loop) } }
-  function loop(t){ if(state!=="run"){ draw(); return } var dt=Math.min(40,t-last); last=t; var k=dt/16;
-    player.vy+=0.6*k; player.y+=player.vy*k; if(player.y>=ground){ player.y=ground; player.vy=0; player.onG=true }
-    spawn-=dt; if(spawn<=0){ obs.push({x:W+12,w:9+Math.random()*15,h:14+Math.random()*26}); spawn=680+Math.random()*640-Math.min(430,score*5) }
-    for(var i=obs.length-1;i>=0;i--){ var o=obs[i]; o.x-=speed*k*1.7;
-      if(o.x+o.w<0){ obs.splice(i,1); score++; if(score>best)best=score; setScore(); continue }
-      var px=player.x-player.s/2;
-      if(px<o.x+o.w && px+player.s>o.x && player.y> ground-o.h){ state="over"; setScore(); draw(); return } }
-    speed+=0.00028*dt; draw(); requestAnimationFrame(loop);
-  }
-  cv.addEventListener("pointerdown", function(e){ e.preventDefault(); cv.focus&&cv.focus(); jump() });
-  document.addEventListener("keydown", function(e){ if(e.code==="Space"||e.code==="ArrowUp"){ var a=document.activeElement; if(a&&/INPUT|TEXTAREA/.test(a.tagName)) return;
-    var r=cv.getBoundingClientRect(); if(state==="run" || (r.top<innerHeight && r.bottom>0)){ e.preventDefault(); jump() } } });
-  window.addEventListener("resize", size);
-  reset(); size();
+  if(!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
+  const h=document.documentElement; h.classList.add('cur');
+  const dot=document.createElement('div'), ring=document.createElement('div');
+  dot.className='cur-dot'; ring.className='cur-ring';
+  dot.setAttribute('aria-hidden','true'); ring.setAttribute('aria-hidden','true');
+  document.body.append(dot,ring);
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;h.classList.remove('cur-out');
+    dot.style.transform='translate('+mx+'px,'+my+'px) translate(-50%,-50%)';},{passive:true});
+  addEventListener('mousedown',()=>h.classList.add('cur-down'));
+  addEventListener('mouseup',()=>h.classList.remove('cur-down'));
+  document.addEventListener('mouseleave',()=>h.classList.add('cur-out'));
+  document.addEventListener('mouseover',e=>{h.classList.toggle('cur-hover',!!e.target.closest('a,button,input,.bubble'));});
+  (function loop(){const k=reduce?1:.16;rx+=(mx-rx)*k;ry+=(my-ry)*k;
+    ring.style.transform='translate('+rx+'px,'+ry+'px) translate(-50%,-50%)';requestAnimationFrame(loop);})();
 })();
 </script>
 </body>
