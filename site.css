@@ -215,3 +215,68 @@ section.reading{box-shadow:inset 3px 0 0 var(--mint)}
 @media (max-width:720px){.reader{left:12px;bottom:12px;max-width:calc(100vw - 110px)}.reader .where{max-width:110px}}
 
 @media (max-width:720px){.hero{padding:24px 0 60px}.hero h1{font-size:clamp(40px,11vw,56px)}.hero p.lede{font-size:17px}.orb-btn{width:60px;height:60px;right:14px;bottom:14px}.orb-btn canvas{width:60px;height:60px}.orb-hint{right:82px;bottom:30px}.panel{right:12px;bottom:84px;width:calc(100vw - 24px);height:min(560px,calc(100vh - 110px))}}
+
+
+/* ===== divider sprig ===== */
+section{position:relative}
+section[data-sprig]::before{content:"";position:absolute;top:0;width:112px;height:30px;transform:translateY(-50%);pointer-events:none;
+  background:var(--pine);
+  -webkit-mask:var(--sprig) center/contain no-repeat;mask:var(--sprig) center/contain no-repeat}
+section[data-sprig]::after{content:"";position:absolute;top:0;width:112px;height:30px;transform:translateY(-50%);pointer-events:none;opacity:.8;
+  background:var(--mint);
+  -webkit-mask:var(--sprig) center/contain no-repeat;mask:var(--sprig) center/contain no-repeat}
+section[data-sprig="r"]::before,section[data-sprig="r"]::after{right:clamp(16px,8vw,120px)}
+section[data-sprig="l"]::before,section[data-sprig="l"]::after{left:clamp(16px,8vw,120px)}
+:root{--sprig:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 112 30'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round'%3E%3Cpath d='M6 15h100'/%3E%3Cpath d='M44 15c0-5 3-8 7.5-8-.6 5-3 8-7.5 8zM44 15c0 5 3 8 7.5 8-.6-5-3-8-7.5-8zM68 15c0-5-3-8-7.5-8 .6 5 3 8 7.5 8zM68 15c0 5-3 8-7.5 8 .6-5 3-8 7.5-8z'/%3E%3Ccircle cx='56' cy='15' r='2.4'/%3E%3C/g%3E%3C/svg%3E")}
+
+/* ===== butterfly ===== */
+.bfly{position:fixed;left:0;top:0;width:34px;height:29px;z-index:9;pointer-events:none;color:var(--mint);opacity:0;transition:opacity .8s;will-change:transform}
+.bfly.on{opacity:.75}
+.bfly svg{width:100%;height:100%;display:block}
+.bfly .bw{transform-origin:20px 17px;animation:flap .42s ease-in-out infinite alternate}
+.bfly .bw-r{animation-name:flapR}
+@keyframes flap{from{transform:scaleX(1)}to{transform:scaleX(.28)}}
+@keyframes flapR{from{transform:scaleX(1)}to{transform:scaleX(.28)}}
+@media (prefers-reduced-motion:reduce){.bfly{display:none}}
+
+/* ===== plain text reading mode ===== */
+html[data-reading] .bubbles,html[data-reading] .lamp,html[data-reading] .lamp-hint,html[data-reading] .bfly,
+html[data-reading] .orb-btn,html[data-reading] .orb-hint,html[data-reading] .panel,
+html[data-reading] section[data-sprig]::before,html[data-reading] section[data-sprig]::after,
+html[data-reading] .cur-dot,html[data-reading] .cur-ring,html[data-reading] .portrait{display:none!important}
+html[data-reading]{cursor:auto!important}
+html[data-reading]{background:#101010}
+html[data-reading] body{background:#101010;color:#F2F2F2;font-size:19px;line-height:1.85}
+html[data-reading] .wrap,html[data-reading] .hero-inner{max-width:68ch;padding:0 22px}
+html[data-reading] h1,html[data-reading] h2,html[data-reading] h3,html[data-reading] .pubs .title,html[data-reading] .teach blockquote{font-family:var(--sans);color:#fff;font-weight:700;letter-spacing:0}
+html[data-reading] h1{font-size:30px;line-height:1.3;margin:0 0 12px}
+html[data-reading] h2{font-size:25px;margin:0 0 10px}
+html[data-reading] h3,html[data-reading] .pubs .title{font-size:21px;margin:0 0 6px}
+html[data-reading] h1 em,html[data-reading] h2 em,html[data-reading] h3 em,html[data-reading] blockquote em{font-style:normal;color:#fff}
+html[data-reading] p,html[data-reading] .about .text p:first-child,html[data-reading] .teach blockquote{color:#E6E6E6;font-size:19px;line-height:1.85;margin:0 0 16px;max-width:none}
+html[data-reading] section{padding:28px 0;border-top:1px solid #3a3a3a;min-height:0}
+html[data-reading] .hero{min-height:0;padding:28px 0;text-align:left;display:block}
+html[data-reading] .sec-head,html[data-reading] .threads,html[data-reading] .teach,html[data-reading] .about,html[data-reading] .skills,html[data-reading] .work li{display:block;gap:0;margin-bottom:0}
+html[data-reading] .threads>div,html[data-reading] .skills>div,html[data-reading] .work li,html[data-reading] .pubs li,html[data-reading] .teach li{margin:0 0 22px;padding:0 0 4px;border:0;border-bottom:1px solid #2b2b2b}
+html[data-reading] a{color:#8FD6FF}
+html[data-reading] .btn,html[data-reading] .listen-btn{border-color:#555;color:#fff;background:transparent}
+html[data-reading] .btn.primary{background:#fff;color:#111}
+html[data-reading] header{background:#101010;border-bottom:1px solid #3a3a3a}
+html[data-reading] .brand{font-family:var(--sans);font-weight:700;color:#fff;font-size:18px}
+html[data-reading] .nav ul a{color:#cfcfcf}
+html[data-reading] .work .year,html[data-reading] .pubs .meta,html[data-reading] .pubs .status,html[data-reading] .teach li span,html[data-reading] footer{color:#B9B9B9}
+html[data-reading] .work .tag{color:#9a9a9a}
+html[data-reading] .reader{background:#1b1b1b;border-color:#444}
+html[data-reading] section.reading{box-shadow:inset 3px 0 0 #8FD6FF}
+
+html[data-reading] .nav{display:flex;flex-wrap:wrap;height:auto;padding:12px 22px;row-gap:8px;column-gap:16px;justify-content:flex-start;align-items:center}
+html[data-reading] .brand{white-space:nowrap;margin-right:auto}
+html[data-reading] .nav ul{flex-wrap:wrap;gap:14px}
+html[data-reading] .hero-inner{margin:0;text-align:left;max-width:68ch}
+html[data-reading] .hero p.lede,html[data-reading] .kicker{margin:0 0 16px;max-width:none;text-align:left}
+html[data-reading] .cta{justify-content:flex-start;margin-top:4px}
+html[data-reading] footer{border-top:1px solid #3a3a3a;padding:24px 0 60px}
+html[data-reading] .contact .email{font-family:var(--sans);font-size:20px;color:#8FD6FF}
+html[data-reading] header{padding-top:6px}
+html[data-reading] .hero{padding-top:34px!important}
+html[data-reading] .brand{line-height:1.5}
