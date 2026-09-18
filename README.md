@@ -20,3 +20,4 @@ Redeploy after changing variables.
 
 ## Local preview
 `npx vite` serves the page. The assistant needs the Vercel function, so test it with `npx vercel dev` or on the deployed site.
+<!-- redeploy -->
