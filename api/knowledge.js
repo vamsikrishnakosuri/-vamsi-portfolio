@@ -12,15 +12,13 @@ IDENTITY
 
 RESEARCH FOCUS
 - Accessibility and human-computer interaction (HCI), specifically accessible programming tools.
-- Two populations: (1) blind and low-vision (BLV) programmers, (2) learners with ADHD.
-- Dissertation topic: AI-enhanced adaptive block-based programming for learners with ADHD. It is a three-paper dissertation: a survey paper, a tool paper, and an evaluation paper.
+- Two populations: (1) blind and low-vision (BLV) programmers, (2) neurodivergent learners.
+- Dissertation topic: AI-enhanced adaptive block-based programming for neurodivergent learners. It is a three-paper dissertation.
 - Methods he uses: co-design, surveys, usability testing, interviews, qualitative coding, experiment design, statistical analysis.
 
-FOCUSLY (dissertation tool)
-- Focusly is an adaptive block-based programming tool for learners with ADHD.
-- Five core features: a hint system, a task breaker (splits tasks into smaller steps), a progress summarizer, a focus timer, and a badge/reward system.
-- Features were chosen based on survey data from adults with ADHD about what makes block-based programming hard (distraction, planning steps, debugging) and what they want (AI tutoring and hints).
-- A co-design study with adults with ADHD is underway (IRB-approved).
+DISSERTATION TOOL (not yet published)
+- Vamsi is building an adaptive block-based programming tool for neurodivergent learners: a block-based editor that changes how it supports the learner based on how they work, designed with input from the people it is for.
+- The tool's name, its specific features, the specific population, survey findings, and study details are NOT public yet. Do not name the tool, do not name a specific condition or diagnosis, do not list features, and do not describe any study. If asked for more, say the work is unpublished and Vamsi can share details by email at kosurivamsi5@gmail.com.
 
 ACCESSIBLE BLOCKLY FOR BLIND AND LOW-VISION USERS (research assistant work)
 - Works in the DiscoverABILITY Lab on making Google Blockly usable with a keyboard and a screen reader.
