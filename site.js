@@ -38,10 +38,15 @@ function makeOrb(canvas){
   const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
   const p=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(p);gl.vertexAttribPointer(p,2,gl.FLOAT,false,0,0);
   const ut=gl.getUniformLocation(pr,'t'),ur=gl.getUniformLocation(pr,'r');
+  const coarse=matchMedia('(hover:none)').matches;
+  if(coarse){canvas.width=Math.round(canvas.width/2);canvas.height=Math.round(canvas.height/2);}
   gl.viewport(0,0,canvas.width,canvas.height);gl.uniform2f(ur,canvas.width,canvas.height);
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let t0=performance.now();
-  function frame(now){gl.uniform1f(ut,(now-t0)/1000);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);if(!reduce)requestAnimationFrame(frame);}
+  let lastDraw=0;
+  function frame(now){
+    if(!coarse||now-lastDraw>33){lastDraw=now;gl.uniform1f(ut,(now-t0)/1000);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);}
+    if(!reduce)requestAnimationFrame(frame);}
   requestAnimationFrame(frame);
 }
 makeOrb(document.getElementById('orbCanvas'));
@@ -51,7 +56,8 @@ makeOrb(document.getElementById('orbCanvasSmall'));
 const panel=document.getElementById('panel'),orbBtn=document.getElementById('orbBtn'),msgs=document.getElementById('msgs'),
       form=document.getElementById('compose'),q=document.getElementById('q'),send=document.getElementById('send'),typing=document.getElementById('typing'),hint=document.getElementById('orbHint');
 const history=[];
-function open(){panel.dataset.open='true';orbBtn.setAttribute('aria-expanded','true');hint.classList.remove('show');setTimeout(()=>q.focus(),50);}
+function open(){panel.dataset.open='true';orbBtn.setAttribute('aria-expanded','true');hint.classList.remove('show');
+  if(!matchMedia('(hover:none)').matches)setTimeout(()=>q.focus(),50);}
 function close(){panel.dataset.open='false';orbBtn.setAttribute('aria-expanded','false');orbBtn.focus();}
 orbBtn.addEventListener('click',()=>panel.dataset.open==='true'?close():open());
 document.getElementById('closePanel').addEventListener('click',close);
@@ -201,7 +207,7 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
     // critically-damped follow, frame-rate independent, with a hard speed limit
     const k=1-Math.pow(.001, dt*(f?1.1:.55));
     let dx=(tx-px)*k, dy=(ty-py)*k;
-    const step=Math.hypot(dx,dy), maxStep=(f?220:105)*dt;   // px per second
+    const step=Math.hypot(dx,dy), maxStep=(f?220:(innerWidth<720?80:105))*dt;   // px per second
     if(step>maxStep && step>1e-6){ const s=maxStep/step; dx*=s; dy*=s; }
     if(Number.isFinite(dx)&&Number.isFinite(dy)){ px+=dx; py+=dy; }
     if(!Number.isFinite(px)||!Number.isFinite(py)){ px=w.x; py=w.y; prevX=px; prevY=py; ang=0; }

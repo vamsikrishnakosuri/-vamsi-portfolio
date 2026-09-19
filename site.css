@@ -52,7 +52,7 @@ header{position:sticky;top:0;z-index:20;background:linear-gradient(var(--pine) 7
   .brand{white-space:nowrap;font-size:20px}
   .nav ul{flex-basis:100%;gap:14px;flex-wrap:wrap}
   .nav ul a{font-size:14px}
-  .nav ul li:nth-child(3),.nav ul li:nth-child(4),.nav ul li:nth-child(5){display:none}
+  /* (old nav rule removed - sections now live in the dropdown) */
   .listen-btn{padding:5px 10px;font-size:12px}
 }
 
@@ -373,7 +373,7 @@ html[data-reading] #a11yBtn{color:#8FD6FF;border-color:#8FD6FF}
 @media (max-width:720px){
   .nav{padding:12px 56px 10px 20px}
   .nav ul{gap:12px}
-  .nav ul li:nth-child(n+3):not(.a11y-wrap){display:none}
+  /* (old nav rule removed - sections now live in the dropdown) */
 }
 
 /* ===== compact header: brand + menu + accessibility ===== */
@@ -410,3 +410,55 @@ header{z-index:40}
 .lamp{pointer-events:none}
 .lamp .bulb,.lamp .fil,.lamp .rays,.lamp .cord{pointer-events:auto}
 .lamp .hit{pointer-events:auto}
+
+/* ===== mobile: real touch targets, no iOS zoom, stable viewport ===== */
+button,a,input,.chip,.bubble{touch-action:manipulation}
+.compose input{font-size:16px}            /* <16px makes iOS zoom the page */
+
+@media (max-width:720px){
+  /* assistant becomes a bottom sheet */
+  .panel{left:0;right:0;bottom:0;width:100%;height:auto;max-height:82dvh;
+    border-radius:20px 20px 0 0;border-left:0;border-right:0;border-bottom:0;
+    padding-bottom:env(safe-area-inset-bottom);
+    transform:translateY(100%);transition:transform .32s cubic-bezier(.2,.9,.25,1);display:flex}
+  .panel[data-open="true"]{transform:translateY(0)}
+  .panel[data-open="false"]{pointer-events:none;visibility:hidden}
+  .panel-head{padding:14px 12px 12px 16px}
+  .panel-head strong{font-size:19px}
+  .msgs{max-height:52dvh;padding:14px 16px}
+  .msg{font-size:16px;max-width:92%}
+  .compose{padding:10px 12px 14px;gap:10px}
+  .compose input{padding:14px 16px}
+  .compose button{padding:0 20px;min-height:48px;font-size:15px}
+  .chips{padding:0 16px 10px}
+  .chips button{padding:9px 14px;font-size:14px}
+  /* 44px+ touch targets */
+  .panel-head button{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:26px}
+  .icon-btn{width:44px;height:44px}
+  .icon-btn svg{width:22px;height:22px}
+  .reader button{width:44px;height:44px}
+  .orb-btn{width:64px;height:64px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom))}
+  .orb-btn canvas{width:64px;height:64px}
+  .reader{bottom:calc(12px + env(safe-area-inset-bottom))}
+  .photo-btn{min-height:44px}
+  .set-panel{position:fixed;left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom));width:auto;
+    max-height:70dvh;overflow:auto;border-radius:18px}
+  .nav-panel{position:fixed;left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom));min-width:0;border-radius:18px}
+  .nav-panel a{padding:13px 14px}
+}
+@supports not (height:1dvh){@media (max-width:720px){.panel{max-height:82vh}.msgs{max-height:52vh}}}
+@media (max-width:720px){
+  .compose{box-sizing:border-box;width:100%}
+  .compose input{min-width:0;flex:1 1 auto}
+  .compose button{flex:0 0 auto}
+}
+@media (max-width:720px){
+  .icon-btn{flex:0 0 44px;min-width:44px}
+  .nav-right{gap:8px}
+  .work .links a,.pubs .meta a,.contact .row a{display:inline-block;padding:9px 2px;min-height:40px;line-height:22px}
+  .work .links{gap:14px}
+  .pubs .meta a{padding:8px 2px}
+}
+
+/* the dropdown must always show every section */
+.nav-panel ul li{display:list-item}
