@@ -235,14 +235,14 @@ html[data-reading] .orb-btn,html[data-reading] .orb-hint,html[data-reading] .pan
 html[data-reading] .cur-dot,html[data-reading] .cur-ring,html[data-reading] .portrait{display:none!important}
 html[data-reading]{cursor:auto!important}
 html[data-reading]{background:#101010}
-html[data-reading] body{background:#101010;color:#F2F2F2;font-size:19px;line-height:1.85}
+html[data-reading] body{background:#101010;color:#F2F2F2;font-size:1.19rem;line-height:1.85}
 html[data-reading] .wrap,html[data-reading] .hero-inner{max-width:68ch;padding:0 22px}
 html[data-reading] h1,html[data-reading] h2,html[data-reading] h3,html[data-reading] .pubs .title,html[data-reading] .teach blockquote{font-family:var(--sans);color:#fff;font-weight:700;letter-spacing:0}
-html[data-reading] h1{font-size:30px;line-height:1.3;margin:0 0 12px}
-html[data-reading] h2{font-size:25px;margin:0 0 10px}
-html[data-reading] h3,html[data-reading] .pubs .title{font-size:21px;margin:0 0 6px}
+html[data-reading] h1{font-size:1.9rem;line-height:1.3;margin:0 0 12px}
+html[data-reading] h2{font-size:1.56rem;margin:0 0 10px}
+html[data-reading] h3,html[data-reading] .pubs .title{font-size:1.31rem;margin:0 0 6px}
 html[data-reading] h1 em,html[data-reading] h2 em,html[data-reading] h3 em,html[data-reading] blockquote em{font-style:normal;color:#fff}
-html[data-reading] p,html[data-reading] .about .text p:first-child,html[data-reading] .teach blockquote{color:#E6E6E6;font-size:19px;line-height:1.85;margin:0 0 16px;max-width:none}
+html[data-reading] p,html[data-reading] .about .text p:first-child,html[data-reading] .teach blockquote{color:#E6E6E6;font-size:1.19rem;line-height:1.85;margin:0 0 16px;max-width:none}
 html[data-reading] section{padding:28px 0;border-top:1px solid #3a3a3a;min-height:0}
 html[data-reading] .hero{min-height:0;padding:28px 0;text-align:left;display:block}
 html[data-reading] .sec-head,html[data-reading] .threads,html[data-reading] .teach,html[data-reading] .about,html[data-reading] .skills,html[data-reading] .work li{display:block;gap:0;margin-bottom:0}
@@ -329,3 +329,35 @@ html[data-reading] .icon-btn{border-color:#555;color:#ddd}
 html[data-reading] .hero p.lede,html[data-reading] .kicker,html[data-reading] .sec-head p{color:#E6E6E6}
 .bfly .bw{animation-duration:.34s}
 .bfly.landed .bw{animation-duration:3s}
+
+/* ===== cursor must never vanish in reading mode or over panels ===== */
+html[data-reading] *,html[data-reading] a,html[data-reading] button,html[data-reading] input,html[data-reading] .bubble{cursor:auto!important}
+html[data-reading] a,html[data-reading] button,html[data-reading] .chip{cursor:pointer!important}
+html.cur .set-panel,html.cur .set-panel *{cursor:auto}
+html.cur .set-panel button,html.cur .chip{cursor:pointer}
+
+/* ===== focusable headings ===== */
+h1[tabindex],h2[tabindex]{outline-offset:8px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.sr-only:focus{position:static;width:auto;height:auto;margin:0;clip:auto;white-space:normal;font-size:25px}
+
+/* ===== photo interaction ===== */
+.photo-wrap{position:relative;width:100%;max-width:320px}
+.photo-btn{display:block;width:100%;padding:0;border:0;background:transparent;border-radius:18px;position:relative;overflow:hidden;cursor:pointer}
+.photo-btn .portrait{transition:transform .5s cubic-bezier(.2,.8,.2,1),filter .5s}
+.photo-btn:hover .portrait{transform:scale(1.02)}
+.photo-btn.pop .portrait{animation:photoPop .55s cubic-bezier(.2,.9,.25,1)}
+@keyframes photoPop{0%{transform:scale(1)}35%{transform:scale(.965)}100%{transform:scale(1)}}
+.photo-btn .scan{position:absolute;left:0;right:0;height:26%;top:-30%;pointer-events:none;opacity:0;
+  background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--mint) 55%,transparent),transparent)}
+.photo-btn.pop .scan{animation:scan .75s ease-out}
+@keyframes scan{0%{top:-30%;opacity:.95}100%{top:105%;opacity:0}}
+.photo-hint{position:absolute;left:50%;bottom:-26px;transform:translateX(-50%);font-size:12px;color:var(--mist);letter-spacing:.04em;white-space:nowrap;transition:opacity .4s}
+.photo-wrap:hover .photo-hint,.photo-btn:focus-visible ~ .photo-hint{color:var(--mint)}
+.fx{position:absolute;inset:-60px;pointer-events:none;overflow:visible;z-index:5}
+.fx i{position:absolute;display:block;border-radius:2px;will-change:transform,opacity}
+.fx .ring{position:absolute;border-radius:50%;border:1.5px solid var(--mint);will-change:transform,opacity}
+@media (prefers-reduced-motion:reduce){.photo-btn.pop .portrait,.photo-btn.pop .scan{animation:none}}
+html[data-reading] .photo-wrap,html[data-reading] .photo-hint,html[data-reading] .fx{display:none}
+
+html[data-reading] #setBtn,html[data-reading] .a11y-wrap .set-panel{display:none}

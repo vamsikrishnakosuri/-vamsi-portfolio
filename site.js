@@ -233,7 +233,9 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
     btn.setAttribute('aria-label',v?'Leave plain text reading mode':'Plain text reading mode');
     try{localStorage.setItem('reading',v?'1':'0');}catch(e){}}
   apply(on);
-  btn.addEventListener('click',()=>apply(!on));
+  btn.addEventListener('click',()=>{apply(!on);
+    if(on){const sp=document.getElementById('setPanel'),sb=document.getElementById('setBtn');
+      if(sp){sp.hidden=true;} if(sb){sb.setAttribute('aria-expanded','false');}}});
 })();
 
 /* ---------- display settings ---------- */
@@ -263,3 +265,60 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
 })();
 
 
+
+/* ---------- photo: tap for a little show ---------- */
+(function(){
+  const btn=document.getElementById('photoBtn'), fx=document.getElementById('photoFx'), hint=document.getElementById('photoHint');
+  if(!btn||!fx)return;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const accent=()=>getComputedStyle(document.documentElement).getPropertyValue('--mint').trim()||'#9FD8C4';
+  const cream=()=>getComputedStyle(document.documentElement).getPropertyValue('--cream').trim()||'#F3EEE3';
+  let taps=0, cooling=false;
+  const lines=['Tap the photo','Again?','He can hear you','Curious yet?','Okay, ask him something'];
+
+  function ring(cx,cy,delay,size){
+    const r=document.createElement('span'); r.className='ring';
+    r.style.cssText='left:'+cx+'px;top:'+cy+'px;width:10px;height:10px;margin:-5px 0 0 -5px;border-color:'+accent();
+    fx.appendChild(r);
+    r.animate([{transform:'scale(.2)',opacity:.85},{transform:'scale('+size+')',opacity:0}],
+      {duration:900,delay:delay,easing:'cubic-bezier(.16,.8,.3,1)'}).onfinish=()=>r.remove();
+  }
+  function burst(cx,cy,n){
+    const cols=[accent(),cream(),accent()];
+    for(let i=0;i<n;i++){
+      const p=document.createElement('i');
+      const a=(Math.PI*2*i)/n + Math.random()*.5, dist=70+Math.random()*130;
+      const w=3+Math.random()*4, h=6+Math.random()*9;
+      p.style.cssText='left:'+cx+'px;top:'+cy+'px;width:'+w+'px;height:'+h+'px;background:'+cols[i%3]+';opacity:.95';
+      fx.appendChild(p);
+      p.animate([
+        {transform:'translate(0,0) rotate(0deg)',opacity:1},
+        {transform:'translate('+Math.cos(a)*dist+'px,'+(Math.sin(a)*dist+60)+'px) rotate('+(Math.random()*720-360)+'deg)',opacity:0}
+      ],{duration:1100+Math.random()*500,easing:'cubic-bezier(.12,.7,.3,1)'}).onfinish=()=>p.remove();
+    }
+  }
+  function nudge(){
+    const msgs=document.getElementById('msgs');
+    if(!msgs)return;
+    const open=document.querySelector('[data-open-assistant]');
+    if(open)open.click();
+    const d=document.createElement('div'); d.className='msg ai';
+    d.textContent="You seem curious. Want to know what Vamsi actually works on?";
+    msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+  }
+  btn.addEventListener('click',()=>{
+    if(cooling)return; cooling=true; setTimeout(()=>cooling=false,180);
+    taps++;
+    const r=btn.getBoundingClientRect(), f=fx.getBoundingClientRect();
+    const cx=r.left+r.width/2-f.left, cy=r.top+r.height/2-f.top;
+    btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
+    if(!reduce){
+      ring(cx,cy,0,Math.min(26,16+taps*2)); ring(cx,cy,140,Math.min(20,12+taps*2));
+      burst(cx,cy,Math.min(46,16+taps*6));
+    }
+    if(hint)hint.textContent=lines[Math.min(taps,lines.length-1)];
+    if(taps===5)nudge();
+    if(taps>5&&taps%5===0)nudge();
+  });
+  btn.setAttribute('aria-label','Photo of Vamsi Krishna Kosuri. Activate for a small animation.');
+})();
