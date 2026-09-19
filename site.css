@@ -361,3 +361,52 @@ h1[tabindex],h2[tabindex]{outline-offset:8px}
 html[data-reading] .photo-wrap,html[data-reading] .photo-hint,html[data-reading] .fx{display:none}
 
 html[data-reading] #setBtn,html[data-reading] .a11y-wrap .set-panel{display:none}
+
+/* ===== one accessibility hub ===== */
+.brand{white-space:nowrap}
+.nav{flex-wrap:nowrap}
+.chip.act[aria-pressed="true"]{background:var(--mint);border-color:var(--mint);color:var(--pine);font-weight:700}
+html[data-reading] .only-normal{display:none}
+html[data-reading] .set-panel{display:block}
+html[data-reading] #a11yBtn{color:#8FD6FF;border-color:#8FD6FF}
+.set-panel .set-h:first-child{margin-top:0}
+@media (max-width:720px){
+  .nav{padding:12px 56px 10px 20px}
+  .nav ul{gap:12px}
+  .nav ul li:nth-child(n+3):not(.a11y-wrap){display:none}
+}
+
+/* ===== compact header: brand + menu + accessibility ===== */
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px;padding:0 24px;flex-wrap:nowrap}
+.nav-right{display:flex;align-items:center;gap:10px;position:relative}
+.nav-right .hub{display:flex;list-style:none;margin:0;padding:0}
+.icon-btn .i-close{display:none}
+#menuBtn[aria-expanded="true"] .i-menu{display:none}
+#menuBtn[aria-expanded="true"] .i-close{display:block}
+#menuBtn[aria-expanded="true"]{color:var(--mint);border-color:var(--mint)}
+.nav-panel{position:absolute;top:calc(100% + 12px);right:0;z-index:60;min-width:250px;
+  background:var(--pine-2);border:1px solid var(--line);border-radius:16px;padding:12px;
+  box-shadow:0 26px 70px rgba(0,0,0,.42)}
+.nav-panel[hidden]{display:none}
+.nav-panel ul{list-style:none;margin:0;padding:0;display:block}
+.nav-panel li{margin:0}
+.nav-panel a{display:flex;align-items:baseline;gap:12px;padding:9px 12px;border-radius:10px;
+  font-family:var(--serif);font-size:23px;color:var(--cream);text-decoration:none;transition:background .2s,padding-left .2s}
+.nav-panel a:hover{background:var(--pine-3);padding-left:18px;color:var(--mint)}
+.nav-panel .n{font-family:var(--sans);font-size:11px;color:var(--mist);letter-spacing:.1em}
+.set-panel{top:calc(100% + 12px)}
+html[data-reading] .nav-panel{background:#1b1b1b;border-color:#444}
+html[data-reading] .nav-panel a{font-family:var(--sans);font-size:18px;color:#eee}
+html[data-reading] .nav-panel a:hover{background:#2a2a2a;color:#8FD6FF}
+@media (max-width:720px){
+  .nav{height:64px;padding:0 16px}
+  .brand{font-size:19px}
+  .nav-panel{min-width:210px}
+  .nav-panel a{font-size:20px}
+}
+
+/* lamp must not block the header buttons: only the bulb and cord are clickable */
+header{z-index:40}
+.lamp{pointer-events:none}
+.lamp .bulb,.lamp .fil,.lamp .rays,.lamp .cord{pointer-events:auto}
+.lamp .hit{pointer-events:auto}

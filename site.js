@@ -233,14 +233,12 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
     btn.setAttribute('aria-label',v?'Leave plain text reading mode':'Plain text reading mode');
     try{localStorage.setItem('reading',v?'1':'0');}catch(e){}}
   apply(on);
-  btn.addEventListener('click',()=>{apply(!on);
-    if(on){const sp=document.getElementById('setPanel'),sb=document.getElementById('setBtn');
-      if(sp){sp.hidden=true;} if(sb){sb.setAttribute('aria-expanded','false');}}});
+  btn.addEventListener('click',()=>apply(!on));
 })();
 
 /* ---------- display settings ---------- */
 (function(){
-  const root=document.documentElement,btn=document.getElementById('setBtn'),panel=document.getElementById('setPanel');
+  const root=document.documentElement,btn=document.getElementById('a11yBtn'),panel=document.getElementById('setPanel');
   if(!btn)return;
   const keys={ct:'a11y-ct',cb:'a11y-cb',ts:'a11y-ts'};
   function set(kind,val){
@@ -255,10 +253,13 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
   panel.addEventListener('click',e=>{
     const b=e.target.closest('button'); if(!b)return;
     if(b.id==='setReset'){set('ct','normal');set('cb','none');set('ts','100');return;}
+    if(b.classList.contains('act'))return;   // Plain text / Listen handle themselves
     ['ct','cb','ts'].forEach(k=>{ if(b.dataset[k]!==undefined) set(k,b.dataset[k]); });
   });
   function open(v){panel.hidden=!v;btn.setAttribute('aria-expanded',v?'true':'false');
-    if(v)panel.querySelector('button').focus();}
+    if(v){const np=document.getElementById('navPanel'),mb=document.getElementById('menuBtn');
+      if(np){np.hidden=true;} if(mb){mb.setAttribute('aria-expanded','false');}
+      panel.querySelector('button').focus();}}
   btn.addEventListener('click',()=>open(panel.hidden));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden){open(false);btn.focus();}});
   document.addEventListener('click',e=>{if(!panel.hidden&&!panel.contains(e.target)&&e.target!==btn&&!btn.contains(e.target))open(false);});
@@ -321,4 +322,21 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
     if(taps>5&&taps%5===0)nudge();
   });
   btn.setAttribute('aria-label','Photo of Vamsi Krishna Kosuri. Activate for a small animation.');
+})();
+
+/* ---------- section menu ---------- */
+(function(){
+  const btn=document.getElementById('menuBtn'),panel=document.getElementById('navPanel');
+  if(!btn||!panel)return;
+  const a11y=document.getElementById('setPanel'),a11yBtn=document.getElementById('a11yBtn');
+  function open(v){
+    panel.hidden=!v; btn.setAttribute('aria-expanded',v?'true':'false');
+    btn.setAttribute('aria-label',v?'Close menu':'Open menu');
+    if(v){ if(a11y){a11y.hidden=true;} if(a11yBtn){a11yBtn.setAttribute('aria-expanded','false');}
+           panel.querySelector('a').focus(); }
+  }
+  btn.addEventListener('click',()=>open(panel.hidden));
+  panel.addEventListener('click',e=>{ if(e.target.closest('a')) open(false); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!panel.hidden){ open(false); btn.focus(); }});
+  document.addEventListener('click',e=>{ if(!panel.hidden&&!panel.contains(e.target)&&!btn.contains(e.target)) open(false); });
 })();

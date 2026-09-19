@@ -25,35 +25,47 @@
 <a class="skip" href="#main">Skip to content</a>
 
 <header>
-  <nav class="wrap nav" aria-label="Primary">
+  <div class="wrap nav">
     <a class="brand" href="#top">Vamsi Krishna Kosuri</a>
-    <ul>
-      <li><a href="#research">Research</a></li>
-      <li><a href="#work">Work</a></li>
-      <li><a href="#publications">Publications</a></li>
-      <li><a href="#teaching">Teaching</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><button class="icon-btn" id="readBtn" type="button" aria-pressed="false" aria-label="Switch to accessible plain-text view" title="Accessible plain-text view">
-        <svg class="i-a11y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="6.4" r="1.7" fill="currentColor"/><path d="M6.6 9.4c3.5 1.1 7.3 1.1 10.8 0" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M12 9.8v4.3m0 0-2.4 4.6m2.4-4.6 2.4 4.6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
-        <svg class="i-exit" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round"/></svg>
-      </button></li>
-      <li class="a11y-wrap"><button class="icon-btn" id="setBtn" type="button" aria-expanded="false" aria-controls="setPanel" aria-label="Display settings" title="Display settings">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.1" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 2.6v2.6M12 18.8v2.6M21.4 12h-2.6M5.2 12H2.6M18.6 5.4l-1.8 1.8M7.2 16.8l-1.8 1.8M18.6 18.6l-1.8-1.8M7.2 7.2 5.4 5.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <div class="nav-right">
+      <button class="icon-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="navPanel" aria-label="Open menu" title="Menu">
+        <svg class="i-menu" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <svg class="i-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </button>
-        <div class="set-panel" id="setPanel" role="group" aria-label="Display settings" hidden>
-          <p class="set-h">Contrast</p>
-          <div class="set-row"><button type="button" class="chip" data-ct="normal" aria-pressed="true">Normal</button><button type="button" class="chip" data-ct="high" aria-pressed="false">High contrast</button></div>
-          <p class="set-h">Colour vision</p>
-          <div class="set-row"><button type="button" class="chip" data-cb="none" aria-pressed="true">Default</button><button type="button" class="chip" data-cb="rg" aria-pressed="false">Red–green</button><button type="button" class="chip" data-cb="by" aria-pressed="false">Blue–yellow</button><button type="button" class="chip" data-cb="mono" aria-pressed="false">Monochrome</button></div>
+      <nav class="nav-panel" id="navPanel" aria-label="Sections" hidden>
+        <ul>
+        <li><a href="#research"><span class="n">01</span>Research</a></li>
+        <li><a href="#work"><span class="n">02</span>Work</a></li>
+        <li><a href="#publications"><span class="n">03</span>Publications</a></li>
+        <li><a href="#teaching"><span class="n">04</span>Teaching</a></li>
+        <li><a href="#about"><span class="n">05</span>About</a></li>
+        <li><a href="#contact"><span class="n">06</span>Contact</a></li>
+        </ul>
+      </nav>
+      <ul class="hub">
+      <li class="a11y-wrap"><button class="icon-btn" id="a11yBtn" type="button" aria-expanded="false" aria-controls="setPanel" aria-label="Accessibility and display options" title="Accessibility &amp; display">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="6.4" r="1.7" fill="currentColor"/><path d="M6.6 9.4c3.5 1.1 7.3 1.1 10.8 0" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M12 9.8v4.3m0 0-2.4 4.6m2.4-4.6 2.4 4.6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+      </button>
+        <div class="set-panel" id="setPanel" role="group" aria-label="Accessibility and display options" hidden>
+          <p class="set-h">Read</p>
+          <div class="set-row">
+            <button type="button" class="chip act" id="readBtn" aria-pressed="false">Plain text view</button>
+            <button type="button" class="chip act" id="listenBtn" aria-pressed="false">Listen aloud</button>
+          </div>
+          <div class="only-normal">
+            <p class="set-h">Contrast</p>
+            <div class="set-row"><button type="button" class="chip" data-ct="normal" aria-pressed="true">Normal</button><button type="button" class="chip" data-ct="high" aria-pressed="false">High contrast</button></div>
+            <p class="set-h">Colour vision</p>
+            <div class="set-row"><button type="button" class="chip" data-cb="none" aria-pressed="true">Default</button><button type="button" class="chip" data-cb="rg" aria-pressed="false">Red&ndash;green</button><button type="button" class="chip" data-cb="by" aria-pressed="false">Blue&ndash;yellow</button><button type="button" class="chip" data-cb="mono" aria-pressed="false">Monochrome</button></div>
+          </div>
           <p class="set-h">Text size</p>
           <div class="set-row"><button type="button" class="chip" data-ts="100" aria-pressed="true">A</button><button type="button" class="chip" data-ts="115" aria-pressed="false">A+</button><button type="button" class="chip" data-ts="130" aria-pressed="false">A++</button></div>
           <div class="set-row"><button type="button" class="chip wide" id="setReset">Reset all</button></div>
         </div>
       </li>
-      <li><button class="listen-btn" id="listenBtn" type="button" aria-pressed="false" aria-controls="reader" aria-label="Listen to this page, read aloud section by section"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6v4h3l4 3V3L5 6H2z" fill="currentColor"/><path d="M11 5.5a3 3 0 0 1 0 5M12.8 3.5a5.5 5.5 0 0 1 0 9" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg>Listen</button></li>
     </ul>
-  </nav>
+    </div>
+  </div>
 </header>
 
 <main id="main">
@@ -267,6 +279,7 @@
       <g class="rays" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
         <path d="M30 172v7M12 150h-7M48 150h7M17 163l-5 5M43 163l5 5M17 137l-5-5M43 137l5-5"/>
       </g>
+      <rect class="hit" x="8" y="108" width="44" height="90" fill="transparent"/>
       <g class="cord">
         <path d="M36 121c2.5 0 3.5 1.2 3.5 3.5V186" stroke="currentColor" stroke-width="1.3" stroke-dasharray="0.1 3" stroke-linecap="round" opacity=".85"/>
         <circle cx="39.5" cy="189" r="2.8" fill="currentColor" opacity=".9"/>
