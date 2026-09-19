@@ -161,20 +161,65 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
 (function(){
   const el=document.getElementById('bfly'); if(!el)return;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  let x=innerWidth*.2,y=innerHeight*.5,tx=x,ty=y,t=0,shown=false,idle=0;
-  function pick(){tx=innerWidth*(.12+Math.random()*.76);ty=innerHeight*(.18+Math.random()*.64);}
-  pick(); setInterval(pick,3600);
+  const flower=document.querySelector('.endflora .b1');
+
+  // smooth wander: layered sines never jump, so the path is continuous
+  let t=Math.random()*100, last=performance.now(), shown=false, idle=0, land=0;
+  let px=0, py=0, prevX=0, prevY=0, ang=0, started=false;
+
+  function wander(){
+    const w=innerWidth, h=innerHeight;
+    const x=w*(.5+.34*Math.sin(t*.17)+.10*Math.sin(t*.41+1.3)+.05*Math.sin(t*.93+2.1));
+    const y=h*(.5+.26*Math.cos(t*.21+.7)+.09*Math.cos(t*.53+2.4)+.04*Math.sin(t*1.11));
+    return {x:Math.max(30,Math.min(w-60,x)), y:Math.max(80,Math.min(h-90,y))};
+  }
+  function flowerPos(){
+    if(!flower)return null;
+    const r=flower.getBoundingClientRect();
+    if(r.top>innerHeight-60||r.bottom<0)return null;
+    return {x:r.left+r.width/2-17, y:r.top-21};
+  }
+
   addEventListener('scroll',()=>{idle=0;if(!shown){shown=true;el.classList.add('on');}},{passive:true});
-  (function loop(){
-    t+=.016; idle+=.016;
-    x+=(tx-x)*.012; y+=(ty-y)*.012;
-    const bx=x+Math.sin(t*1.7)*26, by=y+Math.cos(t*2.3)*14;
-    const ang=Math.sin(t*1.7)*16;
-    el.style.transform='translate('+bx+'px,'+by+'px) rotate('+ang+'deg)';
-    if(idle>9&&shown){shown=false;el.classList.remove('on');}
-    requestAnimationFrame(loop);
-  })();
-  setTimeout(()=>{shown=true;el.classList.add('on');},1800);
+
+  function frame(now){
+    let dt=(now-last)/1000; last=now;
+    if(!(dt>0))dt=.016;                // first frame / clock skew
+    if(dt>.04)dt=.04;                  // a slow frame must not cause a jump
+    t+=dt; idle+=dt;
+
+    const f=flowerPos();
+    // ease the blend between wandering and landing instead of switching instantly
+    land += ((f?1:0)-land)*Math.min(1,dt*1.6);
+    if(land<.001)land=0;
+
+    const w=wander();
+    if(!started){started=true;px=prevX=w.x;py=prevY=w.y;}
+    let tx=w.x, ty=w.y;
+    if(f){ tx=w.x+(f.x-w.x)*land; ty=w.y+(f.y-w.y)*land; }
+
+    // critically-damped follow, frame-rate independent, with a hard speed limit
+    const k=1-Math.pow(.001, dt*(f?1.1:.55));
+    let dx=(tx-px)*k, dy=(ty-py)*k;
+    const step=Math.hypot(dx,dy), maxStep=(f?220:105)*dt;   // px per second
+    if(step>maxStep && step>1e-6){ const s=maxStep/step; dx*=s; dy*=s; }
+    if(Number.isFinite(dx)&&Number.isFinite(dy)){ px+=dx; py+=dy; }
+    if(!Number.isFinite(px)||!Number.isFinite(py)){ px=w.x; py=w.y; prevX=px; prevY=py; ang=0; }
+
+    // bank into the direction of travel, smoothed
+    const vx=px-prevX, vy=py-prevY; prevX=px; prevY=py;
+    const speed=Math.hypot(vx,vy);
+    const want=speed>.05?Math.max(-18,Math.min(18,Math.atan2(vy,vx)*57.3*.16)):0;
+    ang+=(want-ang)*Math.min(1,dt*2.2);
+
+    el.style.transform='translate('+px.toFixed(2)+'px,'+py.toFixed(2)+'px) rotate('+ang.toFixed(2)+'deg)';
+    el.classList.toggle('landed', !!f && land>.93 && speed<.35);
+    if(f){ idle=0; if(!shown){shown=true;el.classList.add('on');} }
+    else if(idle>10&&shown){ shown=false; el.classList.remove('on'); }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  setTimeout(()=>{shown=true;el.classList.add('on');},1600);
 })();
 
 /* ---------- plain text reading mode ---------- */
@@ -190,3 +235,31 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
   apply(on);
   btn.addEventListener('click',()=>apply(!on));
 })();
+
+/* ---------- display settings ---------- */
+(function(){
+  const root=document.documentElement,btn=document.getElementById('setBtn'),panel=document.getElementById('setPanel');
+  if(!btn)return;
+  const keys={ct:'a11y-ct',cb:'a11y-cb',ts:'a11y-ts'};
+  function set(kind,val){
+    if(val&&val!=='normal'&&val!=='none'&&val!=='100')root.setAttribute('data-'+kind,val);else root.removeAttribute('data-'+kind);
+    try{localStorage.setItem(keys[kind],val);}catch(e){}
+    panel.querySelectorAll('[data-'+kind+']').forEach(b=>b.setAttribute('aria-pressed',b.dataset[kind]===val?'true':'false'));
+  }
+  ['ct','cb','ts'].forEach(k=>{
+    let v=null;try{v=localStorage.getItem(keys[k]);}catch(e){}
+    set(k,v||(k==='ct'?'normal':k==='cb'?'none':'100'));
+  });
+  panel.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b)return;
+    if(b.id==='setReset'){set('ct','normal');set('cb','none');set('ts','100');return;}
+    ['ct','cb','ts'].forEach(k=>{ if(b.dataset[k]!==undefined) set(k,b.dataset[k]); });
+  });
+  function open(v){panel.hidden=!v;btn.setAttribute('aria-expanded',v?'true':'false');
+    if(v)panel.querySelector('button').focus();}
+  btn.addEventListener('click',()=>open(panel.hidden));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden){open(false);btn.focus();}});
+  document.addEventListener('click',e=>{if(!panel.hidden&&!panel.contains(e.target)&&e.target!==btn&&!btn.contains(e.target))open(false);});
+})();
+
+
