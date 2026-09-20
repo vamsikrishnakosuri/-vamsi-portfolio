@@ -360,14 +360,14 @@ h1[tabindex],h2[tabindex]{outline-offset:8px}
 @media (prefers-reduced-motion:reduce){.photo-btn.pop .portrait,.photo-btn.pop .scan{animation:none}}
 html[data-reading] .photo-wrap,html[data-reading] .photo-hint,html[data-reading] .fx{display:none}
 
-html[data-reading] #setBtn,html[data-reading] .a11y-wrap .set-panel{display:none}
+/* removed: this trapped users in plain-text mode by hiding the panel */
 
 /* ===== one accessibility hub ===== */
 .brand{white-space:nowrap}
 .nav{flex-wrap:nowrap}
 .chip.act[aria-pressed="true"]{background:var(--mint);border-color:var(--mint);color:var(--pine);font-weight:700}
 html[data-reading] .only-normal{display:none}
-html[data-reading] .set-panel{display:block}
+/* removed: forced the panel open; [hidden] now governs visibility */
 html[data-reading] #a11yBtn{color:#8FD6FF;border-color:#8FD6FF}
 .set-panel .set-h:first-child{margin-top:0}
 @media (max-width:720px){
@@ -462,3 +462,7 @@ button,a,input,.chip,.bubble{touch-action:manipulation}
 
 /* the dropdown must always show every section */
 .nav-panel ul li{display:list-item}
+
+/* the accessibility panel must always be reachable, including in plain-text mode */
+html[data-reading] .set-panel:not([hidden]){display:block}
+html[data-reading] #a11yBtn{display:inline-grid}

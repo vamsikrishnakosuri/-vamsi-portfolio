@@ -236,10 +236,14 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
   function apply(v){on=v;
     if(v)root.setAttribute('data-reading','');else root.removeAttribute('data-reading');
     btn.setAttribute('aria-pressed',v?'true':'false');
-    btn.setAttribute('aria-label',v?'Leave plain text reading mode':'Plain text reading mode');
+    btn.textContent=v?'Exit plain text':'Plain text view';
+    btn.setAttribute('aria-label',v?'Exit plain text view':'Switch to plain text view');
     try{localStorage.setItem('reading',v?'1':'0');}catch(e){}}
   apply(on);
   btn.addEventListener('click',()=>apply(!on));
+  document.addEventListener('keydown',e=>{
+    if(on&&e.altKey&&e.shiftKey&&e.key.toLowerCase()==='p'){e.preventDefault();apply(false);}
+  });
 })();
 
 /* ---------- display settings ---------- */
