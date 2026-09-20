@@ -466,3 +466,24 @@ button,a,input,.chip,.bubble{touch-action:manipulation}
 /* the accessibility panel must always be reachable, including in plain-text mode */
 html[data-reading] .set-panel:not([hidden]){display:block}
 html[data-reading] #a11yBtn{display:inline-grid}
+
+/* ===== readable text on any accent colour, in every theme/profile ===== */
+:root{--on-accent:#0F2622}
+html[data-theme="light"]{--on-accent:#FFFFFF}
+html[data-ct="high"]{--on-accent:#000000}
+html[data-ct="high"][data-theme="light"]{--on-accent:#FFFFFF}
+html[data-cb="rg"]{--on-accent:#06202B}
+html[data-cb="rg"][data-theme="light"]{--on-accent:#FFFFFF}
+html[data-cb="by"]{--on-accent:#2B0A18}
+html[data-cb="by"][data-theme="light"]{--on-accent:#FFFFFF}
+html[data-cb="mono"]{--on-accent:#000000}
+html[data-cb="mono"][data-theme="light"]{--on-accent:#FFFFFF}
+
+.chip[aria-pressed="true"],.chip.act[aria-pressed="true"],
+html[data-reading] .chip[aria-pressed="true"],
+html[data-reading] .chip.act[aria-pressed="true"]{color:var(--on-accent)}
+
+/* plain-text mode uses its own fixed accent, so pin the pair explicitly */
+html[data-reading] .chip[aria-pressed="true"],
+html[data-reading] .chip.act[aria-pressed="true"]{background:#8FD6FF;border-color:#8FD6FF;color:#06202B}
+html[data-reading] .chip{border-color:#666;color:#E8E8E8}
