@@ -275,9 +275,9 @@ html[data-reading] .brand{line-height:1.5}
 .icon-btn svg{width:20px;height:20px}
 .icon-btn:hover{color:var(--mint);border-color:var(--mint)}
 .icon-btn .i-exit{display:none}
-html[data-reading] #readBtn{color:var(--mint);border-color:var(--mint)}
-html[data-reading] #readBtn .i-a11y{display:none}
-html[data-reading] #readBtn .i-exit{display:block}
+/* removed: stale ID rule from when Plain text was an icon button - it outranked the chip colours */
+
+
 .a11y-wrap{position:relative}
 .set-panel{position:absolute;top:calc(100% + 10px);right:0;z-index:60;width:272px;background:var(--pine-2);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 24px 60px rgba(0,0,0,.4)}
 .set-panel[hidden]{display:none}
