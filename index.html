@@ -217,6 +217,7 @@
     <div class="row">
       <span>Texas, USA</span>
       <a href="https://github.com/vamsikrishnakosuri">GitHub</a>
+      <button class="btn note-cta" id="noteCta" type="button">Leave me a note</button>
       <!-- Add these once you send me the links:
       <a href="https://scholar.google.com/...">Google Scholar</a>
       <a href="https://www.linkedin.com/in/...">LinkedIn</a>
@@ -307,5 +308,32 @@
     <path d="M19 11.5c-1-2-3-3-4-3.5M21 11.5c1-2 3-3 4-3.5" stroke="currentColor" stroke-width=".9" fill="none" stroke-linecap="round"/>
   </svg>
 </div>
+<div class="notes-layer" id="notesLayer"></div>
+<div class="notes-bar" id="notesBar" hidden>
+  <button type="button" id="notesToggle" class="nb-btn" aria-pressed="false"><span id="notesCount">0</span> notes</button>
+  <button type="button" id="notesAdd" class="nb-btn nb-add" aria-label="Add a new note">+ Note</button>
+</div>
+
+<template id="noteTpl">
+  <div class="note" role="group">
+    <div class="note-top">
+      <span class="grip" aria-hidden="true"></span>
+      <div class="note-cols" role="radiogroup" aria-label="Note colour">
+        <button type="button" class="col" data-col="sand" aria-label="Sand" role="radio" aria-checked="true"></button>
+        <button type="button" class="col" data-col="sage" aria-label="Sage" role="radio" aria-checked="false"></button>
+        <button type="button" class="col" data-col="blush" aria-label="Blush" role="radio" aria-checked="false"></button>
+        <button type="button" class="col" data-col="sky" aria-label="Sky" role="radio" aria-checked="false"></button>
+      </div>
+      <button type="button" class="note-x" aria-label="Delete this note">&times;</button>
+    </div>
+    <label class="sr-only">Your note</label>
+    <textarea class="note-text" rows="4" maxlength="1200" placeholder="Write a note for Vamsi&#8230;"></textarea>
+    <input class="note-mail" type="email" placeholder="Your email (optional)" autocomplete="email" maxlength="120">
+    <div class="note-foot">
+      <button type="button" class="note-send">Send</button>
+      <span class="note-status" role="status"></span>
+    </div>
+  </div>
+</template>
 </body>
 </html>

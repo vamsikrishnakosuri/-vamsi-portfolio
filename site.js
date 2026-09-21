@@ -350,3 +350,115 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
   document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!panel.hidden){ open(false); btn.focus(); }});
   document.addEventListener('click',e=>{ if(!panel.hidden&&!panel.contains(e.target)&&!btn.contains(e.target)) open(false); });
 })();
+
+/* ---------- sticky notes ---------- */
+(function(){
+  const layer=document.getElementById('notesLayer'),bar=document.getElementById('notesBar'),
+        tpl=document.getElementById('noteTpl'),countEl=document.getElementById('notesCount'),
+        toggle=document.getElementById('notesToggle'),addBtn=document.getElementById('notesAdd'),
+        cta=document.getElementById('noteCta');
+  if(!layer||!tpl)return;
+  const KEY='vk-notes';
+  let notes=[];            // {id,x,y,col,text,mail,sent}
+  let hidden=false;
+
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({notes,hidden}));}catch(e){}};
+  const load=()=>{try{const d=JSON.parse(localStorage.getItem(KEY)||'{}');
+    if(Array.isArray(d.notes))notes=d.notes; hidden=!!d.hidden;}catch(e){}};
+
+  function refreshBar(){
+    bar.hidden=notes.length===0;
+    countEl.textContent=notes.length;
+    toggle.setAttribute('aria-pressed',hidden?'true':'false');
+    toggle.textContent='';
+    const n=document.createElement('span'); n.id='notesCount'; n.textContent=notes.length;
+    toggle.append(n,document.createTextNode(hidden?' notes (hidden)':' notes'));
+    layer.dataset.hidden=hidden?'true':'false';
+  }
+
+  function build(n){
+    const el=tpl.content.firstElementChild.cloneNode(true);
+    el.dataset.id=n.id; el.dataset.col=n.col;
+    el.style.left=n.x+'px'; el.style.top=n.y+'px';
+    el.style.setProperty('--rot',(((parseInt(n.id,36)%5)-2)*0.45)+'deg');
+    el.setAttribute('aria-label','Sticky note');
+    const ta=el.querySelector('.note-text'), mail=el.querySelector('.note-mail'),
+          send=el.querySelector('.note-send'), status=el.querySelector('.note-status');
+    ta.value=n.text||''; mail.value=n.mail||'';
+    ta.addEventListener('input',()=>{n.text=ta.value;save();});
+    mail.addEventListener('input',()=>{n.mail=mail.value;save();});
+
+    el.querySelectorAll('.col').forEach(b=>b.addEventListener('click',()=>{
+      n.col=b.dataset.col; el.dataset.col=n.col;
+      el.querySelectorAll('.col').forEach(x=>x.setAttribute('aria-checked',x===b?'true':'false'));
+      save();}));
+    el.querySelector('.col[data-col="'+n.col+'"]').setAttribute('aria-checked','true');
+    el.querySelectorAll('.col').forEach(x=>{if(x.dataset.col!==n.col)x.setAttribute('aria-checked','false');});
+
+    el.querySelector('.note-x').addEventListener('click',()=>{
+      notes=notes.filter(o=>o.id!==n.id); el.remove(); refreshBar(); save();
+      (cta||document.body).focus&&cta&&cta.focus();});
+
+    send.addEventListener('click',async()=>{
+      const text=ta.value.trim();
+      if(!text){status.textContent='Write something first.';ta.focus();return;}
+      send.disabled=true; status.textContent='Sending…';
+      try{
+        const r=await fetch('/api/note',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({text,email:mail.value.trim(),page:location.pathname+location.hash})});
+        const d=await r.json().catch(()=>({}));
+        if(r.ok&&d.ok){status.textContent='Sent. Thank you!';n.sent=true;save();
+          setTimeout(()=>{status.textContent='';},4000);}
+        else if(r.status===501){
+          status.innerHTML='';
+          const a=document.createElement('a');
+          a.href='mailto:kosurivamsi5@gmail.com?subject='+encodeURIComponent('A note from your site')+'&body='+encodeURIComponent(text);
+          a.textContent='Email it instead'; status.append('Not set up yet — ',a);
+        }
+        else{status.textContent=(d.error||'Could not send')+' — try email.';}
+      }catch(e){status.textContent='Network problem — try again.';}
+      finally{send.disabled=false;}
+    });
+
+    // drag (pointer) + keyboard nudge
+    const grip=el.querySelector('.grip');
+    let sx,sy,ox,oy,drag=false;
+    grip.addEventListener('pointerdown',e=>{drag=true;el.classList.add('dragging');
+      sx=e.clientX;sy=e.clientY;ox=n.x;oy=n.y;grip.setPointerCapture(e.pointerId);e.preventDefault();});
+    grip.addEventListener('pointermove',e=>{if(!drag)return;
+      n.x=Math.max(4,Math.min(document.documentElement.scrollWidth-140,ox+e.clientX-sx));
+      n.y=Math.max(4,oy+e.clientY-sy);
+      el.style.left=n.x+'px'; el.style.top=n.y+'px';});
+    const stop=()=>{if(!drag)return;drag=false;el.classList.remove('dragging');save();};
+    grip.addEventListener('pointerup',stop); grip.addEventListener('pointercancel',stop);
+    grip.tabIndex=0; grip.setAttribute('role','application');
+    grip.setAttribute('aria-label','Move note. Use arrow keys.');
+    grip.addEventListener('keydown',e=>{
+      const step=e.shiftKey?40:10; let used=true;
+      if(e.key==='ArrowLeft')n.x-=step; else if(e.key==='ArrowRight')n.x+=step;
+      else if(e.key==='ArrowUp')n.y-=step; else if(e.key==='ArrowDown')n.y+=step;
+      else used=false;
+      if(used){e.preventDefault();n.x=Math.max(4,n.x);n.y=Math.max(4,n.y);
+        el.style.left=n.x+'px';el.style.top=n.y+'px';save();}});
+    layer.appendChild(el); return el;
+  }
+
+  function add(x,y){
+    const id=Date.now().toString(36)+Math.floor(Math.random()*36).toString(36);
+    const n={id,x:Math.round(x),y:Math.round(y),col:'sand',text:'',mail:''};
+    notes.push(n); hidden=false; const el=build(n); refreshBar(); save();
+    el.querySelector('.note-text').focus(); return el;
+  }
+
+  addBtn.addEventListener('click',()=>{
+    const x=Math.min(innerWidth-300,60+Math.random()*Math.max(40,innerWidth-420));
+    add(x, scrollY+120+Math.random()*80);
+  });
+  toggle.addEventListener('click',()=>{hidden=!hidden;refreshBar();save();});
+  if(cta)cta.addEventListener('click',()=>{
+    const r=cta.getBoundingClientRect();
+    add(Math.max(16,Math.min(innerWidth-290,r.left)), scrollY+r.bottom+14);
+  });
+
+  load(); notes.forEach(build); refreshBar();
+})();
