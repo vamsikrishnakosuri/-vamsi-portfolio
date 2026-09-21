@@ -580,3 +580,48 @@ html[data-reading] .notes-layer,html[data-reading] .notes-bar{display:none}
 .link-btn:hover{color:var(--cream)}
 .link-btn:focus-visible{outline:2px solid var(--mint);outline-offset:4px;border-radius:2px}
 @media (max-width:720px){.contact .row .link-btn{display:inline-block;padding:9px 2px;min-height:40px}}
+
+/* ===== sticky notes, v2: square paper, folded corner, free rotation ===== */
+.note{
+  width:240px;padding:14px 14px 12px;border-radius:1px;
+  background:var(--nc,#EDE4D0);          /* flat paper, no gradient */
+  box-shadow:0 1px 2px rgba(0,0,0,.18),0 12px 22px -8px rgba(0,0,0,.42);
+  transform:rotate(var(--rot,0deg));
+}
+.note::before{content:none}               /* no tape */
+/* folded corner, bottom-right */
+.note::after{
+  content:"";position:absolute;right:0;bottom:0;width:30px;height:30px;pointer-events:none;
+  background:linear-gradient(315deg,var(--pine,#0F2622) 0 49.6%,rgba(0,0,0,.20) 50%,rgba(0,0,0,.06) 52%,transparent 53%);
+  filter:drop-shadow(-2px -2px 2px rgba(0,0,0,.12))}
+.note:hover{transform:rotate(var(--rot,0deg)) translateY(-3px)}
+.note:focus-within{transform:rotate(var(--rot,0deg))}
+.note.dragging,.note.rotating{transform:rotate(var(--rot,0deg)) scale(1.03);
+  box-shadow:0 3px 6px rgba(0,0,0,.2),0 26px 46px -10px rgba(0,0,0,.5);z-index:10}
+.note-text{
+  background:transparent;min-height:104px;font-size:16px;line-height:1.55;
+  letter-spacing:.005em;padding:6px 2px}
+.note-mail{background:rgba(255,255,255,.42);font-size:12.5px;margin-top:4px}
+.note-text::placeholder{color:rgba(34,48,43,.45)}
+.note-top{margin-bottom:4px}
+.note .grip{height:18px}
+.note-rot{background:transparent;border:0;padding:2px;color:#22302B;opacity:.5;cursor:grab;
+  display:grid;place-items:center;line-height:0}
+.note-rot svg{width:14px;height:14px}
+.note-rot:hover{opacity:1}
+.note.rotating .note-rot{cursor:grabbing}
+.note-foot{margin-top:6px}
+@media (prefers-reduced-motion:reduce){.note:hover{transform:rotate(var(--rot,0deg))}}
+
+/* idle notes read as plain paper; controls appear on hover/focus */
+.note .note-top,.note .note-mail,.note .note-foot{opacity:0;transition:opacity .22s}
+.note:hover .note-top,.note:hover .note-mail,.note:hover .note-foot,
+.note:focus-within .note-top,.note:focus-within .note-mail,.note:focus-within .note-foot{opacity:1}
+.note .note-top{margin-bottom:2px}
+.note-text{min-height:112px}
+.note-send{padding:7px 14px;font-size:12.5px;min-height:32px;background:rgba(34,48,43,.9)}
+.note-status{font-size:11.5px}
+/* keep everything reachable for keyboard and screen readers */
+.note :focus-visible{opacity:1}
+@media (hover:none){.note .note-top,.note .note-mail,.note .note-foot{opacity:1}}
+@media (prefers-reduced-motion:reduce){.note .note-top,.note .note-mail,.note .note-foot{transition:none}}

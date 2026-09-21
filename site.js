@@ -380,7 +380,9 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
     const el=tpl.content.firstElementChild.cloneNode(true);
     el.dataset.id=n.id; el.dataset.col=n.col;
     el.style.left=n.x+'px'; el.style.top=n.y+'px';
-    el.style.setProperty('--rot',(((parseInt(n.id,36)%5)-2)*0.45)+'deg');
+    if(n.rot===undefined){n.rot=+(Math.random()*8-4).toFixed(1);}
+    const setRot=v=>{n.rot=Math.round(v*10)/10;el.style.setProperty('--rot',n.rot+'deg');};
+    setRot(+n.rot);
     el.setAttribute('aria-label','Sticky note');
     const ta=el.querySelector('.note-text'), mail=el.querySelector('.note-mail'),
           send=el.querySelector('.note-send'), status=el.querySelector('.note-status');
@@ -415,7 +417,7 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
           a.href='mailto:kosurivamsi5@gmail.com?subject='+encodeURIComponent('A note from your site')+'&body='+encodeURIComponent(text);
           a.textContent='Email it instead'; status.append('Not set up yet — ',a);
         }
-        else{status.textContent=(d.error||'Could not send')+' — try email.';}
+        else{status.textContent=(d.detail||d.error||'Could not send')+' — try email.';}
       }catch(e){status.textContent='Network problem — try again.';}
       finally{send.disabled=false;}
     });
@@ -433,6 +435,28 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
     grip.addEventListener('pointerup',stop); grip.addEventListener('pointercancel',stop);
     grip.tabIndex=0; grip.setAttribute('role','application');
     grip.setAttribute('aria-label','Move note. Use arrow keys.');
+    // free rotation: drag the handle, or arrow keys when focused
+    const rot=el.querySelector('.note-rot');
+    if(rot){
+      let spinning=false, startA=0, startRot=0;
+      const centre=()=>{const r=el.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2};};
+      const angleOf=(e,c)=>Math.atan2(e.clientY-c.y,e.clientX-c.x)*180/Math.PI;
+      rot.addEventListener('pointerdown',e=>{spinning=true;el.classList.add('rotating');
+        const c=centre();startA=angleOf(e,c);startRot=+n.rot;rot.setPointerCapture(e.pointerId);e.preventDefault();});
+      rot.addEventListener('pointermove',e=>{if(!spinning)return;
+        const c=centre();let v=startRot+(angleOf(e,c)-startA);
+        if(e.shiftKey)v=Math.round(v/15)*15;                 // hold Shift to snap
+        setRot(v);});
+      const stopRot=()=>{if(!spinning)return;spinning=false;el.classList.remove('rotating');save();};
+      rot.addEventListener('pointerup',stopRot); rot.addEventListener('pointercancel',stopRot);
+      rot.addEventListener('keydown',e=>{
+        const step=e.shiftKey?15:5; let used=true;
+        if(e.key==='ArrowLeft')setRot(+n.rot-step);
+        else if(e.key==='ArrowRight')setRot(+n.rot+step);
+        else if(e.key==='Home')setRot(0);
+        else used=false;
+        if(used){e.preventDefault();save();}});
+    }
     grip.addEventListener('keydown',e=>{
       const step=e.shiftKey?40:10; let used=true;
       if(e.key==='ArrowLeft')n.x-=step; else if(e.key==='ArrowRight')n.x+=step;
