@@ -54,9 +54,16 @@ export default async function handler(req, res) {
     if (process.env.WEB3FORMS_KEY) {
       const r = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          // Web3Forms rejects calls that don't look like they came from a browser (403, empty body)
+          'User-Agent': 'Mozilla/5.0 (compatible; vamsikrishnakosuri.com note form)',
+          Origin: 'https://www.vamsikrishnakosuri.com',
+          Referer: 'https://www.vamsikrishnakosuri.com/',
+        },
         body: JSON.stringify({
-          access_key: process.env.WEB3FORMS_KEY,
+          access_key: (process.env.WEB3FORMS_KEY||'').trim(),
           subject,
           from_name: 'Website note',
           replyto: email || undefined,
@@ -65,8 +72,10 @@ export default async function handler(req, res) {
       });
       const d = await r.json().catch(() => ({}));
       if (!r.ok || d.success === false) {
-        console.error('web3forms', r.status, JSON.stringify(d).slice(0, 300));
-        return res.status(502).json({ error: 'Mail service refused' });
+        let why = (d && (d.message || d.error)) ? String(d.message || d.error).slice(0, 120) : `HTTP ${r.status}`;
+        if (r.status === 403 && !d.message) why = 'Blocked by mail service (403)';
+        console.error('web3forms refused:', r.status, JSON.stringify(d).slice(0, 300));
+        return res.status(502).json({ error: 'Mail service refused', detail: why });
       }
       return res.status(200).json({ ok: true });
     }
