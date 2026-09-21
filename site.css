@@ -543,3 +543,40 @@ html[data-reading] .notes-layer,html[data-reading] .notes-bar{display:none}
   .notes-bar{left:12px;bottom:calc(84px + env(safe-area-inset-bottom))}
 }
 @media (prefers-reduced-motion:reduce){.note{transition:none}}
+
+/* ===== make notes look like real paper ===== */
+.note{
+  border-radius:2px 2px 3px 3px;
+  padding:18px 14px 13px;
+  background:
+    linear-gradient(175deg,rgba(255,255,255,.34),rgba(0,0,0,.05) 62%,rgba(0,0,0,.10)),
+    var(--nc,#EDE4D0);
+  box-shadow:0 1px 1px rgba(0,0,0,.14),0 10px 18px -6px rgba(0,0,0,.34),0 22px 34px -18px rgba(0,0,0,.4);
+}
+/* strip of tape */
+.note::before{
+  content:"";position:absolute;top:-9px;left:50%;width:74px;height:20px;
+  transform:translateX(-50%) rotate(var(--tape,-3deg));
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.3));
+  border-left:1px dashed rgba(0,0,0,.08);border-right:1px dashed rgba(0,0,0,.08);
+  box-shadow:0 1px 2px rgba(0,0,0,.12);pointer-events:none}
+/* curled bottom corner */
+.note::after{
+  content:"";position:absolute;right:0;bottom:0;width:26px;height:26px;pointer-events:none;
+  background:linear-gradient(135deg,transparent 48%,rgba(0,0,0,.12) 50%,rgba(255,255,255,.4) 52%);
+  border-bottom-right-radius:3px}
+.note:hover{transform:rotate(calc(var(--rot,0deg) * .35)) translateY(-2px)}
+.note:focus-within{transform:rotate(0deg)}
+.note-text,.note-mail{background:rgba(255,255,255,.4);border-radius:3px}
+.note-text{min-height:92px}
+.note .grip{height:14px;opacity:.55}
+.note-send{border-radius:3px;letter-spacing:.02em}
+.note .col{box-shadow:0 1px 2px rgba(0,0,0,.18)}
+@media (prefers-reduced-motion:reduce){.note:hover{transform:rotate(var(--rot,0deg))}}
+
+/* contact row: the note button reads as one of the links */
+.link-btn{background:none;border:0;padding:0;margin:0;font:inherit;color:var(--mint);cursor:pointer;
+  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;font-family:var(--sans)}
+.link-btn:hover{color:var(--cream)}
+.link-btn:focus-visible{outline:2px solid var(--mint);outline-offset:4px;border-radius:2px}
+@media (max-width:720px){.contact .row .link-btn{display:inline-block;padding:9px 2px;min-height:40px}}
