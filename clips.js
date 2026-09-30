@@ -20,7 +20,7 @@ export const CLIPS = [
     title: 'Hello',
     intro: true,                 // this one plays when someone taps the photo
     ask: ['who are you', 'about you', 'introduce', 'yourself', 'hello', 'hi'],
-    text: "Hi, I'm Vamsi Krishna Kosuri. I'm a fourth-year PhD candidate in Computer Science at the University of North Texas, advised by Dr. Stephanie Ludi in the DiscoverABILITY Lab. I work on making programming tools usable for people they usually leave out — blind and low-vision programmers, and neurodivergent learners. I expect to graduate in May 2027.",
+    text: "Hi, I'm Vamsi Krishna Kosuri. I'm a PhD candidate in Computer Science at the University of North Texas, advised by Dr. Stephanie Ludi in the DiscoverABILITY Lab. I love working at the intersection of AI and human-computer interaction, building programming tools that work for the people they usually leave out — blind and low-vision programmers, and neurodivergent learners.",
   },
   {
     id: 'research',
@@ -28,7 +28,7 @@ export const CLIPS = [
     vtt: 'videos/research.vtt',
     title: 'What I research',
     ask: ['research', 'what do you work on', 'focus', 'phd', 'dissertation', 'study'],
-    text: "My research asks one stubborn question: the tools we build for programming assume a certain kind of user, so what does it take to make them work for everyone else? I approach that from three sides — blind and low-vision access, neurodivergent learners, and the human-computer interaction methods that keep both grounded in how people actually work.",
+    text: "My research sits where AI meets human-computer interaction. It asks one stubborn question: the tools we build for programming assume a certain kind of user, so what does it take to make them work for everyone else? I approach that from three sides — blind and low-vision access, neurodivergent learners, and the HCI methods that keep both grounded in how people actually work.",
   },
   {
     id: 'blockly',
@@ -52,6 +52,6 @@ export const CLIPS = [
     vtt: 'videos/hiring.vtt',
     title: 'What I am looking for',
     ask: ['hire', 'hiring', 'job', 'role', 'available', 'graduate', 'looking for', 'work with'],
-    text: "I graduate in May 2027, and I'm open to accessibility engineering and UX research roles, and to research collaborations. I move between research methods and engineering because good accessibility needs both — evidence about people, and software that actually runs. The fastest way to reach me is email, and there's a note you can leave on this page too.",
+    text: "I'm open to accessibility engineering and UX research roles, and to research collaborations. I move between research methods and engineering because good accessibility needs both — evidence about people, and software that actually runs. AI and human-computer interaction are where I'm most at home. The fastest way to reach me is email, and there's a note you can leave on this page too.",
   },
 ];
