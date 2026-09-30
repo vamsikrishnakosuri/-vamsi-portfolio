@@ -1,3 +1,4 @@
+import { CLIPS } from './clips.js';
 /* ---------- fluid orb (WebGL) ---------- */
 function makeOrb(canvas){
   const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:false});
@@ -74,6 +75,20 @@ async function ask(text){
     const data=await res.json();
     if(!res.ok||!data.reply)throw new Error(data.error||'no reply');
     add('ai',data.reply);history.push({role:'assistant',content:data.reply});
+    if(window.__offerClip){
+      const off=window.__offerClip(text);
+      if(off){
+        const b=document.createElement('button');
+        b.type='button'; b.className='watch-chip';
+        b.textContent='▶  Watch Vamsi answer this';
+        b.addEventListener('click',()=>{
+          const p=document.querySelector('.photo-wrap');
+          if(p)p.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+          off.play();
+        });
+        msgs.appendChild(b); msgs.scrollTop=msgs.scrollHeight;
+      }
+    }
   }catch(err){
     add('ai err','The assistant is offline right now. Email kosurivamsi5@gmail.com and Vamsi will answer in person.');
   }finally{send.disabled=false;typing.hidden=true;}
@@ -485,4 +500,75 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
   });
 
   load(); notes.forEach(build); refreshBar();
+})();
+
+/* ---------- talking photo: the picture speaks ---------- */
+(function(){
+  const wrap=document.querySelector('.photo-wrap'), btn=document.getElementById('photoBtn'),
+        player=document.getElementById('vplayer'), vid=document.getElementById('vvid'),
+        close=document.getElementById('vclose'), script=document.getElementById('vscript'),
+        vtext=document.getElementById('vtext'), hint=document.getElementById('photoHint');
+  if(!wrap||!btn||!vid)return;
+
+  const clips=(Array.isArray(CLIPS)?CLIPS:[]).filter(c=>c&&c.file);
+  const have=new Map();          // id -> clip, only ones whose file really exists
+  let ready=false;
+
+  async function check(){
+    await Promise.all(clips.map(async c=>{
+      try{const r=await fetch(c.file,{method:'HEAD'});if(r.ok)have.set(c.id,c);}catch(e){}
+    }));
+    ready=true;
+    if(have.size&&hint)hint.textContent='Tap to hear from me';
+    window.__clipsReady=have.size;
+  }
+  check();
+
+  function play(clip){
+    if(!clip)return false;
+    vid.pause();
+    vid.querySelectorAll('track').forEach(t=>t.remove());
+    vid.src=clip.file;
+    if(clip.vtt){
+      const t=document.createElement('track');
+      t.kind='captions'; t.label='English'; t.srclang='en'; t.src=clip.vtt; t.default=true;
+      vid.appendChild(t);
+    }
+    vtext.textContent=clip.text||'';
+    script.hidden=!clip.text;
+    player.hidden=false; wrap.classList.add('vplaying');
+    vid.currentTime=0;
+    const go=()=>{const p=vid.play(); if(p&&p.catch)p.catch(()=>{});};
+    if(vid.readyState>=2)go(); else vid.addEventListener('loadeddata',go,{once:true});
+    vid.load();
+    setTimeout(()=>close.focus(),120);
+    return true;
+  }
+  function stop(){
+    vid.pause(); vid.removeAttribute('src'); vid.load();
+    player.hidden=true; wrap.classList.remove('vplaying'); btn.focus();
+  }
+  close.addEventListener('click',stop);
+  vid.addEventListener('ended',()=>{ /* leave the last frame up, don't yank it away */ });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!player.hidden)stop(); });
+
+  // tapping the photo plays the intro clip (falls back to the confetti if none exist yet)
+  btn.addEventListener('click',()=>{
+    if(!ready||!have.size)return;                       // photo.js confetti still runs
+    const intro=[...have.values()].find(c=>c.intro)||[...have.values()][0];
+    play(intro);
+  },true);
+
+  // let the assistant offer a clip when a question matches one
+  window.__offerClip=function(question){
+    if(!have.size)return null;
+    const q=(question||'').toLowerCase();
+    let best=null,score=0;
+    have.forEach(c=>{
+      let s=0;(c.ask||[]).forEach(k=>{ if(q.includes(k)) s+=k.length; });
+      if(s>score){score=s;best=c;}
+    });
+    if(!best||score<4)return null;
+    return {title:best.title,play:()=>play(best)};
+  };
 })();

@@ -194,6 +194,14 @@
         <span class="scan" aria-hidden="true"></span>
       </button>
       <span class="photo-hint" id="photoHint">Tap the photo</span>
+      <div class="vplayer" id="vplayer" hidden>
+        <video id="vvid" playsinline preload="none" controls crossorigin="anonymous"></video>
+        <div class="vbar">
+          <span class="vlabel" id="vlabel">AI-generated likeness &middot; script by Vamsi</span>
+          <button type="button" class="vclose" id="vclose" aria-label="Close video">&times;</button>
+        </div>
+        <details class="vscript" id="vscript"><summary>Transcript</summary><p id="vtext"></p></details>
+      </div>
       <div class="fx" id="photoFx" aria-hidden="true"></div>
     </div>
     <div class="text">

@@ -625,3 +625,23 @@ html[data-reading] .notes-layer,html[data-reading] .notes-bar{display:none}
 .note :focus-visible{opacity:1}
 @media (hover:none){.note .note-top,.note .note-mail,.note .note-foot{opacity:1}}
 @media (prefers-reduced-motion:reduce){.note .note-top,.note .note-mail,.note .note-foot{transition:none}}
+
+/* ===== talking-photo clips ===== */
+.vplayer{margin-top:12px;max-width:320px}
+.vplayer[hidden]{display:none}
+.vplayer video{width:100%;border-radius:14px;display:block;background:#000;border:1px solid var(--line)}
+.vbar{display:flex;align-items:center;gap:10px;margin-top:8px}
+.vlabel{flex:1;font-size:11.5px;color:var(--mist);letter-spacing:.02em}
+.vclose{background:transparent;border:1px solid var(--line);color:var(--sand);border-radius:50%;
+  width:32px;height:32px;cursor:pointer;font-size:18px;line-height:1;display:grid;place-items:center}
+.vclose:hover{border-color:var(--mint);color:var(--mint)}
+.vscript{margin-top:8px;font-size:14px;color:var(--sand)}
+.vscript summary{cursor:pointer;color:var(--mint);font-size:13px}
+.vscript p{margin:8px 0 0;line-height:1.6}
+.vplaying .portrait{display:none}
+/* "watch the answer" chip inside the assistant */
+.watch-chip{display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid var(--mint);
+  color:var(--mint);border-radius:999px;padding:7px 13px;font-size:13px;font-family:var(--sans);cursor:pointer;margin-top:4px}
+.watch-chip:hover{background:var(--mint);color:var(--pine)}
+html[data-reading] .vplayer{display:none}
+@media (max-width:720px){.vplayer{max-width:100%}.vclose{width:44px;height:44px}}
