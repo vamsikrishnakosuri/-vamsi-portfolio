@@ -62,6 +62,8 @@
           <div class="set-row"><button type="button" class="chip" data-ts="100" aria-pressed="true">A</button><button type="button" class="chip" data-ts="115" aria-pressed="false">A+</button><button type="button" class="chip" data-ts="130" aria-pressed="false">A++</button></div>
           <p class="set-h">Motion</p>
           <div class="set-row"><button type="button" class="chip" data-mo="on" aria-pressed="true">Moving</button><button type="button" class="chip" data-mo="off" aria-pressed="false">Paused</button></div>
+          <p class="set-h">Homepage</p>
+          <div class="set-row"><button type="button" class="chip" data-hm="desk" aria-pressed="true">Desk</button><button type="button" class="chip" data-hm="classic" aria-pressed="false">Classic</button></div>
           <div class="set-row"><button type="button" class="chip wide" id="setReset">Reset all</button></div>
         </div>
       </li>
@@ -73,9 +75,13 @@
 <main id="main">
 <section class="hero" id="top" style="border-top:0;padding-top:0">
   <div class="hero-inner wrap">
-    <p class="kicker">Accessibility &amp; HCI researcher · PhD candidate, University of North Texas</p>
+    <p class="kicker">AI and human-computer interaction researcher · PhD candidate, University of North Texas</p>
     <h1 tabindex="0">Interfaces that work for the people they <em>usually leave out.</em></h1>
-    <p class="lede">I design and study programming tools for blind and low-vision users and for neurodivergent learners, then ship them so real people can use them.</p>
+    <p class="lede">I design and study programming tools that work by keyboard, screen reader and sound, and that adapt to how neurodivergent minds learn, using AI where it genuinely helps.</p>
+    <div class="cta cta-classic">
+      <a class="btn primary" href="#work">See the work</a>
+      <button class="btn" type="button" data-open-assistant>Ask my assistant</button>
+    </div>
   </div>
   <div class="desk" id="desk">
     <svg class="desk-art" viewBox="0 0 1200 600" aria-hidden="true" focusable="false">
@@ -138,8 +144,22 @@
         <path d="M50 470 H1150"/>
         <path d="M50 470 V492 H1150 V470"/>
         <path d="M100 492 V600 M1100 492 V600"/>
+      </g>
+      <g class="obj obj-drawer">
         <rect x="860" y="500" width="200" height="44" rx="3"/>
         <path d="M940 522 H980"/>
+      </g>
+      <g class="obj obj-phone">
+        <rect x="536" y="226" width="128" height="226" rx="16"/>
+        <path d="M586 240 H614"/>
+        <path d="M574 452 L566 470 H634 L626 452"/>
+      </g>
+      <g class="obj obj-lamp">
+        <path class="lamp-glow" d="M1066 350 L1096 362 L1092 470 L996 470 Z"/>
+        <path d="M1112 470 C1116 460 1144 460 1148 470"/>
+        <path d="M1130 464 L1144 384 L1110 334"/>
+        <circle cx="1144" cy="384" r="5"/>
+        <path d="M1110 334 L1088 316 L1066 350 L1096 362 Z"/>
       </g>
       <g class="obj obj-note">
         <rect class="note-fill" x="740" y="144" width="50" height="50" rx="2" transform="rotate(7 765 169)"/>
@@ -149,25 +169,38 @@
 
     <div class="desk-screen" aria-hidden="true">
       <img src="profile.jpg" alt="">
-      <video id="deskVid" playsinline preload="none" crossorigin="anonymous"></video>
       <span class="desk-play"></span>
     </div>
 
     <div class="desk-hs" role="group" aria-label="Things on my desk">
-      <button type="button" class="hs hs-monitor" id="hsMonitor" aria-label="Say hello: play a 20-second video introduction"><span class="lbl">Say hello</span></button>
+      <button type="button" class="hs hs-monitor" id="hsMonitor" aria-haspopup="dialog" aria-label="Open my computer and play a 20-second video hello"><span class="lbl">Open my computer</span></button>
       <a class="hs hs-laptop" href="#work"><span class="lbl">Things I've built</span></a>
       <a class="hs hs-board" href="#research"><span class="lbl">What I research</span></a>
       <button type="button" class="hs hs-phones" id="hsPhones" aria-label="Hear my research: play the audio-cue demo, where code nesting becomes sound"><span class="lbl">Hear my research</span></button>
       <a class="hs hs-papers" href="#publications"><span class="lbl">Papers</span></a>
       <a class="hs hs-mug" href="#about"><span class="lbl">About me</span></a>
       <button type="button" class="hs hs-note" id="hsNote"><span class="lbl">Leave me a note</span></button>
+      <button type="button" class="hs hs-drawer" id="hsDrawer" aria-expanded="false" aria-controls="deskCard"><span class="lbl">My card</span></button>
+      <button type="button" class="hs hs-lamp" id="hsLamp" aria-pressed="false"><span class="lbl">Lights on</span></button>
     </div>
   </div>
 
-  <div class="desk-audio" id="deskAudio" hidden>
+  <div class="desk-audio desk-panel" id="deskAudio" role="region" aria-label="Audio-cue demo" hidden>
+    <button type="button" class="panel-x" data-close="deskAudio" aria-label="Close the audio demo">&times;</button>
     <p class="da-title">Each nesting level has its own pitch. Listen to the code go deeper and come back out.</p>
     <ol class="da-lines" id="daLines"></ol>
     <p class="da-end" id="daEnd" hidden>That is how a blind programmer can hear the shape of their code. <a href="#work">See the project</a></p>
+  </div>
+  <div class="desk-card desk-panel" id="deskCard" role="region" aria-label="Business card" hidden>
+    <button type="button" class="panel-x" data-close="deskCard" aria-label="Close the card">&times;</button>
+    <p class="card-name">Vamsi Krishna Kosuri</p>
+    <p class="card-role">PhD candidate, AI and human-computer interaction<br>University of North Texas, Texas</p>
+    <div class="card-links">
+      <button type="button" class="card-copy" id="cardCopy">kosurivamsi5@gmail.com</button>
+      <a href="https://www.linkedin.com/in/vamsikrishnakosuri/">LinkedIn</a>
+      <a href="https://github.com/vamsikrishnakosuri">GitHub</a>
+    </div>
+    <p class="card-status" id="cardStatus" role="status"></p>
   </div>
   <p class="desk-hint">Everything on the desk opens something. Tab and Enter work too.</p>
 
@@ -181,8 +214,8 @@
     </div>
     <div class="threads">
       <div><h3>Blind &amp; low-vision access</h3><p>Making block-based programming environments like Google Blockly work with keyboards, screen readers, and audio cues, so visual programming isn't only for sighted students.</p></div>
-      <div><h3>Neurodivergent learners</h3><p>Studying how neurodivergent learners experience block-based programming, and building tools that adapt to the way they work rather than the other way round.</p></div>
-      <div><h3>Human-computer interaction</h3><p>The method behind both: co-design, surveys, usability studies, and qualitative analysis, so what gets built is grounded in how people really work.</p></div>
+      <div><h3>Cognitive accessibility</h3><p>Studying how neurodivergent learners experience block-based programming, and building adaptive tools that fit the way they think and focus, rather than the other way round.</p></div>
+      <div><h3>AI and human-computer interaction</h3><p>The method behind both: co-design, surveys, usability studies and qualitative analysis, plus AI that adapts to the person, so what gets built is grounded in how people really work.</p></div>
     </div>
   </div>
 </section>
@@ -432,5 +465,51 @@
     </div>
   </div>
 </template>
+
+<div class="vos" id="vos" role="dialog" aria-modal="true" aria-labelledby="vosTitle" hidden>
+  <div class="vos-bar">
+    <span class="vos-name" id="vosTitle">VamsiOS</span>
+    <span class="vos-clock" id="vosClock"></span>
+    <button type="button" class="vos-x" id="vosClose" aria-label="Close my computer and go back to the desk">&times;</button>
+  </div>
+  <ul class="vos-desk" aria-label="Files">
+    <li><button type="button" class="vos-ic" data-open="hello"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="11" width="34" height="26" rx="4"/><path d="M21 19 L29 24 L21 29 Z"/></svg><span>hello.mp4</span></button></li>
+    <li><button type="button" class="vos-ic" data-open="projects"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 14 V36 Q6 39 9 39 H39 Q42 39 42 36 V18 Q42 15 39 15 H23 L19 10 H9 Q6 10 6 13 Z"/></svg><span>Projects</span></button></li>
+    <li><button type="button" class="vos-ic" data-open="papers"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 14 V36 Q6 39 9 39 H39 Q42 39 42 36 V18 Q42 15 39 15 H23 L19 10 H9 Q6 10 6 13 Z"/></svg><span>Papers</span></button></li>
+    <li class="vos-resume" hidden><button type="button" class="vos-ic" data-open="resume"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6 H29 L37 14 V42 H12 Z"/><path d="M29 6 V14 H37 M17 22 H32 M17 28 H32 M17 34 H26"/></svg><span>Resume.pdf</span></button></li>
+    <li><button type="button" class="vos-ic" data-open="notes"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 9 H39 V31 L31 39 H9 Z"/><path d="M31 39 V31 H39 M15 18 H33 M15 24 H29"/></svg><span>notes.txt</span></button></li>
+  </ul>
+  <p class="vos-tip">Pick a file. Esc closes a window, then the computer.</p>
+  
+  <section class="vos-win" id="win-hello" role="dialog" aria-modal="true" aria-labelledby="wt-hello" hidden>
+    <header class="win-bar"><h2 class="win-title" id="wt-hello">hello.mp4</h2><button type="button" class="win-x" aria-label="Close hello.mp4">&times;</button></header>
+    <div class="win-body"><video id="vosVid" playsinline controls preload="none" crossorigin="anonymous"></video>
+      <details class="win-script"><summary>Transcript</summary><p id="vosScript"></p></details>
+      <p class="win-note">AI-generated likeness, script by Vamsi.</p></div>
+  </section>
+  
+  <section class="vos-win" id="win-projects" role="dialog" aria-modal="true" aria-labelledby="wt-projects" hidden>
+    <header class="win-bar"><h2 class="win-title" id="wt-projects">Projects</h2><button type="button" class="win-x" aria-label="Close Projects">&times;</button></header>
+    <div class="win-body"><ul class="win-list">
+      <li><h3>Accessible Blockly</h3><p>Keyboard navigation and audio cues that let blind and low-vision programmers use Google Blockly. Funded by Google's Blockly Accessibility Fund.</p><p class="win-links"><a href="https://rubelhassan.github.io/eaf-blockly">Try the demo</a><a href="https://dl.acm.org/doi/pdf/10.1145/3786169.3788398">Read the paper (PDF)</a></p></li>
+      <li><h3>An adaptive programming tool for neurodivergent learners</h3><p>The core of my dissertation: a block-based editor that adapts its support to how each learner works. Not yet published.</p><p class="win-links"><a href="mailto:kosurivamsi5@gmail.com?subject=Your%20dissertation%20tool">Ask me about it</a></p></li>
+      <li><h3>AI-AC</h3><p>A Chrome extension that checks any website against each disability profile, with an optional AI pass that reads the page the way a person sees it.</p><p class="win-links"><a href="https://chromewebstore.google.com/detail/kkfchmjomomkiggchkodggcniklniika">Chrome Web Store</a><a href="https://github.com/vamsikrishnakosuri/ai-ac">Source</a></p></li>
+      <li><h3>Strangers Connect</h3><p>Real-time video chat with peer-to-peer WebRTC and encrypted messaging.</p><p class="win-links"><a href="https://strangers-connect.vercel.app">Live demo</a><a href="https://github.com/vamsikrishnakosuri/StrangersConnect">Source</a></p></li>
+    </ul></div>
+  </section>
+  
+  <section class="vos-win" id="win-papers" role="dialog" aria-modal="true" aria-labelledby="wt-papers" hidden>
+    <header class="win-bar"><h2 class="win-title" id="wt-papers">Papers</h2><button type="button" class="win-x" aria-label="Close Papers">&times;</button></header>
+    <div class="win-body"><ul class="win-list">
+      <li><h3>An Extension-Based Accessibility Framework for Making Blockly Accessible to Blind and Low-Vision Users</h3><p>Mollik, <strong>Kosuri</strong>, Djalali, Ludi, Mountapmbeme. UISE '26, ACM.</p><p class="win-links"><a href="https://dl.acm.org/doi/pdf/10.1145/3786169.3788398">PDF</a><a href="https://doi.org/10.1145/3786169.3788398">DOI</a><a href="https://arxiv.org/abs/2601.10688">arXiv</a></p></li>
+      <li><h3>Papers under review</h3><p>Two more papers on accessible block-based programming. Details once they are public.</p></li>
+    </ul></div>
+  </section>
+  
+  <section class="vos-win" id="win-resume" role="dialog" aria-modal="true" aria-labelledby="wt-resume" hidden>
+    <header class="win-bar"><h2 class="win-title" id="wt-resume">Resume.pdf</h2><button type="button" class="win-x" aria-label="Close Resume.pdf">&times;</button></header>
+    <div class="win-body"><p>My resume as a PDF.</p><p class="win-links"><a href="resume.pdf" target="_blank" rel="noopener">Open resume</a><a href="resume.pdf" download>Download</a></p></div>
+  </section>
+</div>
 </body>
 </html>

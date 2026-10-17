@@ -745,3 +745,102 @@ html[data-reading] .desk,html[data-reading] .desk-hint{display:none}
 .hero p.lede{max-width:640px;font-size:18px;margin:16px auto 0}
 .desk{width:min(980px,calc(100% - 32px));margin-top:4px}
 .da-lines li{color:var(--sand)}
+
+/* ===== desk v2: lamp, drawer, phone, panels ===== */
+.desk-art .obj-phone{display:none}
+.desk-art .lamp-glow{fill:rgba(255,214,140,.16);stroke:none;opacity:0;transition:opacity .4s}
+html[data-theme="light"] .desk-art .lamp-glow{opacity:1;fill:rgba(255,196,90,.28)}
+html[data-theme="light"] .desk-art .obj-lamp{color:#B07A1A}
+.desk-art .obj-drawer rect,.desk-art .obj-drawer path{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.desk.card-open .desk-art .obj-drawer rect,.desk.card-open .desk-art .obj-drawer path{transform:translateY(10px)}
+.desk-screen{background:#E9E8E4}
+.desk-screen img{object-fit:contain;object-position:50% 100%;opacity:1;filter:none}
+.hs-drawer{left:71.5%;top:82.5%;width:17%;height:9.5%}
+.hs-lamp{left:90.2%;top:51.5%;width:6%;height:27.5%}
+.hs-phones{width:9.6%}
+.hs-drawer .lbl{bottom:auto;top:calc(100% + 8px)}
+.desk:has(.hs-drawer:is(:hover,:focus-visible)) .obj-drawer,
+.desk:has(.hs-lamp:is(:hover,:focus-visible)) .obj-lamp{color:var(--mint)}
+
+.desk-panel{position:relative;width:min(560px,calc(100% - 32px));margin:18px auto 0;padding:16px 52px 16px 20px;border:1px solid var(--line);border-radius:14px;background:var(--pine-2);text-align:left}
+.desk-panel[hidden]{display:none}
+.panel-x,.win-x,.vos-x{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--cream);font-size:22px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.panel-x:hover,.win-x:hover,.vos-x:hover{border-color:var(--mint);color:var(--mint)}
+.card-name{margin:0;font-family:var(--serif);font-size:28px;color:var(--cream)}
+.card-role{margin:4px 0 12px;color:var(--sand);font-size:15px}
+.card-links{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.card-copy{background:none;border:0;padding:0;font:inherit;color:var(--mint);text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.card-status{margin:8px 0 0;min-height:1em;color:var(--sand);font-size:14px}
+
+/* classic homepage: no desk, the old buttons come back */
+.cta-classic{display:none}
+html[data-hm="classic"] .cta-classic{display:inline-flex;margin-top:24px}
+html[data-hm="classic"] .desk,html[data-hm="classic"] .desk-hint,html[data-hm="classic"] .desk-panel{display:none!important}
+html[data-hm="classic"] .hero{padding:72px 0 96px}
+
+/* the hanging lamp steps aside while the desk lamp is on screen */
+.lamp,.lamp-hint{transition:opacity .3s}
+html.desk-in-view .lamp,html.desk-in-view .lamp-hint{opacity:0;pointer-events:none}
+
+/* ===== VamsiOS ===== */
+.vos{position:fixed;inset:0;z-index:80;background:
+  radial-gradient(120% 90% at 20% 10%,#1d4a40 0,transparent 60%),
+  radial-gradient(90% 80% at 90% 100%,#163b34 0,transparent 55%),#0d221e;
+  color:#F3EEE3;display:flex;flex-direction:column;font-family:var(--sans)}
+.vos[hidden]{display:none}
+.vos.opening{animation:vosIn .38s cubic-bezier(.2,.8,.2,1)}
+@keyframes vosIn{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+html[data-mo="off"] .vos.opening{animation:none}
+.vos-bar{position:relative;display:flex;align-items:center;gap:16px;height:52px;padding:0 64px 0 20px;border-bottom:1px solid rgba(243,238,227,.14);font-size:14px}
+.vos-name{font-family:var(--serif);font-size:20px}
+.vos-clock{margin-left:auto;color:#CFC4A8}
+.vos-x{top:8px;color:#F3EEE3;border-color:rgba(243,238,227,.3)}
+.vos-desk{list-style:none;margin:0;padding:32px;display:grid;grid-template-columns:repeat(auto-fill,112px);gap:18px;align-content:start}
+.vos-desk li[hidden]{display:none}
+.vos-ic{width:112px;padding:12px 6px;border:1px solid transparent;border-radius:12px;background:transparent;color:#F3EEE3;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:var(--sans);font-size:14px}
+.vos-ic svg{width:48px;height:48px;fill:none;stroke:#9FD8C4;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.vos-ic:hover,.vos-ic:focus-visible{background:rgba(159,216,196,.12);border-color:rgba(159,216,196,.5)}
+.vos-ic:focus-visible{outline:2px solid #9FD8C4;outline-offset:2px}
+.vos-tip{margin:auto 0 0;padding:14px 20px;color:#8FA69B;font-size:13px}
+.vos-win{position:absolute;left:50%;top:50%;transform:translate(-50%,-46%);width:min(720px,calc(100% - 32px));max-height:calc(100% - 96px);display:flex;flex-direction:column;
+  background:#143029;border:1px solid rgba(243,238,227,.18);border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.vos-win[hidden]{display:none}
+.win-bar{position:relative;padding:14px 60px 12px 20px;border-bottom:1px solid rgba(243,238,227,.12)}
+.win-title{margin:0;font-family:var(--sans);font-size:15px;font-weight:700;letter-spacing:0;color:#F3EEE3}
+.win-x{top:7px;color:#F3EEE3;border-color:rgba(243,238,227,.3)}
+.win-body{padding:18px 20px 22px;overflow:auto;color:#CFC4A8}
+.win-body video{display:block;width:auto;max-width:100%;max-height:min(60vh,520px);margin:0 auto;border-radius:10px;background:#000}
+.win-script{margin-top:12px}
+.win-script summary{cursor:pointer;color:#9FD8C4}
+.win-note{margin:10px 0 0;font-size:12.5px;color:#8FA69B;text-align:center}
+.win-list{list-style:none;margin:0;padding:0}
+.win-list li{padding:14px 0;border-bottom:1px solid rgba(243,238,227,.1)}
+.win-list li:last-child{border-bottom:0}
+.win-list h3{margin:0 0 6px;font-family:var(--serif);font-size:22px;color:#F3EEE3;line-height:1.2}
+.win-list p{margin:0 0 6px;font-size:15px}
+.win-links{display:flex;flex-wrap:wrap;gap:16px}
+.vos a{color:#9FD8C4}
+.vos strong{color:#F3EEE3;font-weight:400}
+
+/* phones: a phone on the desk, and VamsiOS opens as a home screen */
+@media (max-width:680px){
+  .desk-art .obj-monitor,.desk-art .obj-note{display:none}
+  .desk-art .obj-phone{display:inline}
+  .desk-screen{left:45.7%;top:auto;width:8.7%;height:auto;aspect-ratio:96/178;margin-top:calc(100% * .205);border-radius:5px}
+  .desk-play{width:18px;height:18px;right:4px;bottom:4px}
+  .desk-play::after{left:7px;top:5px;border-left-width:6px;border-top-width:4px;border-bottom-width:4px}
+  .vos-desk{grid-template-columns:repeat(3,1fr);padding:24px 16px;gap:12px}
+  .vos-ic{width:auto}
+  .vos-win{inset:56px 0 0 0;left:0;top:56px;transform:none;width:100%;max-height:none;border-radius:16px 16px 0 0}
+  .vos-tip{display:none}
+}
+.desk-screen{background:#FDFDFD}
+.vos .vos-win{padding:0;min-height:0;border-top:1px solid rgba(243,238,227,.18)}
+@media (min-width:681px){
+  .vos-desk{grid-template-columns:112px;grid-auto-rows:min-content;padding:28px 20px}
+  .vos-win{left:calc(50% + 76px);width:min(720px,calc(100% - 200px))}
+}
+.vos .win-bar{position:relative;top:auto;z-index:auto;background:transparent}
+@media (max-width:680px){
+  .desk-screen{top:0;left:45.67%;width:8.67%;height:auto;aspect-ratio:104/180;margin-top:20.8%}
+}

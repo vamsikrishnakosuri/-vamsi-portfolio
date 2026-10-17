@@ -267,22 +267,22 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
 (function(){
   const root=document.documentElement,btn=document.getElementById('a11yBtn'),panel=document.getElementById('setPanel');
   if(!btn)return;
-  const keys={ct:'a11y-ct',cb:'a11y-cb',ts:'a11y-ts',mo:'a11y-mo'};
+  const keys={ct:'a11y-ct',cb:'a11y-cb',ts:'a11y-ts',mo:'a11y-mo',hm:'a11y-hm'};
   function set(kind,val){
-    if(val&&val!=='normal'&&val!=='none'&&val!=='100'&&val!=='on')root.setAttribute('data-'+kind,val);else root.removeAttribute('data-'+kind);
+    if(val&&val!=='normal'&&val!=='none'&&val!=='100'&&val!=='on'&&val!=='desk')root.setAttribute('data-'+kind,val);else root.removeAttribute('data-'+kind);
     try{localStorage.setItem(keys[kind],val);}catch(e){}
     panel.querySelectorAll('[data-'+kind+']').forEach(b=>b.setAttribute('aria-pressed',b.dataset[kind]===val?'true':'false'));
   }
   const osReduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  ['ct','cb','ts','mo'].forEach(k=>{
+  ['ct','cb','ts','mo','hm'].forEach(k=>{
     let v=null;try{v=localStorage.getItem(keys[k]);}catch(e){}
-    set(k,v||(k==='ct'?'normal':k==='cb'?'none':k==='mo'?(osReduce?'off':'on'):'100'));
+    set(k,v||(k==='ct'?'normal':k==='cb'?'none':k==='mo'?(osReduce?'off':'on'):k==='hm'?'desk':'100'));
   });
   panel.addEventListener('click',e=>{
     const b=e.target.closest('button'); if(!b)return;
-    if(b.id==='setReset'){set('ct','normal');set('cb','none');set('ts','100');set('mo',osReduce?'off':'on');return;}
+    if(b.id==='setReset'){set('ct','normal');set('cb','none');set('ts','100');set('mo',osReduce?'off':'on');set('hm','desk');return;}
     if(b.classList.contains('act'))return;   // Plain text / Listen handle themselves
-    ['ct','cb','ts','mo'].forEach(k=>{ if(b.dataset[k]!==undefined) set(k,b.dataset[k]); });
+    ['ct','cb','ts','mo','hm'].forEach(k=>{ if(b.dataset[k]!==undefined) set(k,b.dataset[k]); });
   });
   function open(v){panel.hidden=!v;btn.setAttribute('aria-expanded',v?'true':'false');
     if(v){const np=document.getElementById('navPanel'),mb=document.getElementById('menuBtn');
@@ -590,25 +590,46 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
       desk.querySelectorAll('[pathLength]').forEach(el=>el.removeAttribute('pathLength'));},3000);
   }
 
-  // monitor: the intro video plays on the monitor itself
-  const mon=document.getElementById('hsMonitor'), screen=desk.querySelector('.desk-screen'), vid=document.getElementById('deskVid');
-  let ready=false;
-  function stopVid(){vid.pause();screen.classList.remove('playing');
-    mon.setAttribute('aria-label','Say hello: play a 20-second video introduction');mon.querySelector('.lbl').textContent='Say hello';}
-  mon.addEventListener('click',()=>{
-    if(screen.classList.contains('playing')){stopVid();return;}
-    if(!ready){
-      vid.src='videos/intro.mp4';
-      const t=document.createElement('track');t.kind='captions';t.label='English';t.srclang='en';t.src='videos/intro.vtt';t.default=true;
-      vid.appendChild(t);ready=true;
-      t.addEventListener('load',()=>{try{vid.textTracks[0].mode='showing';}catch(e){}});
-    }
-    screen.classList.add('playing');
-    mon.setAttribute('aria-label','Stop the video');mon.querySelector('.lbl').textContent='Stop video';
-    vid.currentTime=0;const p=vid.play();if(p&&p.catch)p.catch(()=>{});
-  });
-  vid.addEventListener('ended',stopVid);
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&screen.classList.contains('playing'))stopVid();});
+  // monitor (or phone): open VamsiOS with the hello video
+  const mon=document.getElementById('hsMonitor');
+  const small=matchMedia('(max-width:680px)');
+  const monLabel=()=>{const ph=small.matches;
+    mon.querySelector('.lbl').textContent=ph?'Open my phone':'Open my computer';
+    mon.setAttribute('aria-label',(ph?'Open my phone':'Open my computer')+' and play a 20-second video hello');};
+  monLabel(); if(small.addEventListener)small.addEventListener('change',monLabel);
+  mon.addEventListener('click',()=>{if(window.__vos)window.__vos.open('hello',mon);});
+
+  // panels under the desk close with their x or Escape
+  function closePanel(id){const p=document.getElementById(id);if(!p||p.hidden)return;p.hidden=true;
+    if(id==='deskAudio'&&window.__stopDemo)window.__stopDemo();
+    if(id==='deskCard'){desk.classList.remove('card-open');drawer.setAttribute('aria-expanded','false');drawer.focus();}
+    if(id==='deskAudio')document.getElementById('hsPhones').focus();}
+  document.querySelectorAll('.panel-x').forEach(b=>b.addEventListener('click',()=>closePanel(b.dataset.close)));
+  document.addEventListener('keydown',e=>{if(e.key!=='Escape'||document.getElementById('vos')&&!document.getElementById('vos').hidden)return;
+    closePanel('deskCard');closePanel('deskAudio');});
+
+  // drawer: pull out the business card
+  const drawer=document.getElementById('hsDrawer'),card=document.getElementById('deskCard');
+  drawer.addEventListener('click',()=>{const open=card.hidden;card.hidden=!open;
+    desk.classList.toggle('card-open',open);drawer.setAttribute('aria-expanded',open?'true':'false');
+    if(open)card.scrollIntoView({behavior:still()?'auto':'smooth',block:'nearest'});});
+  const copy=document.getElementById('cardCopy'),cs=document.getElementById('cardStatus');
+  copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText('kosurivamsi5@gmail.com');cs.textContent='Email copied.';}
+    catch(e){location.href='mailto:kosurivamsi5@gmail.com';}});
+
+  // desk lamp: lights on means the light theme
+  const lampBtn=document.getElementById('hsLamp');
+  const syncLamp=()=>{const on=root.getAttribute('data-theme')==='light';
+    lampBtn.setAttribute('aria-pressed',on?'true':'false');
+    lampBtn.setAttribute('aria-label',on?'Desk lamp: turn the lights off (dark theme)':'Desk lamp: turn the lights on (light theme)');
+    lampBtn.querySelector('.lbl').textContent=on?'Lights off':'Lights on';};
+  syncLamp(); new MutationObserver(syncLamp).observe(root,{attributes:true,attributeFilter:['data-theme']});
+  lampBtn.addEventListener('click',()=>{const l=document.getElementById('lamp');
+    if(l){l.dispatchEvent(new MouseEvent('click',{bubbles:true,detail:0}));}});
+
+  // hide the hanging lamp while the desk is on screen
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(es=>{es.forEach(en=>root.classList.toggle('desk-in-view',en.isIntersecting));},{threshold:.15}).observe(desk);}
 
   // sticky note on the monitor: start a note
   const hsNote=document.getElementById('hsNote');
@@ -626,6 +647,7 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
     g.gain.setValueAtTime(0,at);g.gain.linearRampToValueAtTime(.16,at+.02);g.gain.exponentialRampToValueAtTime(.001,at+.42);
     o.start(at);o.stop(at+.45);
   }
+  window.__stopDemo=()=>stopDemo();
   function stopDemo(){timers.forEach(clearTimeout);timers=[];playing=false;desk.classList.remove('phones-on');
     list.querySelectorAll('li').forEach(li=>li.classList.remove('on'));
     phones.querySelector('.lbl').textContent='Hear my research';}
@@ -644,4 +666,71 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
     timers.push(setTimeout(()=>{stopDemo();end.hidden=false;},80+prog.length*step));
     box.scrollIntoView({behavior:still()?'auto':'smooth',block:'nearest'});
   });
+})();
+
+/* ---------- VamsiOS: the computer on the desk ---------- */
+(function(){
+  const vos=document.getElementById('vos'); if(!vos)return;
+  const root=document.documentElement;
+  const vid=document.getElementById('vosVid'), script=document.getElementById('vosScript');
+  const clock=document.getElementById('vosClock');
+  let opener=null, openWin=null, winOpener=null, clockT=null, vidReady=false;
+
+  // Resume.pdf appears only once the file exists
+  fetch('resume.pdf',{method:'HEAD'}).then(r=>{
+    if(r.ok&&(r.headers.get('content-type')||'').includes('pdf'))vos.querySelector('.vos-resume').hidden=false;}).catch(()=>{});
+
+  const intro=(Array.isArray(CLIPS)?CLIPS:[]).find(c=>c.intro)||{};
+  if(script)script.textContent=intro.text||'';
+
+  function tick(){try{clock.textContent=new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',weekday:'short',hour:'numeric',minute:'2-digit'}).format(new Date())+' in Texas';}catch(e){}}
+
+  function focusables(el){return [...el.querySelectorAll('button,a[href],video[controls],summary,[tabindex]:not([tabindex="-1"])')].filter(n=>!n.closest('[hidden]')&&n.offsetParent!==null);}
+
+  function openWindow(key,from){
+    if(key==='notes'){close();const a=document.getElementById('notesAdd');if(a)a.click();return;}
+    const w=document.getElementById('win-'+key); if(!w)return;
+    if(openWin)closeWindow(false);
+    openWin=w; winOpener=from||null; w.hidden=false;
+    if(key==='hello'){
+      if(!vidReady){vid.src='videos/intro.mp4';
+        const t=document.createElement('track');t.kind='captions';t.label='English';t.srclang='en';t.src='videos/intro.vtt';t.default=true;
+        vid.appendChild(t);vidReady=true;}
+      vid.currentTime=0;const p=vid.play();if(p&&p.catch)p.catch(()=>{});
+    }
+    w.querySelector('.win-x').focus();
+  }
+  function closeWindow(refocus=true){
+    if(!openWin)return;
+    if(openWin.id==='win-hello')vid.pause();
+    openWin.hidden=true;const back=winOpener;openWin=null;winOpener=null;
+    if(refocus&&back)back.focus();
+  }
+  function open(key,from){
+    opener=from||document.activeElement;
+    vos.hidden=false;vos.classList.add('opening');setTimeout(()=>vos.classList.remove('opening'),450);
+    document.body.style.overflow='hidden';
+    tick();clockT=setInterval(tick,30000);
+    if(key)openWindow(key,vos.querySelector('[data-open="'+key+'"]'));
+    else document.getElementById('vosClose').focus();
+  }
+  function close(){
+    closeWindow(false);vos.hidden=true;document.body.style.overflow='';clearInterval(clockT);
+    if(opener&&opener.focus)opener.focus();
+  }
+  window.__vos={open,close};
+
+  vos.querySelectorAll('.vos-ic').forEach(b=>b.addEventListener('click',()=>openWindow(b.dataset.open,b)));
+  vos.querySelectorAll('.win-x').forEach(b=>b.addEventListener('click',()=>closeWindow()));
+  document.getElementById('vosClose').addEventListener('click',close);
+  vos.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){e.preventDefault();if(openWin)closeWindow();else close();return;}
+    if(e.key!=='Tab')return;
+    const scope=openWin||vos, f=focusables(scope); if(!f.length)return;
+    const first=f[0], last=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  });
+  // clicking the empty desktop closes an open window
+  vos.addEventListener('click',e=>{if(openWin&&!openWin.contains(e.target)&&!e.target.closest('.vos-ic,.vos-bar'))closeWindow();});
 })();
