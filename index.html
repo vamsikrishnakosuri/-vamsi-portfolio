@@ -184,11 +184,11 @@
       <button type="button" class="hs hs-plant" id="hsPlant"><span class="lbl">Call the butterfly</span></button>
       <button type="button" class="hs hs-monitor" id="hsMonitor" aria-haspopup="dialog" aria-label="Open my computer"><span class="lbl">Open my computer</span></button>
       <button type="button" class="hs hs-keys" id="hsKeys" aria-expanded="false" aria-controls="deskKeys" aria-label="Try it without a mouse: the keyboard navigation demo"><span class="lbl">Try it without a mouse</span></button>
-      <a class="hs hs-laptop" href="#work"><span class="lbl">Things I've built</span></a>
-      <a class="hs hs-board" href="#research"><span class="lbl">What I research</span></a>
+      <a class="hs hs-laptop" data-sheet aria-haspopup="dialog" href="#work"><span class="lbl">Things I've built</span></a>
+      <a class="hs hs-board" data-sheet aria-haspopup="dialog" href="#research"><span class="lbl">What I research</span></a>
       <button type="button" class="hs hs-phones" id="hsPhones" aria-label="Hear my research: play the audio-cue demo, where code nesting becomes sound"><span class="lbl">Hear my research</span></button>
-      <a class="hs hs-papers" href="#publications"><span class="lbl">Papers</span></a>
-      <a class="hs hs-mug" href="#about"><span class="lbl">About me</span></a>
+      <a class="hs hs-papers" data-sheet aria-haspopup="dialog" href="#publications"><span class="lbl">Papers</span></a>
+      <a class="hs hs-mug" data-sheet aria-haspopup="dialog" href="#about"><span class="lbl">About me</span></a>
       <button type="button" class="hs hs-note" id="hsNote"><span class="lbl">Leave me a note</span></button>
       <button type="button" class="hs hs-drawer" id="hsDrawer" aria-expanded="false" aria-controls="deskCard"><span class="lbl">My card</span></button>
       <button type="button" class="hs hs-lamp" id="hsLamp" aria-pressed="false"><span class="lbl">Lights on</span></button>
@@ -484,6 +484,12 @@
   </div>
 </template>
 
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+  <div class="sheet-box">
+    <header class="sheet-bar"><h2 class="sheet-title" id="sheetTitle"></h2><button type="button" class="sheet-x" id="sheetClose" aria-label="Close and go back to the desk">&times;</button></header>
+    <div class="sheet-body" id="sheetBody"></div>
+  </div>
+</div>
 <div class="art-dlg" id="artDlg" role="dialog" aria-modal="true" aria-labelledby="artQuote" hidden>
   <canvas class="art-canvas" id="artCanvas" aria-hidden="true"></canvas>
   <figure class="art-quote">
