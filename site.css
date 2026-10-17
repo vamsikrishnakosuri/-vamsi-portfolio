@@ -651,3 +651,97 @@ html[data-mo="off"]{scroll-behavior:auto}
 html[data-mo="off"] *,html[data-mo="off"] *::before,html[data-mo="off"] *::after{animation-play-state:paused!important}
 html[data-mo="off"] .bfly{display:none!important}
 html[data-mo="off"] .photo-btn.pop .portrait,html[data-mo="off"] .photo-btn.pop .scan,html[data-mo="off"] .lamp.swinging .swing{animation:none!important}
+
+/* ===== the desk (homepage scene) ===== */
+.hero{display:block;min-height:0;padding:28px 0 40px;overflow:visible}
+.hero h1{font-size:clamp(38px,5.6vw,72px)}
+.hero p.lede{margin:22px auto 8px}
+.desk{position:relative;width:min(1120px,calc(100% - 32px));margin:8px auto 0;aspect-ratio:2/1}
+.desk-art{position:absolute;inset:0;width:100%;height:100%;overflow:visible;color:var(--cream)}
+.desk-art *{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.desk-art .obj{color:var(--sand);transition:color .25s ease}
+.desk-art .obj-desk,.desk-art .obj-plant,.desk-art .obj-frame{color:var(--mist)}
+.desk-art .note-fill{fill:#EDE4D0;stroke:#22302B}
+.desk-art .obj-note path{stroke:#22302B}
+.desk-art .steam{opacity:.55;animation:steam 3.2s ease-in-out infinite}
+.desk-art .steam.s2{animation-delay:-1.6s}
+@keyframes steam{0%,100%{transform:translateY(0);opacity:.15}50%{transform:translateY(-6px);opacity:.6}}
+
+/* one orchestrated moment: the desk draws itself in once */
+.desk.drawing .desk-art [pathLength]{stroke-dasharray:1;stroke-dashoffset:1;animation:deskDraw 1.6s cubic-bezier(.6,0,.2,1) forwards}
+.desk.drawing .desk-art .obj-desk [pathLength]{animation-delay:0s}
+.desk.drawing .desk-art .obj-monitor [pathLength],.desk.drawing .desk-art .obj-laptop [pathLength]{animation-delay:.25s}
+.desk.drawing .desk-art .obj-board [pathLength],.desk.drawing .desk-art .obj-papers [pathLength],.desk.drawing .desk-art .obj-phones [pathLength]{animation-delay:.5s}
+.desk.drawing .desk-art .obj-mug [pathLength],.desk.drawing .desk-art .obj-plant [pathLength],.desk.drawing .desk-art .obj-frame [pathLength],.desk.drawing .desk-art .obj-note [pathLength]{animation-delay:.75s}
+@keyframes deskDraw{to{stroke-dashoffset:0}}
+html[data-mo="off"] .desk-art *{animation:none!important;stroke-dashoffset:0!important}
+
+/* the monitor shows Vamsi; the intro video plays right on it */
+.desk-screen{position:absolute;left:36.2%;top:29%;width:27.6%;height:33%;border-radius:6px;overflow:hidden;background:#0a1714;pointer-events:none}
+.desk-screen img,.desk-screen video{width:100%;height:100%;display:block}
+.desk-screen img{object-fit:cover;object-position:50% 22%;filter:saturate(.85);opacity:.9}
+.desk-screen video{position:absolute;inset:0;object-fit:contain;background:#0a1714;display:none}
+.desk-screen.playing video{display:block}
+.desk-play{position:absolute;right:8px;bottom:8px;width:28px;height:28px;border-radius:50%;background:rgba(15,38,34,.8);border:1px solid rgba(243,238,227,.5)}
+.desk-play::after{content:"";position:absolute;left:11px;top:8px;border-left:9px solid #F3EEE3;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.desk-screen.playing .desk-play{display:none}
+
+/* hotspots: every object is a real button or link */
+.desk-hs{position:absolute;inset:0}
+.hs{position:absolute;display:block;border-radius:14px;background:transparent;border:0;padding:0;cursor:pointer;color:inherit;text-decoration:none}
+.hs:focus-visible{outline:2px solid var(--mint);outline-offset:4px}
+.hs .lbl{position:absolute;left:50%;bottom:calc(100% + 8px);transform:translate(-50%,4px);white-space:nowrap;font-family:var(--sans);font-size:14px;color:var(--pine);background:var(--mint);padding:5px 11px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s}
+.hs:hover .lbl,.hs:focus-visible .lbl{opacity:1;transform:translate(-50%,0)}
+.hs-monitor{left:35%;top:26.7%;width:30%;height:37.7%}
+.hs-note{left:61.5%;top:23.3%;width:4.7%;height:10%;z-index:2}
+.hs-laptop{left:14.3%;top:54.3%;width:17.3%;height:24.3%}
+.hs-board{left:71.3%;top:11%;width:19.8%;height:30.7%}
+.hs-phones{left:80.2%;top:61.3%;width:10%;height:17.3%}
+.hs-papers{left:65.7%;top:68.3%;width:12.7%;height:10.7%}
+.hs-mug{left:33.2%;top:62%;width:6.3%;height:17%}
+.hs-monitor .lbl{bottom:auto;top:calc(100% + 64px)}
+
+/* the object lights up while its hotspot is hovered or focused */
+.desk:has(.hs-monitor:is(:hover,:focus-visible)) .obj-monitor,
+.desk:has(.hs-laptop:is(:hover,:focus-visible)) .obj-laptop,
+.desk:has(.hs-board:is(:hover,:focus-visible)) .obj-board,
+.desk:has(.hs-phones:is(:hover,:focus-visible)) .obj-phones,
+.desk:has(.hs-papers:is(:hover,:focus-visible)) .obj-papers,
+.desk:has(.hs-mug:is(:hover,:focus-visible)) .obj-mug{color:var(--mint)}
+.desk:has(.hs-note:is(:hover,:focus-visible)) .note-fill{fill:#D5E5DB}
+.desk.phones-on .obj-phones{color:var(--mint)}
+
+/* audio-cue demo captions */
+.desk-audio{width:min(560px,calc(100% - 32px));margin:18px auto 0;padding:16px 20px;border:1px solid var(--line);border-radius:14px;background:var(--pine-2);text-align:left}
+.desk-audio[hidden]{display:none}
+.da-title{margin:0 0 10px;color:var(--sand);font-size:15px}
+.da-lines{list-style:none;margin:0;padding:0;font-size:16px}
+.da-lines li{padding:3px 8px;border-radius:6px;color:var(--mist);transition:background .15s,color .15s}
+.da-lines li.on{background:var(--mint);color:var(--pine)}
+.da-end{margin:12px 0 0;color:var(--sand);font-size:15px}
+.desk-hint{margin:14px auto 0;color:var(--mist);font-size:14px;text-align:center}
+
+/* touch screens: labels always visible */
+@media (hover:none){.hs .lbl{opacity:.92;transform:translate(-50%,0);font-size:12px;padding:3px 8px}}
+
+/* phones: objects too small to tap, so the same buttons become a list under the drawing */
+@media (max-width:680px){
+  .desk{aspect-ratio:auto;width:calc(100% - 24px)}
+  .desk-art,.desk-screen{position:relative;inset:auto}
+  .desk-art{display:block;height:auto;aspect-ratio:2/1}
+  .desk-screen{position:absolute;left:36.2%;top:0;width:27.6%;height:auto;aspect-ratio:332/198;margin-top:calc((100%)*0.145)}
+  .desk-hs{position:static;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+  .hs{position:static;width:auto!important;height:auto!important;min-height:44px;border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;justify-content:center}
+  .hs .lbl{position:static;opacity:1;transform:none;background:none;color:var(--cream);font-size:15px;padding:0;white-space:normal;text-align:center}
+  .hs:is(:hover,:focus-visible){border-color:var(--mint)}
+  .hs-monitor .lbl{top:auto}
+  .desk-hint{display:none}
+}
+html[data-reading] .desk,html[data-reading] .desk-hint{display:none}
+/* desk sizing: keep the whole scene in the first screen on a laptop */
+.hero{padding:16px 0 32px}
+.hero .kicker{margin-bottom:14px}
+.hero h1{font-size:clamp(34px,4.4vw,60px);line-height:1.05}
+.hero p.lede{max-width:640px;font-size:18px;margin:16px auto 0}
+.desk{width:min(980px,calc(100% - 32px));margin-top:4px}
+.da-lines li{color:var(--sand)}

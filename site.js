@@ -575,3 +575,73 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
     return {title:best.title,play:()=>play(best)};
   };
 })();
+
+/* ---------- the desk ---------- */
+(function(){
+  const desk=document.getElementById('desk'); if(!desk)return;
+  const root=document.documentElement;
+  const still=()=>matchMedia('(prefers-reduced-motion: reduce)').matches||root.dataset.mo==='off';
+
+  // draw the desk in, once
+  if(!still()){
+    desk.querySelectorAll('.desk-art path,.desk-art rect,.desk-art circle').forEach(el=>el.setAttribute('pathLength','1'));
+    desk.classList.add('drawing');
+    setTimeout(()=>{desk.classList.remove('drawing');
+      desk.querySelectorAll('[pathLength]').forEach(el=>el.removeAttribute('pathLength'));},3000);
+  }
+
+  // monitor: the intro video plays on the monitor itself
+  const mon=document.getElementById('hsMonitor'), screen=desk.querySelector('.desk-screen'), vid=document.getElementById('deskVid');
+  let ready=false;
+  function stopVid(){vid.pause();screen.classList.remove('playing');
+    mon.setAttribute('aria-label','Say hello: play a 20-second video introduction');mon.querySelector('.lbl').textContent='Say hello';}
+  mon.addEventListener('click',()=>{
+    if(screen.classList.contains('playing')){stopVid();return;}
+    if(!ready){
+      vid.src='videos/intro.mp4';
+      const t=document.createElement('track');t.kind='captions';t.label='English';t.srclang='en';t.src='videos/intro.vtt';t.default=true;
+      vid.appendChild(t);ready=true;
+      t.addEventListener('load',()=>{try{vid.textTracks[0].mode='showing';}catch(e){}});
+    }
+    screen.classList.add('playing');
+    mon.setAttribute('aria-label','Stop the video');mon.querySelector('.lbl').textContent='Stop video';
+    vid.currentTime=0;const p=vid.play();if(p&&p.catch)p.catch(()=>{});
+  });
+  vid.addEventListener('ended',stopVid);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&screen.classList.contains('playing'))stopVid();});
+
+  // sticky note on the monitor: start a note
+  const hsNote=document.getElementById('hsNote');
+  hsNote.addEventListener('click',()=>{const a=document.getElementById('notesAdd');if(a)a.click();});
+
+  // headphones: hear code nesting as pitch (the audio-cue research, in miniature)
+  const phones=document.getElementById('hsPhones'), box=document.getElementById('deskAudio'),
+        list=document.getElementById('daLines'), end=document.getElementById('daEnd');
+  const prog=[['when run is clicked',0],['repeat 3 times',1],['if the sensor is on',2],['say "hello"',3],['end if',2],['end repeat',1],['done',0]];
+  let ctx=null, playing=false, timers=[];
+  function tone(depth,at){
+    const f=262*Math.pow(2,depth*4/12);            // each level up a major third
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type='sine';o.frequency.value=f;o.connect(g);g.connect(ctx.destination);
+    g.gain.setValueAtTime(0,at);g.gain.linearRampToValueAtTime(.16,at+.02);g.gain.exponentialRampToValueAtTime(.001,at+.42);
+    o.start(at);o.stop(at+.45);
+  }
+  function stopDemo(){timers.forEach(clearTimeout);timers=[];playing=false;desk.classList.remove('phones-on');
+    list.querySelectorAll('li').forEach(li=>li.classList.remove('on'));
+    phones.querySelector('.lbl').textContent='Hear my research';}
+  phones.addEventListener('click',()=>{
+    if(playing){stopDemo();return;}
+    try{ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();}catch(e){ctx=null;}
+    if(ctx&&ctx.state==='suspended')ctx.resume();
+    list.innerHTML='';end.hidden=true;box.hidden=false;
+    prog.forEach(([txt,d])=>{const li=document.createElement('li');li.textContent=txt;li.style.paddingLeft=(8+d*22)+'px';list.appendChild(li);});
+    playing=true;desk.classList.add('phones-on');phones.querySelector('.lbl').textContent='Stop sound';
+    const step=620, t0=ctx?ctx.currentTime+.08:0, items=list.querySelectorAll('li');
+    prog.forEach(([,d],i)=>{
+      if(ctx)tone(d,t0+i*step/1000);
+      timers.push(setTimeout(()=>{items.forEach(x=>x.classList.remove('on'));items[i].classList.add('on');},80+i*step));
+    });
+    timers.push(setTimeout(()=>{stopDemo();end.hidden=false;},80+prog.length*step));
+    box.scrollIntoView({behavior:still()?'auto':'smooth',block:'nearest'});
+  });
+})();
