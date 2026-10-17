@@ -1006,3 +1006,8 @@ html[data-mo="off"] .sheet.opening .sheet-box{animation:none}
 .sheet-body section::before,.sheet-body section::after{content:none}
 .sheet-body .sec-head{margin-bottom:36px}
 @media (max-width:680px){.sheet-box{height:92vh;border-radius:16px 16px 0 0}.sheet-body{padding:20px 0 40px}}
+@media (max-width:680px){.desk-screen{margin-top:20.5%;aspect-ratio:104/172;border-radius:3px}}
+@media (max-width:680px){
+  .mini-os{grid-template-columns:repeat(2,34%);gap:8% 10%;padding:22% 11%;justify-content:center}
+  .mini-os b{display:none}
+}
