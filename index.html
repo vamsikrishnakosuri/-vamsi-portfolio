@@ -86,11 +86,10 @@
   <div class="desk" id="desk">
     <svg class="desk-art" viewBox="0 0 1200 600" aria-hidden="true" focusable="false">
       <g class="obj obj-frame">
-        <rect x="170" y="96" width="150" height="104" rx="3"/>
-        <rect x="182" y="108" width="126" height="80" rx="1"/>
-        <circle cx="270" cy="134" r="11"/>
-        <path d="M184 160 C206 152 222 166 244 158 S284 150 306 158"/>
-        <path d="M184 172 C206 164 222 178 244 170 S284 162 306 170"/>
+        <path d="M240 40 L196 66 M240 40 L284 66"/>
+        <circle cx="240" cy="40" r="3"/>
+        <rect x="180" y="66" width="120" height="146" rx="3"/>
+        <rect x="190" y="76" width="100" height="126" rx="1"/>
       </g>
       <g class="obj obj-board">
         <rect x="860" y="70" width="230" height="170" rx="4"/>
@@ -145,6 +144,10 @@
         <path d="M50 470 V492 H1150 V470"/>
         <path d="M100 492 V600 M1100 492 V600"/>
       </g>
+      <g class="obj obj-keys">
+        <rect x="668" y="450" width="118" height="20" rx="4"/>
+        <path d="M678 457 H776 M678 463 H700 M708 463 H748 M756 463 H776"/>
+      </g>
       <g class="obj obj-drawer">
         <rect x="860" y="500" width="200" height="44" rx="3"/>
         <path d="M940 522 H980"/>
@@ -168,12 +171,16 @@
     </svg>
 
     <div class="desk-screen" aria-hidden="true">
-      <img src="profile.jpg" alt="">
-      <span class="desk-play"></span>
+      <span class="mini-os"><i></i><i></i><i></i><i></i><b>VamsiOS</b></span>
     </div>
 
+    <canvas class="desk-portrait" id="deskPortrait" width="20" height="25" aria-hidden="true"></canvas>
+
     <div class="desk-hs" role="group" aria-label="Things on my desk">
-      <button type="button" class="hs hs-monitor" id="hsMonitor" aria-haspopup="dialog" aria-label="Open my computer and play a 20-second video hello"><span class="lbl">Open my computer</span></button>
+      <button type="button" class="hs hs-frame" id="hsFrame" aria-haspopup="dialog" aria-label="Play a 20-second video hello from Vamsi"><span class="lbl">Say hello</span></button>
+      <button type="button" class="hs hs-plant" id="hsPlant"><span class="lbl">Call the butterfly</span></button>
+      <button type="button" class="hs hs-monitor" id="hsMonitor" aria-haspopup="dialog" aria-label="Open my computer"><span class="lbl">Open my computer</span></button>
+      <button type="button" class="hs hs-keys" id="hsKeys" aria-expanded="false" aria-controls="deskKeys" aria-label="Try it without a mouse: the keyboard navigation demo"><span class="lbl">Try it without a mouse</span></button>
       <a class="hs hs-laptop" href="#work"><span class="lbl">Things I've built</span></a>
       <a class="hs hs-board" href="#research"><span class="lbl">What I research</span></a>
       <button type="button" class="hs hs-phones" id="hsPhones" aria-label="Hear my research: play the audio-cue demo, where code nesting becomes sound"><span class="lbl">Hear my research</span></button>
@@ -190,6 +197,14 @@
     <p class="da-title">Each nesting level has its own pitch. Listen to the code go deeper and come back out.</p>
     <ol class="da-lines" id="daLines"></ol>
     <p class="da-end" id="daEnd" hidden>That is how a blind programmer can hear the shape of their code. <a href="#work">See the project</a></p>
+  </div>
+  <div class="desk-keys desk-panel" id="deskKeys" role="region" aria-labelledby="dkTitle" hidden>
+    <button type="button" class="panel-x" data-close="deskKeys" aria-label="Close the keyboard demo">&times;</button>
+    <p class="da-title" id="dkTitle">Move through this program with your keyboard. Up and Down step through blocks, Right goes inside, Left comes back out.</p>
+    <div class="dk-tree" id="dkTree" tabindex="0" role="application" aria-roledescription="block program" aria-describedby="dkTitle"></div>
+    <p class="dk-say" id="dkSay" aria-live="polite"></p>
+    <label class="dk-speak"><input type="checkbox" id="dkSpeak"> Speak it aloud</label>
+    <p class="da-end">This is the idea behind my first paper: blocks you can reach and understand without a mouse or a screen. <a href="#publications">Read the paper</a></p>
   </div>
   <div class="desk-card desk-panel" id="deskCard" role="region" aria-label="Business card" hidden>
     <button type="button" class="panel-x" data-close="deskCard" aria-label="Close the card">&times;</button>
@@ -466,19 +481,33 @@
   </div>
 </template>
 
+<div class="hello-dlg" id="helloDlg" role="dialog" aria-modal="true" aria-labelledby="hdTitle" hidden>
+  <div class="hello-box">
+    <header class="win-bar"><h2 class="win-title" id="hdTitle">Hello from Vamsi</h2><button type="button" class="win-x" id="hdClose" aria-label="Close the video">&times;</button></header>
+    <div class="win-body">
+      <video id="hdVid" playsinline controls preload="none" crossorigin="anonymous"></video>
+      <details class="win-script"><summary>Transcript</summary><p class="hd-script"></p></details>
+      <p class="win-note">AI-generated likeness, script by Vamsi.</p>
+    </div>
+  </div>
+</div>
 <div class="vos" id="vos" role="dialog" aria-modal="true" aria-labelledby="vosTitle" hidden>
   <div class="vos-bar">
     <span class="vos-name" id="vosTitle">VamsiOS</span>
     <span class="vos-clock" id="vosClock"></span>
     <button type="button" class="vos-x" id="vosClose" aria-label="Close my computer and go back to the desk">&times;</button>
   </div>
-  <ul class="vos-desk" aria-label="Files">
+  <ul class="vos-desk" aria-label="Apps and files">
+    <li><a class="vos-ic vos-app" href="https://strangers-connect.vercel.app" target="_blank" rel="noopener" aria-label="Strangers Connect: real-time video chat app (opens in a new tab)" style="--app:#E8B86B"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="12" width="22" height="16" rx="4"/><path d="M14 28 L12 34 L19 28"/><rect x="20" y="20" width="20" height="14" rx="4"/><path d="M34 34 L36 39 L30 34"/></svg></span><span>Strangers Connect</span></a></li>
+    <li><a class="vos-ic vos-app" href="https://chromewebstore.google.com/detail/kkfchmjomomkiggchkodggcniklniika" target="_blank" rel="noopener" aria-label="AI-AC: accessibility checker Chrome extension (opens in a new tab)" style="--app:#9FD8C4"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 24 C12 14 36 14 42 24 C36 34 12 34 6 24 Z"/><circle cx="24" cy="24" r="6"/><path d="M21 24 L23.5 26.5 L28 21.5"/></svg></span><span>AI-AC</span></a></li>
+    <li><a class="vos-ic vos-app" href="https://rubelhassan.github.io/eaf-blockly" target="_blank" rel="noopener" aria-label="Accessible Blockly: keyboard and audio-cue demo (opens in a new tab)" style="--app:#A9C7F0"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="10" width="20" height="9" rx="3"/><rect x="14" y="21" width="24" height="9" rx="3"/><rect x="8" y="32" width="16" height="7" rx="3"/></svg></span><span>Accessible Blockly</span></a></li>
+    <li><button type="button" class="vos-ic vos-app" data-open="soon" style="--app:#C9B8E8" aria-label="Adaptive tool for neurodivergent learners: coming soon"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="13" y="22" width="22" height="17" rx="3"/><path d="M18 22 V16 a6 6 0 0 1 12 0 V22"/></svg></span><span>Adaptive tool</span></button></li>
     <li><button type="button" class="vos-ic" data-open="hello"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="11" width="34" height="26" rx="4"/><path d="M21 19 L29 24 L21 29 Z"/></svg><span>hello.mp4</span></button></li>
-    <li><button type="button" class="vos-ic" data-open="projects"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 14 V36 Q6 39 9 39 H39 Q42 39 42 36 V18 Q42 15 39 15 H23 L19 10 H9 Q6 10 6 13 Z"/></svg><span>Projects</span></button></li>
     <li><button type="button" class="vos-ic" data-open="papers"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 14 V36 Q6 39 9 39 H39 Q42 39 42 36 V18 Q42 15 39 15 H23 L19 10 H9 Q6 10 6 13 Z"/></svg><span>Papers</span></button></li>
     <li class="vos-resume" hidden><button type="button" class="vos-ic" data-open="resume"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6 H29 L37 14 V42 H12 Z"/><path d="M29 6 V14 H37 M17 22 H32 M17 28 H32 M17 34 H26"/></svg><span>Resume.pdf</span></button></li>
     <li><button type="button" class="vos-ic" data-open="notes"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 9 H39 V31 L31 39 H9 Z"/><path d="M31 39 V31 H39 M15 18 H33 M15 24 H29"/></svg><span>notes.txt</span></button></li>
   </ul>
+  <div class="vos-hi" aria-hidden="true"><p class="vos-hi-big">Hi, this is my computer.</p><p>The apps open things I've built. The files are mine to share.</p></div>
   <p class="vos-tip">Pick a file. Esc closes a window, then the computer.</p>
   
   <section class="vos-win" id="win-hello" role="dialog" aria-modal="true" aria-labelledby="wt-hello" hidden>
@@ -488,14 +517,9 @@
       <p class="win-note">AI-generated likeness, script by Vamsi.</p></div>
   </section>
   
-  <section class="vos-win" id="win-projects" role="dialog" aria-modal="true" aria-labelledby="wt-projects" hidden>
-    <header class="win-bar"><h2 class="win-title" id="wt-projects">Projects</h2><button type="button" class="win-x" aria-label="Close Projects">&times;</button></header>
-    <div class="win-body"><ul class="win-list">
-      <li><h3>Accessible Blockly</h3><p>Keyboard navigation and audio cues that let blind and low-vision programmers use Google Blockly. Funded by Google's Blockly Accessibility Fund.</p><p class="win-links"><a href="https://rubelhassan.github.io/eaf-blockly">Try the demo</a><a href="https://dl.acm.org/doi/pdf/10.1145/3786169.3788398">Read the paper (PDF)</a></p></li>
-      <li><h3>An adaptive programming tool for neurodivergent learners</h3><p>The core of my dissertation: a block-based editor that adapts its support to how each learner works. Not yet published.</p><p class="win-links"><a href="mailto:kosurivamsi5@gmail.com?subject=Your%20dissertation%20tool">Ask me about it</a></p></li>
-      <li><h3>AI-AC</h3><p>A Chrome extension that checks any website against each disability profile, with an optional AI pass that reads the page the way a person sees it.</p><p class="win-links"><a href="https://chromewebstore.google.com/detail/kkfchmjomomkiggchkodggcniklniika">Chrome Web Store</a><a href="https://github.com/vamsikrishnakosuri/ai-ac">Source</a></p></li>
-      <li><h3>Strangers Connect</h3><p>Real-time video chat with peer-to-peer WebRTC and encrypted messaging.</p><p class="win-links"><a href="https://strangers-connect.vercel.app">Live demo</a><a href="https://github.com/vamsikrishnakosuri/StrangersConnect">Source</a></p></li>
-    </ul></div>
+  <section class="vos-win" id="win-soon" role="dialog" aria-modal="true" aria-labelledby="wt-soon" hidden>
+    <header class="win-bar"><h2 class="win-title" id="wt-soon">Adaptive tool</h2><button type="button" class="win-x" aria-label="Close Adaptive tool">&times;</button></header>
+    <div class="win-body"><h3 class="soon-h">Not out yet</h3><p>The core of my dissertation: a block-based programming tool that adapts its support to how each neurodivergent learner thinks and focuses. It isn't published yet, so it stays locked for now.</p><p class="win-links"><a href="mailto:kosurivamsi5@gmail.com?subject=Your%20dissertation%20tool">Ask me about it</a></p></div>
   </section>
   
   <section class="vos-win" id="win-papers" role="dialog" aria-modal="true" aria-labelledby="wt-papers" hidden>
