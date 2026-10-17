@@ -589,6 +589,8 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
   if(!still()){
     desk.querySelectorAll('.desk-art path,.desk-art rect,.desk-art circle').forEach(el=>el.setAttribute('pathLength','1'));
     desk.classList.add('drawing');
+    const scr=desk.querySelector('.desk-screen');scr.classList.add('off');
+    setTimeout(()=>{scr.classList.remove('off');scr.classList.add('boot');},2100);
     setTimeout(()=>{desk.classList.remove('drawing');
       desk.querySelectorAll('[pathLength]').forEach(el=>el.removeAttribute('pathLength'));},3000);
   }
@@ -743,7 +745,29 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
         vid.appendChild(t);vidReady=true;}
       vid.currentTime=0;const p=vid.play();if(p&&p.catch)p.catch(()=>{});
     }
+    if(key==='github')loadRepos();
     w.querySelector('.win-x').focus();
+  }
+  let reposLoaded=false;
+  async function loadRepos(){
+    if(reposLoaded)return;const st=document.getElementById('ghStatus'),ul=document.getElementById('ghList');
+    ul.innerHTML='<li class="gh-skel"></li><li class="gh-skel"></li><li class="gh-skel"></li>';
+    try{
+      const r=await fetch('https://api.github.com/users/vamsikrishnakosuri/repos?sort=pushed&per_page=12',{headers:{Accept:'application/vnd.github+json'}});
+      if(!r.ok)throw new Error(r.status);
+      const repos=(await r.json()).filter(x=>!x.fork).slice(0,8);
+      ul.innerHTML='';
+      repos.forEach(x=>{const li=document.createElement('li'),a=document.createElement('a');
+        a.href=x.html_url;a.target='_blank';a.rel='noopener';
+        const n=document.createElement('span');n.className='gh-name';n.textContent=x.name;
+        const d=document.createElement('span');d.className='gh-desc';d.textContent=x.description||'No description yet.';
+        const m=document.createElement('span');m.className='gh-meta';
+        const upd=new Date(x.pushed_at).toLocaleDateString('en-US',{month:'short',year:'numeric'});
+        m.textContent=[x.language,x.stargazers_count?('★ '+x.stargazers_count):'','updated '+upd].filter(Boolean).join('  ·  ');
+        a.append(n,d,m);a.setAttribute('aria-label',x.name+'. '+(x.description||'')+' Opens on GitHub in a new tab.');
+        li.appendChild(a);ul.appendChild(li);});
+      st.textContent=repos.length+' public repositories, most recently updated first.';reposLoaded=true;
+    }catch(e){ul.innerHTML='';st.textContent="Couldn't reach GitHub just now. The profile link below still works.";}
   }
   function closeWindow(refocus=true){
     if(!openWin)return;
