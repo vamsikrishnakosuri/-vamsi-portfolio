@@ -645,3 +645,9 @@ html[data-reading] .notes-layer,html[data-reading] .notes-bar{display:none}
 .watch-chip:hover{background:var(--mint);color:var(--pine)}
 html[data-reading] .vplayer{display:none}
 @media (max-width:720px){.vplayer{max-width:100%}.vclose{width:44px;height:44px}}
+
+/* ===== pause all motion ===== */
+html[data-mo="off"]{scroll-behavior:auto}
+html[data-mo="off"] *,html[data-mo="off"] *::before,html[data-mo="off"] *::after{animation-play-state:paused!important}
+html[data-mo="off"] .bfly{display:none!important}
+html[data-mo="off"] .photo-btn.pop .portrait,html[data-mo="off"] .photo-btn.pop .scan,html[data-mo="off"] .lamp.swinging .swing{animation:none!important}

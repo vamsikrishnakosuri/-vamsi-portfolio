@@ -46,6 +46,7 @@ function makeOrb(canvas){
   let t0=performance.now();
   let lastDraw=0;
   function frame(now){
+    if(document.documentElement.dataset.mo==='off'){requestAnimationFrame(frame);return;}
     if(!coarse||now-lastDraw>33){lastDraw=now;gl.uniform1f(ut,(now-t0)/1000);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);}
     if(!reduce)requestAnimationFrame(frame);}
   requestAnimationFrame(frame);
@@ -112,7 +113,7 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
   addEventListener('mouseup',()=>h.classList.remove('cur-down'));
   document.addEventListener('mouseleave',()=>h.classList.add('cur-out'));
   document.addEventListener('mouseover',e=>{h.classList.toggle('cur-hover',!!e.target.closest('a,button,input,.bubble'));});
-  (function loop(){const k=reduce?1:.16;rx+=(mx-rx)*k;ry+=(my-ry)*k;
+  (function loop(){const k=(reduce||h.dataset.mo==='off')?1:.16;rx+=(mx-rx)*k;ry+=(my-ry)*k;
     ring.style.transform='translate('+rx+'px,'+ry+'px) translate(-50%,-50%)';requestAnimationFrame(loop);})();
 })();
 /* ---------- theme + lamp ---------- */
@@ -205,6 +206,7 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
 
   function frame(now){
     let dt=(now-last)/1000; last=now;
+    if(document.documentElement.dataset.mo==='off'){requestAnimationFrame(frame);return;}
     if(!(dt>0))dt=.016;                // first frame / clock skew
     if(dt>.04)dt=.04;                  // a slow frame must not cause a jump
     t+=dt; idle+=dt;
@@ -265,21 +267,22 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
 (function(){
   const root=document.documentElement,btn=document.getElementById('a11yBtn'),panel=document.getElementById('setPanel');
   if(!btn)return;
-  const keys={ct:'a11y-ct',cb:'a11y-cb',ts:'a11y-ts'};
+  const keys={ct:'a11y-ct',cb:'a11y-cb',ts:'a11y-ts',mo:'a11y-mo'};
   function set(kind,val){
-    if(val&&val!=='normal'&&val!=='none'&&val!=='100')root.setAttribute('data-'+kind,val);else root.removeAttribute('data-'+kind);
+    if(val&&val!=='normal'&&val!=='none'&&val!=='100'&&val!=='on')root.setAttribute('data-'+kind,val);else root.removeAttribute('data-'+kind);
     try{localStorage.setItem(keys[kind],val);}catch(e){}
     panel.querySelectorAll('[data-'+kind+']').forEach(b=>b.setAttribute('aria-pressed',b.dataset[kind]===val?'true':'false'));
   }
-  ['ct','cb','ts'].forEach(k=>{
+  const osReduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  ['ct','cb','ts','mo'].forEach(k=>{
     let v=null;try{v=localStorage.getItem(keys[k]);}catch(e){}
-    set(k,v||(k==='ct'?'normal':k==='cb'?'none':'100'));
+    set(k,v||(k==='ct'?'normal':k==='cb'?'none':k==='mo'?(osReduce?'off':'on'):'100'));
   });
   panel.addEventListener('click',e=>{
     const b=e.target.closest('button'); if(!b)return;
-    if(b.id==='setReset'){set('ct','normal');set('cb','none');set('ts','100');return;}
+    if(b.id==='setReset'){set('ct','normal');set('cb','none');set('ts','100');set('mo',osReduce?'off':'on');return;}
     if(b.classList.contains('act'))return;   // Plain text / Listen handle themselves
-    ['ct','cb','ts'].forEach(k=>{ if(b.dataset[k]!==undefined) set(k,b.dataset[k]); });
+    ['ct','cb','ts','mo'].forEach(k=>{ if(b.dataset[k]!==undefined) set(k,b.dataset[k]); });
   });
   function open(v){panel.hidden=!v;btn.setAttribute('aria-expanded',v?'true':'false');
     if(v){const np=document.getElementById('navPanel'),mb=document.getElementById('menuBtn');
@@ -338,7 +341,7 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
     const r=btn.getBoundingClientRect(), f=fx.getBoundingClientRect();
     const cx=r.left+r.width/2-f.left, cy=r.top+r.height/2-f.top;
     btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
-    if(!reduce){
+    if(!reduce&&document.documentElement.dataset.mo!=='off'){
       ring(cx,cy,0,Math.min(26,16+taps*2)); ring(cx,cy,140,Math.min(20,12+taps*2));
       burst(cx,cy,Math.min(46,16+taps*6));
     }
