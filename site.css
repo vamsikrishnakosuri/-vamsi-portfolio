@@ -400,6 +400,9 @@ html[data-theme="light"] .desk-art .obj-lamp{color:#B07A1A}
 .hint-3d{display:none}
 .desk.is-3d ~ .desk-hint .hint-wide{display:none}
 .desk.is-3d ~ .desk-hint .hint-3d{display:inline}
+.hint-floor{display:none}
+.desk.is-3d.has-floor ~ .desk-hint .hint-3d{display:none}
+.desk.is-3d.has-floor ~ .desk-hint .hint-floor{display:inline}
 /* first visit: a soft dot on everything you can click, until the first click */
 .desk.hinting .hs::before{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;pointer-events:none;
   background:var(--mint);opacity:.9;animation:hint 2.2s ease-out infinite}

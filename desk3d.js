@@ -228,7 +228,7 @@ export function startDesk3D(desk) {
   screen.material.color.setScalar(0);
   mesh(rbox(.06, .2, .03, .008), mat('bezel'), mon, 0, .12, -.03);
   mesh(rbox(.26, .016, .17, .008), mat('bezel'), mon, 0, .008, .01);
-  const noteG = group('note', .32, .6, -.205);
+  const noteG = group('note', .32, .6, .035, mon); noteG.userData.base = noteG.position.clone();   // stuck to the monitor: it travels and tips with it
   const noteM = plane(.075, .075, canvasTex(128, 128, paintNote)); noteM.rotation.z = -.12; noteM.castShadow = true; noteG.add(noteM);
   const noteBack = mesh(rbox(.075, .075, .003, .001), mat('note'), noteG, 0, 0, -.002); noteBack.rotation.z = -.12;
 
@@ -397,7 +397,8 @@ export function startDesk3D(desk) {
     const W = canvas.clientWidth, H = canvas.clientHeight; if (!W) return;
     camera.updateMatrixWorld(); const placed = [];
     for (const p of PINS) {
-      const r = project(boundsOf(p.g), W, H), pad = 4, minS = 28, cx = (r.x0 + r.x1) / 2, cy = (r.y0 + r.y1) / 2,
+      const bb = boundsOf(p.g); if (dragging !== p.g && p.g.userData.rest) { const lift = p.g.position.y - p.g.userData.rest.y; bb.min.y -= lift; bb.max.y -= lift; }
+      const r = project(bb, W, H), pad = 4, minS = 28, cx = (r.x0 + r.x1) / 2, cy = (r.y0 + r.y1) / 2,
         w = Math.max(minS, r.x1 - r.x0 + pad * 2), h = Math.max(minS, r.y1 - r.y0 + pad * 2);
       const s = p.el.style, q = [cx - w / 2, cy - h / 2, w, h], o = p.last;
       // only move a hotspot when its object really moved, so swaying leaves or steam never make it jitter
@@ -436,40 +437,46 @@ export function startDesk3D(desk) {
     for (let i = 0; i <= 24; i++) { const a = i / 24 * Math.PI * 2, r = W * (.32 + .09 * Math.sin(a * 3 + 1) + .05 * Math.sin(a * 7)); i ? g.lineTo(W / 2 + Math.cos(a) * r, H / 2 + Math.sin(a) * r) : g.moveTo(W / 2 + Math.cos(a) * r, H / 2 + Math.sin(a) * r); }
     g.fill(); });
   function moved() { if (resetBtn) resetBtn.hidden = false; }
+  function screenOf(x, y, z) { v.set(x, y, z).project(camera); const r = canvas.getBoundingClientRect(); return [(v.x + 1) / 2 * r.width, (1 - v.y) / 2 * r.height]; }
   function hit(e, y) { const r = canvas.getBoundingClientRect(); ndc.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1);
     ray.setFromCamera(ndc, camera); flat.constant = -y; return ray.ray.intersectPlane(flat, hitP); }
   function spill(onFloor) { spilled = true; spillT = 0; spillDir = Math.random() < .5 ? -1 : 1; moved();
     const m = new THREE.Mesh(new THREE.PlaneGeometry(.22, .22).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ map: puddleTex, transparent: true, roughness: .12, depthWrite: false }));
     const r = mug.userData.rest; m.position.set(r.x + spillDir * .09, (onFloor ? DESK.floor : 0) + .0015, r.z); m.scale.setScalar(.05); m.receiveShadow = true;
     scene.add(m); puddles.push(m); kick(); }
-  function tidy() { DRAG.forEach(k => { const u = groups[k] && groups[k].userData; if (!u) return; u.rest.copy(u.base); Object.assign(u, { vy: 0, falling: false, fallen: false, tilt: 0 }); });
+  function putBack(g) { const u = g.userData; Object.assign(u, { falling: false, fallen: false, vy: 0, lift: { t: 0, from: u.rest.clone() } });
+    if (g === mug) spilled = false; kick(); }
+  function tidy() { DRAG.forEach(k => { const u = groups[k] && groups[k].userData; if (!u) return; u.rest.copy(u.base); Object.assign(u, { vy: 0, falling: false, fallen: false, tilt: 0, lift: null }); });
     spilled = false; puddles.forEach(m => scene.remove(m)); puddles.length = 0;
     if (resetBtn) { resetBtn.hidden = true; const f = desk.querySelector('#hsMonitor'); if (f) f.focus(); }
     if (say) say.textContent = 'Everything is back in its place.'; kick(); }
   if (resetBtn) resetBtn.addEventListener('click', tidy);
   PINS.forEach(p => { const g = p.g; if (!g.userData.drag) return;
     p.el.addEventListener('dragstart', e => e.preventDefault());
+    p.el.addEventListener('contextmenu', e => { const u = g.userData; if (!(u.fallen || u.falling) || !running) return; e.preventDefault(); putBack(g); });
     p.el.addEventListener('pointerdown', e => { if (e.button !== 0 || !running) return;
-      const sx = e.clientX, sy = e.clientY; let live = false, off = null, lx = 0, lz = 0, lt = 0, dir = 0, flips = [];
+      const sx = e.clientX, sy = e.clientY; let live = false, r0 = null, kx = 1, kz = 1, travel = 0, lx = 0, lz = 0;
       const mv = ev => {
+        const u = g.userData, r = u.rest;
         if (!live) { if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 7) return;
           live = true; dragging = g; try { p.el.setPointerCapture(ev.pointerId); } catch (x) {} p.el.classList.add('dragging');
-          const h0 = hit(ev, g.userData.rest.y); off = h0 ? h0.clone().sub(g.userData.rest) : V(0, 0, 0); Object.assign(g.userData, { falling: false, fallen: false, vy: 0 }); }
-        const h = hit(ev, g.userData.rest.y); if (!h) return;
-        const nx = Math.max(-1.6, Math.min(1.6, h.x - off.x)), nz = Math.max(-.44, Math.min(.9, h.z - off.z)), t = performance.now();
-        const sp = lt ? Math.hypot(nx - lx, nz - lz) / Math.max(.008, (t - lt) / 1000) : 0; lx = nx; lz = nz; lt = t;
-        g.userData.rest.x = nx; g.userData.rest.z = nz; moved();
-        // shaking spills the mug: a fast fling, or three quick changes of direction
-        if (g === mug && lt) { const d = Math.sign(nx - (flips.px ?? nx)); if (Math.abs(nx - (flips.px ?? nx)) > .02) { if (dir && d && d !== dir) flips.push(t); if (d) dir = d; flips.px = nx; }
-          while (flips.length && t - flips[0] > 1200) flips.shift(); }
-        if (g === mug && !spilled && (sp > 2.4 || flips.length >= 3) && g.userData.rest.y > -.01) spill(false);
+          Object.assign(u, { falling: false, fallen: false, vy: 0 }); r0 = r.clone(); lx = r.x; lz = r.z;
+          // how many screen pixels one unit of desk covers at this object, across and in depth (depth kept gentle)
+          const a0 = screenOf(r0.x, r0.y, r0.z), ax = screenOf(r0.x + .1, r0.y, r0.z), az = screenOf(r0.x, r0.y, r0.z + .1);
+          kx = Math.max(60, Math.abs(ax[0] - a0[0]) * 10); kz = Math.max(260, Math.abs(az[1] - a0[1]) * 10); }
+        const nx = Math.max(-1.6, Math.min(1.6, r0.x + (ev.clientX - sx) / kx)), nz = Math.max(-.44, Math.min(.6, r0.z + (ev.clientY - sy) / kz));
+        travel += Math.hypot(nx - lx, nz - lz); lx = nx; lz = nz;
+        r.x = nx; r.z = nz; moved();
+        // moving the mug sloshes the coffee out; a tap still just opens "About me"
+        if (g === mug && !spilled && travel > .08 && r.y > -.01) spill(false);
         kick(); };
       const up = () => { p.el.removeEventListener('pointermove', mv); p.el.removeEventListener('pointerup', up); p.el.removeEventListener('pointercancel', up);
         p.el.classList.remove('dragging'); if (!live) return;
         dragging = null; suppress = true; setTimeout(() => { suppress = false; }, 80);
         const u = g.userData, r = u.rest;
-        if (r.y > -.01 && (r.x < DESK.x0 || r.x > DESK.x1 || r.z > DESK.z1)) {   // off the edge: it falls
-          r.x = Math.max(-1.38, Math.min(1.38, r.x)); r.z = Math.max(-.3, Math.min(.6, r.z)); Object.assign(u, { falling: true, vy: .4, tiltDir: Math.random() < .5 ? -1 : 1 }); }
+        if (r.y > -.01 && (r.x < DESK.x0 || r.x > DESK.x1 || r.z > DESK.z1)) {   // off the edge: it falls, landing where it can be seen
+          r.x = Math.max(-1.38, Math.min(1.38, r.x)); r.z = Math.max(-.3, Math.min(.45, r.z)); if (Math.abs(r.x) < 1.18) r.z = Math.max(r.z, .4);
+          Object.assign(u, { falling: true, vy: .4, tiltDir: Math.random() < .5 ? -1 : 1 }); }
         kick(); };
       p.el.addEventListener('pointermove', mv); p.el.addEventListener('pointerup', up); p.el.addEventListener('pointercancel', up);
     }); });
@@ -492,15 +499,19 @@ export function startDesk3D(desk) {
     const dl = target.light - T.light; if (Math.abs(dl) > .002) { T.light += dl * (calm ? 1 : 1 - Math.pow(.002, dt)); moving = true; } else T.light = target.light;
     const dlamp = target.light - T.lamp; if (Math.abs(dlamp) > .002) { T.lamp += dlamp * (calm ? 1 : 1 - Math.pow(.0004, dt)); moving = true; } else T.lamp = target.light;
     applyLight(now);
-    if (!calm) { par.x = lerp(par.x, par.tx, 1 - Math.pow(.004, dt)); par.y = lerp(par.y, par.ty, 1 - Math.pow(.004, dt)); } else { par.x = par.y = 0; }
+    if (!calm && !dragging) { par.x = lerp(par.x, par.tx, 1 - Math.pow(.004, dt)); par.y = lerp(par.y, par.ty, 1 - Math.pow(.004, dt)); } else if (calm) { par.x = par.y = 0; }
     if (Math.abs(par.x - par.tx) > .001 || Math.abs(par.y - par.ty) > .001) moving = true;
     const intro = 1 - eio(T.intro), down = DRAG.some(k => groups[k] && (groups[k].userData.fallen || groups[k].userData.falling)) ? 1 : 0;
     if (Math.abs(down - T.floor) > .002) { T.floor += (down - T.floor) * (calm ? 1 : 1 - Math.pow(.02, dt)); moving = true; } else T.floor = down;
+    desk.classList.toggle('has-floor', !!down);
     const fl = eio(T.floor);
-    camera.position.set(HOME.x + par.x * .16, lerp(HOME.y, .3, fl) - par.y * .07 + intro * .22, lerp(HOME.z, 3.7, fl) + intro * .9);
-    camera.lookAt(0, lerp(LOOK.y, -.25, fl), lerp(LOOK.z, 0, fl));
+    camera.position.set(HOME.x + par.x * .16, lerp(HOME.y, .22, fl) - par.y * .07 + intro * .22, lerp(HOME.z, 4.75, fl) + intro * .9);
+    camera.lookAt(0, lerp(LOOK.y, .08, fl), lerp(LOOK.z, -.1, fl));
     // dragged and falling things
     for (const k of DRAG) { const g = groups[k]; if (!g) continue; const u = g.userData, r = u.rest;
+      if (u.lift) { const L = u.lift; L.t = Math.min(1, L.t + (calm ? 1 : dt / .75)); const e = eio(L.t);
+        r.x = lerp(L.from.x, u.base.x, e); r.z = lerp(L.from.z, u.base.z, e); r.y = lerp(L.from.y, u.base.y, e) + Math.sin(Math.PI * L.t) * .28;
+        u.tilt = Math.max(0, u.tilt - (calm ? 1 : dt * 2)); if (L.t >= 1) { r.copy(u.base); u.lift = null; u.tilt = 0; } moving = true; }
       if (u.falling) { if (calm) { r.y = DESK.floor; u.vy = 0; } else { u.vy -= 6 * dt; r.y += u.vy * dt; }
         u.tilt = Math.min(1, u.tilt + (calm ? 1 : dt * 2.5));
         if (r.y <= DESK.floor) { r.y = DESK.floor; if (!calm && u.vy < -.7) u.vy = -u.vy * .22; else { Object.assign(u, { vy: 0, falling: false, fallen: true }); if (g === mug && !spilled) spill(true); } }
@@ -510,8 +521,6 @@ export function startDesk3D(desk) {
       const wantRot = g === mug && spilled ? spillDir * Math.PI / 2 : (u.fallen || u.falling ? u.tiltDir * .32 * u.tilt : 0);
       if (Math.abs(wantRot - g.rotation.z) > .002) { g.rotation.z += (wantRot - g.rotation.z) * (calm ? 1 : 1 - Math.pow(.0005, dt)); moving = true; } else g.rotation.z = wantRot; }
     if (spilled && spillT < 1) { spillT = Math.min(1, spillT + (calm ? 1 : dt * .8)); puddles.forEach(m => m.scale.setScalar(.05 + .95 * eio(spillT))); moving = true; }
-    { const mb = groups.monitor.userData, nd = groups.note.userData; nd.rest.copy(nd.base).add(groups.monitor.position).sub(mb.base); nd.rest.y = nd.base.y + (mb.rest.y - mb.base.y);
-      noteG.position.x = nd.rest.x; noteG.position.z = nd.rest.z; noteG.rotation.z = groups.monitor.rotation.z; }
     lamp.updateMatrixWorld(true); head.localToWorld(spotT.position.set(0, -.7, 0));
     // objects: hover lift + outline, drawer, headphones pulse while the audio demo plays
     const act = active();
@@ -520,7 +529,8 @@ export function startDesk3D(desk) {
       const h = g.userData.hi, o = g.userData.outline;
       if (o && o.userData.ink) { o.uniforms.color.value.copy(o.userData.ink).lerp(o.userData.accent, h); o.uniforms.opacity.value = lerp(o.userData.baseOpacity, 1, h); o.uniforms.thickness.value = lerp(o.userData.baseThick, .0055, h); }
       const still3 = g === groups.drawer || g === groups.desk || g === groups.clock || g === groups.window || g === groups.lights || g === groups.books;
-      g.position.y = g.userData.rest.y + (still3 ? 0 : h * .012) + (dragging === g ? .035 : 0) + (g === mug && spilled ? .045 * Math.abs(Math.sin(g.rotation.z)) : 0); }
+      g.position.y = g.userData.rest.y + (still3 ? 0 : h * .012) + (dragging === g ? .035 : 0);
+      if (g.userData.drag && Math.abs(g.rotation.z) > .01) { g.updateMatrixWorld(true); const lo = boundsOf(g).min.y - (g.position.y - g.userData.rest.y); if (lo < g.userData.rest.y) g.position.y += g.userData.rest.y - lo; } }
     const dz = (desk.classList.contains('card-open') ? .2 : 0) + drawer.userData.base.z - drawer.position.z;
     if (Math.abs(dz) > .0005) { drawer.position.z += dz * (calm ? 1 : 1 - Math.pow(.001, dt)); moving = true; }
     // living things: steam, swaying leaves, dust in the sunbeam, twinkling lights. All still when motion is paused
