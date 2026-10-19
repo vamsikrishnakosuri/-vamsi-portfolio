@@ -717,6 +717,29 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
   });
 })();
 
+/* ---------- 3D room: on wide screens with WebGL2 the desk becomes a lit 3D room ----------
+   desk3d.js loads only when needed. The line drawing stays underneath as the fallback, and the same hotspot
+   buttons keep working; ?flat in the address forces the drawing. */
+(function(){
+  const desk=document.getElementById('desk'); if(!desk)return;
+  if(/[?&]flat\b/.test(location.search))return;
+  try{if(!document.createElement('canvas').getContext('webgl2'))return;}catch(e){return;}
+  const root=document.documentElement, wide=matchMedia('(min-width:681px)');
+  let room=null, loading=false;
+  const want=()=>wide.matches&&!root.hasAttribute('data-reading')&&root.dataset.hm!=='classic';
+  async function sync(){
+    if(!want()){if(room)room.suspend();return;}
+    if(room){room.resume();return;}
+    if(loading)return;loading=true;
+    try{const m=await import('./desk3d.js');room=m.startDesk3D(desk);if(!want())room.suspend();}
+    catch(e){console.warn('3D desk unavailable, keeping the drawing',e);}
+    loading=false;
+  }
+  sync();
+  if(wide.addEventListener)wide.addEventListener('change',sync);
+  new MutationObserver(sync).observe(root,{attributes:true,attributeFilter:['data-reading','data-hm']});
+})();
+
 /* ---------- VamsiOS: the computer on the desk ---------- */
 (function(){
   const vos=document.getElementById('vos'); if(!vos)return;

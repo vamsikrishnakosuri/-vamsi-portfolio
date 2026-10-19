@@ -377,6 +377,16 @@ html[data-theme="light"] .desk-art .obj-lamp{color:#B07A1A}
 .card-copy{background:none;border:0;padding:0;font:inherit;color:var(--mint);text-decoration:underline;text-underline-offset:4px;cursor:pointer}
 .card-status{margin:8px 0 0;min-height:1em;color:var(--sand);font-size:14px}
 
+/* 3D room (desk3d.js): drawn under the same hotspot buttons, edges fade into the page; the drawing stays as the fallback */
+.desk-3d{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;pointer-events:none;transition:opacity 1.2s ease;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(transparent,#000 5%,#000 88%,transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(transparent,#000 5%,#000 88%,transparent);
+  mask-composite:intersect}
+.desk.is-3d .desk-3d{opacity:1}
+.desk.is-3d .desk-art,.desk.is-3d .desk-screen,.desk.is-3d .desk-portrait{opacity:0;visibility:hidden;transition:opacity .9s ease,visibility 0s .9s}
+.desk.is-3d .hs-monitor .lbl{top:auto;bottom:calc(100% + 8px)}
+
 /* phones: a portrait desk (400x620 drawing) you tap directly */
 @media (max-width:680px){
   .desk{aspect-ratio:400/620;width:min(440px,calc(100% - 24px))}
@@ -740,7 +750,7 @@ html[data-theme="light"] .sheet{background:rgba(19,48,42,.35)}
 /* high contrast and colour profiles (the colours themselves are tokens in section 1) */
 html[data-ct="high"] a{text-decoration-thickness:2px}
 html[data-ct="high"] .btn,html[data-ct="high"] .chip,html[data-ct="high"] .icon-btn{border-width:2px}
-html[data-cb="mono"] .orb-btn,html[data-cb="mono"] .panel-head canvas,html[data-cb="mono"] .endflora,html[data-cb="mono"] .bfly{filter:grayscale(1)}
+html[data-cb="mono"] .orb-btn,html[data-cb="mono"] .panel-head canvas,html[data-cb="mono"] .endflora,html[data-cb="mono"] .bfly,html[data-cb="mono"] .desk-3d{filter:grayscale(1)}
 html[data-cb]:not([data-cb="none"]) a{text-decoration-thickness:2px}
 
 /* plain text view: one readable column, no decoration, fixed high-contrast colours */
