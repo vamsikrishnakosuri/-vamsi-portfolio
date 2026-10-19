@@ -388,7 +388,18 @@ html[data-theme="light"] .desk-art .obj-lamp{color:#B07A1A}
 .desk.is-3d .desk-3d{opacity:1}
 .desk.is-3d .desk-art,.desk.is-3d .desk-screen,.desk.is-3d .desk-portrait{opacity:0;visibility:hidden;transition:opacity .9s ease,visibility 0s .9s}
 .desk.is-3d .hs-monitor .lbl{top:auto;bottom:calc(100% + 8px)}
-.desk:not(.is-3d) :is(.hs-clock,.hs-window,.hs-lights,.hs-books,.hs-bot){display:none}
+.desk:not(.is-3d) :is(.hs-clock,.hs-window,.hs-lights,.hs-books,.hs-bot,.desk-reset){display:none}
+/* dragging things around the room */
+@media (pointer:fine){.desk.is-3d .hs{touch-action:none}}
+.desk.is-3d .hs.dragging{cursor:grabbing}
+.desk.is-3d .hs.dragging .lbl{opacity:0}
+.desk-reset{position:absolute;right:14px;bottom:14px;z-index:30;min-height:36px;padding:7px 16px;border-radius:999px;border:1px solid var(--line);
+  background:var(--pine-2);color:var(--cream);font:inherit;font-size:14px;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.desk-reset:hover{border-color:var(--mint);color:var(--mint)}
+.desk-reset[hidden]{display:none}
+.hint-3d{display:none}
+.desk.is-3d ~ .desk-hint .hint-wide{display:none}
+.desk.is-3d ~ .desk-hint .hint-3d{display:inline}
 /* first visit: a soft dot on everything you can click, until the first click */
 .desk.hinting .hs::before{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;pointer-events:none;
   background:var(--mint);opacity:.9;animation:hint 2.2s ease-out infinite}

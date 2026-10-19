@@ -84,11 +84,18 @@ function paintSky(g, W, H) {
   g.fillStyle = ph === 'day' ? '#4F7F6C' : ph === 'morning' ? '#4A5E66' : ph === 'dusk' ? '#2B3A3E' : '#08171B';   // the same forest as the painting
   for (let i = 0; i < 14; i++) { const x = (i / 13) * W, h = H * (.12 + r() * .14); g.beginPath(); g.moveTo(x - W * .06, H); g.lineTo(x, H - h - H * .05); g.lineTo(x + W * .06, H); g.fill(); }
 }
+let clockMode = 'hands';   // 'hands', or after a click 'you' then 'texas': the time written large inside the face
 function paintClock(g, W, H) {   // the wall clock shows the visitor's own time
   const d = new Date(), h = d.getHours(), m = d.getMinutes(), c = W / 2; g.clearRect(0, 0, W, H);
   g.fillStyle = COL.clock; g.beginPath(); g.arc(c, c, c * .96, 0, 7); g.fill(); g.strokeStyle = '#22302B';
   for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; g.lineWidth = W * (i % 3 ? .012 : .025);
     g.beginPath(); g.moveTo(c + Math.sin(a) * c * .78, c - Math.cos(a) * c * .78); g.lineTo(c + Math.sin(a) * c * .88, c - Math.cos(a) * c * .88); g.stroke(); }
+  const fmt = tz => { try { return new Date().toLocaleTimeString('en-US', Object.assign({ hour: 'numeric', minute: '2-digit' }, tz ? { timeZone: tz } : {})).split(' '); } catch (e) { return ['', '']; } };
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  if (clockMode !== 'hands') { const tx = clockMode === 'texas', [hm, ap] = fmt(tx ? 'America/Chicago' : null);
+    g.fillStyle = '#22302B'; g.font = `700 ${W * (hm.length > 4 ? .2 : .23)}px "Atkinson Hyperlegible", sans-serif`; g.fillText(hm, c, c * .9);
+    g.fillStyle = '#2A9478'; g.font = `700 ${W * .075}px "Atkinson Hyperlegible", sans-serif`; g.fillText((ap || '') + (tx ? '  TEXAS' : '  YOUR TIME'), c, c * 1.3); return; }
+  { const [hm, ap] = fmt(null); g.fillStyle = 'rgba(34,48,43,.75)'; g.font = `700 ${W * .075}px "Atkinson Hyperlegible", sans-serif`; g.fillText(hm + ' ' + (ap || ''), c, c * 1.45); }
   const hand = (a, len, w) => { g.lineWidth = w; g.lineCap = 'round'; g.beginPath(); g.moveTo(c, c); g.lineTo(c + Math.sin(a) * len, c - Math.cos(a) * len); g.stroke(); };
   hand(((h % 12) + m / 60) / 12 * Math.PI * 2, c * .48, W * .04); g.strokeStyle = '#2A9478'; hand(m / 60 * Math.PI * 2, c * .7, W * .025);
   g.fillStyle = '#22302B'; g.beginPath(); g.arc(c, c, W * .03, 0, 7); g.fill();
@@ -161,6 +168,8 @@ export function startDesk3D(desk) {
   const wallMat = new THREE.MeshStandardMaterial({ color: '#163029', roughness: .95 }), floorMat = new THREE.MeshStandardMaterial({ color: '#0E221E', roughness: .9 });
   const wall = new THREE.Mesh(new THREE.PlaneGeometry(8, 4), wallMat); wall.position.set(0, .9, -.56); wall.receiveShadow = true; room.add(wall);
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(8, 5), floorMat); floor.rotation.x = -Math.PI / 2; floor.position.set(0, -.78, 1.4); floor.receiveShadow = true; room.add(floor);
+  const rug = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 1.1), new THREE.MeshStandardMaterial({ color: '#7A5A4A', roughness: 1 }));
+  rug.rotation.x = -Math.PI / 2; rug.position.set(0, -.777, .35); rug.receiveShadow = true; room.add(rug);
   const skirt = new THREE.Mesh(new THREE.BoxGeometry(8, .05, .015), mat('#20392F')); skirt.position.set(0, -.755, -.55); room.add(skirt);
 
   /* window (decorative): the visitor's sky right now */
@@ -343,7 +352,7 @@ export function startDesk3D(desk) {
   scene.updateMatrixWorld(true); head.localToWorld(spotT.position.set(0, -.7, 0));
 
   /* ---- theme: walls, outlines and light change; objects keep their colour ---- */
-  const T = { light: 0, lamp: 0, screen: 0, intro: 0, fairy: 1 };
+  const T = { light: 0, lamp: 0, screen: 0, intro: 0, fairy: 1, floor: 0 };
   const target = { light: 0 };
   let ph = phase();
   function readTheme() {
@@ -414,6 +423,58 @@ export function startDesk3D(desk) {
     p.el.addEventListener('focus', () => { if (p.el.matches(':focus-visible')) on(); }); p.el.addEventListener('blur', off); });
   const active = () => new Set([desk.classList.contains('phones-on') && groups.phones, desk.classList.contains('keys-on') && groups.keys, desk.classList.contains('card-open') && groups.drawer].filter(Boolean));
 
+  /* ---- drag things around the desk. Past the edge they fall to the floor and stay there; the mug spills if you
+     shake it or drop it. A plain click still opens each object, and "Tidy the desk" puts everything back ---- */
+  const DRAG = ['laptop', 'plant', 'mug', 'keys', 'papers', 'phones', 'bot', 'lamp', 'monitor'];
+  const DESK = { x0: -1.14, x1: 1.14, z1: .32, floor: -.78 };
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), flat = new THREE.Plane(V(0, 1, 0), 0), hitP = new THREE.Vector3();
+  Object.values(groups).forEach(g => { g.userData.rest = g.userData.base.clone(); });
+  DRAG.forEach(k => { if (groups[k]) Object.assign(groups[k].userData, { drag: true, vy: 0, falling: false, fallen: false, tilt: 0, tiltDir: 1 }); });
+  let dragging = null, suppress = false, spilled = false, spillDir = 1, spillT = 0;
+  const resetBtn = desk.querySelector('#deskReset'), say = document.getElementById('clockSay'), puddles = [];
+  const puddleTex = canvasTex(128, 128, (g, W, H) => { g.clearRect(0, 0, W, H); g.fillStyle = 'rgba(60,34,18,.92)'; g.beginPath();
+    for (let i = 0; i <= 24; i++) { const a = i / 24 * Math.PI * 2, r = W * (.32 + .09 * Math.sin(a * 3 + 1) + .05 * Math.sin(a * 7)); i ? g.lineTo(W / 2 + Math.cos(a) * r, H / 2 + Math.sin(a) * r) : g.moveTo(W / 2 + Math.cos(a) * r, H / 2 + Math.sin(a) * r); }
+    g.fill(); });
+  function moved() { if (resetBtn) resetBtn.hidden = false; }
+  function hit(e, y) { const r = canvas.getBoundingClientRect(); ndc.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1);
+    ray.setFromCamera(ndc, camera); flat.constant = -y; return ray.ray.intersectPlane(flat, hitP); }
+  function spill(onFloor) { spilled = true; spillT = 0; spillDir = Math.random() < .5 ? -1 : 1; moved();
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(.22, .22).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ map: puddleTex, transparent: true, roughness: .12, depthWrite: false }));
+    const r = mug.userData.rest; m.position.set(r.x + spillDir * .09, (onFloor ? DESK.floor : 0) + .0015, r.z); m.scale.setScalar(.05); m.receiveShadow = true;
+    scene.add(m); puddles.push(m); kick(); }
+  function tidy() { DRAG.forEach(k => { const u = groups[k] && groups[k].userData; if (!u) return; u.rest.copy(u.base); Object.assign(u, { vy: 0, falling: false, fallen: false, tilt: 0 }); });
+    spilled = false; puddles.forEach(m => scene.remove(m)); puddles.length = 0;
+    if (resetBtn) { resetBtn.hidden = true; const f = desk.querySelector('#hsMonitor'); if (f) f.focus(); }
+    if (say) say.textContent = 'Everything is back in its place.'; kick(); }
+  if (resetBtn) resetBtn.addEventListener('click', tidy);
+  PINS.forEach(p => { const g = p.g; if (!g.userData.drag) return;
+    p.el.addEventListener('dragstart', e => e.preventDefault());
+    p.el.addEventListener('pointerdown', e => { if (e.button !== 0 || !running) return;
+      const sx = e.clientX, sy = e.clientY; let live = false, off = null, lx = 0, lz = 0, lt = 0, dir = 0, flips = [];
+      const mv = ev => {
+        if (!live) { if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 7) return;
+          live = true; dragging = g; try { p.el.setPointerCapture(ev.pointerId); } catch (x) {} p.el.classList.add('dragging');
+          const h0 = hit(ev, g.userData.rest.y); off = h0 ? h0.clone().sub(g.userData.rest) : V(0, 0, 0); Object.assign(g.userData, { falling: false, fallen: false, vy: 0 }); }
+        const h = hit(ev, g.userData.rest.y); if (!h) return;
+        const nx = Math.max(-1.6, Math.min(1.6, h.x - off.x)), nz = Math.max(-.44, Math.min(.9, h.z - off.z)), t = performance.now();
+        const sp = lt ? Math.hypot(nx - lx, nz - lz) / Math.max(.008, (t - lt) / 1000) : 0; lx = nx; lz = nz; lt = t;
+        g.userData.rest.x = nx; g.userData.rest.z = nz; moved();
+        // shaking spills the mug: a fast fling, or three quick changes of direction
+        if (g === mug && lt) { const d = Math.sign(nx - (flips.px ?? nx)); if (Math.abs(nx - (flips.px ?? nx)) > .02) { if (dir && d && d !== dir) flips.push(t); if (d) dir = d; flips.px = nx; }
+          while (flips.length && t - flips[0] > 1200) flips.shift(); }
+        if (g === mug && !spilled && (sp > 2.4 || flips.length >= 3) && g.userData.rest.y > -.01) spill(false);
+        kick(); };
+      const up = () => { p.el.removeEventListener('pointermove', mv); p.el.removeEventListener('pointerup', up); p.el.removeEventListener('pointercancel', up);
+        p.el.classList.remove('dragging'); if (!live) return;
+        dragging = null; suppress = true; setTimeout(() => { suppress = false; }, 80);
+        const u = g.userData, r = u.rest;
+        if (r.y > -.01 && (r.x < DESK.x0 || r.x > DESK.x1 || r.z > DESK.z1)) {   // off the edge: it falls
+          r.x = Math.max(-1.38, Math.min(1.38, r.x)); r.z = Math.max(-.3, Math.min(.6, r.z)); Object.assign(u, { falling: true, vy: .4, tiltDir: Math.random() < .5 ? -1 : 1 }); }
+        kick(); };
+      p.el.addEventListener('pointermove', mv); p.el.addEventListener('pointerup', up); p.el.addEventListener('pointercancel', up);
+    }); });
+  hsLayer.addEventListener('click', e => { if (suppress) { suppress = false; e.stopPropagation(); e.preventDefault(); } }, true);   // a drag is not a click
+
   /* ---- camera: gentle parallax and an intro ---- */
   const par = { x: 0, y: 0, tx: 0, ty: 0 };
   desk.addEventListener('pointermove', e => { const r = desk.getBoundingClientRect(); par.tx = (e.clientX - r.left) / r.width - .5; par.ty = (e.clientY - r.top) / r.height - .5; kick(); });
@@ -433,22 +494,40 @@ export function startDesk3D(desk) {
     applyLight(now);
     if (!calm) { par.x = lerp(par.x, par.tx, 1 - Math.pow(.004, dt)); par.y = lerp(par.y, par.ty, 1 - Math.pow(.004, dt)); } else { par.x = par.y = 0; }
     if (Math.abs(par.x - par.tx) > .001 || Math.abs(par.y - par.ty) > .001) moving = true;
-    const intro = 1 - eio(T.intro);
-    camera.position.set(HOME.x + par.x * .16, HOME.y - par.y * .07 + intro * .22, HOME.z + intro * .9); camera.lookAt(LOOK);
+    const intro = 1 - eio(T.intro), down = DRAG.some(k => groups[k] && (groups[k].userData.fallen || groups[k].userData.falling)) ? 1 : 0;
+    if (Math.abs(down - T.floor) > .002) { T.floor += (down - T.floor) * (calm ? 1 : 1 - Math.pow(.02, dt)); moving = true; } else T.floor = down;
+    const fl = eio(T.floor);
+    camera.position.set(HOME.x + par.x * .16, lerp(HOME.y, .3, fl) - par.y * .07 + intro * .22, lerp(HOME.z, 3.7, fl) + intro * .9);
+    camera.lookAt(0, lerp(LOOK.y, -.25, fl), lerp(LOOK.z, 0, fl));
+    // dragged and falling things
+    for (const k of DRAG) { const g = groups[k]; if (!g) continue; const u = g.userData, r = u.rest;
+      if (u.falling) { if (calm) { r.y = DESK.floor; u.vy = 0; } else { u.vy -= 6 * dt; r.y += u.vy * dt; }
+        u.tilt = Math.min(1, u.tilt + (calm ? 1 : dt * 2.5));
+        if (r.y <= DESK.floor) { r.y = DESK.floor; if (!calm && u.vy < -.7) u.vy = -u.vy * .22; else { Object.assign(u, { vy: 0, falling: false, fallen: true }); if (g === mug && !spilled) spill(true); } }
+        moving = true; }
+      const kx = calm || dragging === g ? 1 : 1 - Math.pow(.0001, dt);
+      if (Math.abs(r.x - g.position.x) > .0005 || Math.abs(r.z - g.position.z) > .0005) { g.position.x += (r.x - g.position.x) * kx; g.position.z += (r.z - g.position.z) * kx; moving = true; }
+      const wantRot = g === mug && spilled ? spillDir * Math.PI / 2 : (u.fallen || u.falling ? u.tiltDir * .32 * u.tilt : 0);
+      if (Math.abs(wantRot - g.rotation.z) > .002) { g.rotation.z += (wantRot - g.rotation.z) * (calm ? 1 : 1 - Math.pow(.0005, dt)); moving = true; } else g.rotation.z = wantRot; }
+    if (spilled && spillT < 1) { spillT = Math.min(1, spillT + (calm ? 1 : dt * .8)); puddles.forEach(m => m.scale.setScalar(.05 + .95 * eio(spillT))); moving = true; }
+    { const mb = groups.monitor.userData, nd = groups.note.userData; nd.rest.copy(nd.base).add(groups.monitor.position).sub(mb.base); nd.rest.y = nd.base.y + (mb.rest.y - mb.base.y);
+      noteG.position.x = nd.rest.x; noteG.position.z = nd.rest.z; noteG.rotation.z = groups.monitor.rotation.z; }
+    lamp.updateMatrixWorld(true); head.localToWorld(spotT.position.set(0, -.7, 0));
     // objects: hover lift + outline, drawer, headphones pulse while the audio demo plays
     const act = active();
     for (const g of Object.values(groups)) { const want = hot.has(g) || act.has(g) ? 1 : 0, d = want - g.userData.hi;
       if (Math.abs(d) > .002) { g.userData.hi += d * (calm ? 1 : 1 - Math.pow(.0005, dt)); moving = true; } else g.userData.hi = want;
       const h = g.userData.hi, o = g.userData.outline;
       if (o && o.userData.ink) { o.uniforms.color.value.copy(o.userData.ink).lerp(o.userData.accent, h); o.uniforms.opacity.value = lerp(o.userData.baseOpacity, 1, h); o.uniforms.thickness.value = lerp(o.userData.baseThick, .0055, h); }
-      g.position.y = g.userData.base.y + (g === groups.drawer || g === groups.desk || g === groups.clock || g === groups.window || g === groups.lights || g === groups.books ? 0 : h * .012); }
+      const still3 = g === groups.drawer || g === groups.desk || g === groups.clock || g === groups.window || g === groups.lights || g === groups.books;
+      g.position.y = g.userData.rest.y + (still3 ? 0 : h * .012) + (dragging === g ? .035 : 0) + (g === mug && spilled ? .045 * Math.abs(Math.sin(g.rotation.z)) : 0); }
     const dz = (desk.classList.contains('card-open') ? .2 : 0) + drawer.userData.base.z - drawer.position.z;
     if (Math.abs(dz) > .0005) { drawer.position.z += dz * (calm ? 1 : 1 - Math.pow(.001, dt)); moving = true; }
     // living things: steam, swaying leaves, dust in the sunbeam, twinkling lights. All still when motion is paused
     const P = PH[ph];
     if (!calm) {
       steam.forEach(s => { s.userData.t = (s.userData.t + dt * .22) % 1; const t = s.userData.t;
-        s.position.set(mug.position.x + Math.sin(t * 6 + s.id) * .012, mug.position.y + .11 + t * .16, mug.position.z); s.scale.setScalar(.03 + t * .05); s.material.opacity = Math.sin(t * Math.PI) * .22; });
+        s.position.set(mug.position.x + Math.sin(t * 6 + s.id) * .012, mug.position.y + .11 + t * .16, mug.position.z); s.scale.setScalar(.03 + t * .05); s.material.opacity = spilled ? 0 : Math.sin(t * Math.PI) * .22; });
       leaves.forEach((lg, i) => { lg.rotation.z = Math.sin(now / 1400 + i * .9) * .025; });
       motes.forEach(m => { const u = m.userData; u.t = (u.t + dt * .012) % 1; u.a += dt * .3;
         m.position.copy(WIN).lerp(LAND, u.t); m.position.x += Math.cos(u.a) * u.r * .14; m.position.y += Math.sin(u.a * .7) * u.r * .1; m.position.z += Math.sin(u.a) * u.r * .1;
@@ -474,6 +553,10 @@ export function startDesk3D(desk) {
   new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(desk);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) kick(); });
   window.addEventListener('dayphase', () => { ph = phase(); repaint(skyTex); kick(); });
+  const clockBtn = desk.querySelector('#hsClock'); let clockT = 0;
+  const showClock = m => { clockMode = m; repaint(clockTex); kick(); };
+  if (clockBtn) clockBtn.addEventListener('click', () => { clearTimeout(clockT); showClock('you');
+    clockT = setTimeout(() => { showClock('texas'); clockT = setTimeout(() => showClock('hands'), 3500); }, 3500); });
   setInterval(() => { repaint(clockTex); repaint(osTex); const now = phase(); if (now !== ph) { ph = now; repaint(skyTex); } kick(); }, 30000);
   canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); api.suspend(); });
 

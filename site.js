@@ -669,12 +669,11 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
 
   // wall clock (3D room): says the visitor's own time, and Vamsi's in Texas
   const clockBtn=document.getElementById('hsClock'), clockSay=document.getElementById('clockSay');
-  if(clockBtn){const clockLbl=clockBtn.querySelector('.lbl');
+  if(clockBtn){
     clockBtn.addEventListener('click',()=>{const t=o=>new Date().toLocaleTimeString('en-US',Object.assign({hour:'numeric',minute:'2-digit'},o));
       let tx='';try{tx=t({timeZone:'America/Chicago'});}catch(e){}
-      clockLbl.textContent='Your time '+t()+(tx?'  ·  Texas '+tx:'');
       clockSay.textContent="It's "+t()+' where you are.'+(tx?" In Texas, where I am, it's "+tx+'.':'');
-      clearTimeout(clockBtn.t);clockBtn.t=setTimeout(()=>{clockLbl.textContent='What time is it?';},6000);});}
+      });}
 
   // first visit: a soft dot on everything you can click, until the first click
   let explored=false;try{explored=localStorage.getItem('desk-explored')==='1';}catch(e){}
