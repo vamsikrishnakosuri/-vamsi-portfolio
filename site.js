@@ -1,5 +1,25 @@
 import { CLIPS } from './clips.js';
 import { POSTS } from './blog.js';
+
+/* time of day by the visitor's own clock; ?time=morning|day|dusk|night previews one. The room and the window view share it */
+let dayOverride=(location.search.match(/[?&]time=(morning|day|dusk|night)\b/)||[])[1]||null;
+window.__dayPhase=function(){if(dayOverride)return dayOverride;const d=new Date(),t=d.getHours()+d.getMinutes()/60;
+  if(t>=5&&t<8.5)return 'morning';if(t>=8.5&&t<17.5)return 'day';if(t>=17.5&&t<20)return 'dusk';return 'night';};
+window.__setDayPhase=function(p){dayOverride=p;dispatchEvent(new Event('dayphase'));};
+/* a full-screen layer that grows out of a rectangle on the page (the monitor, the window), and shrinks back into it */
+function zoomEl(el,r,out,done){
+  const sx=r.width/innerWidth, sy=r.height/innerHeight, small='translate('+r.left+'px,'+r.top+'px) scale('+sx+','+sy+')', rad=(8/sx)+'px';
+  el.classList.add('zooming');el.style.transformOrigin='0 0';el.style.transition='none';
+  el.style.transform=out?'none':small;el.style.borderRadius=out?'0':rad;el.getBoundingClientRect();
+  el.style.transition='transform .6s cubic-bezier(.2,.8,.2,1),border-radius .6s cubic-bezier(.2,.8,.2,1)';
+  el.style.transform=out?small:'none';el.style.borderRadius=out?rad:'0';
+  let ended=false;const end=()=>{if(ended)return;ended=true;el.classList.remove('zooming');
+    ['transform','transition','borderRadius','transformOrigin'].forEach(k=>el.style[k]='');if(done)done();};
+  el.addEventListener('transitionend',function te(e){if(e.target===el&&e.propertyName==='transform'){el.removeEventListener('transitionend',te);end();}});
+  setTimeout(end,800);}
+const onScreen=r=>r&&r.width>=20&&r.top+r.height>0&&r.top<innerHeight?r:null;
+/* will the 3D room take over the desk? Then the line drawing does not need to draw itself in first */
+const want3d=()=>!/[?&]flat\b/.test(location.search)&&matchMedia('(min-width:681px)').matches&&!document.documentElement.hasAttribute('data-reading')&&document.documentElement.dataset.hm!=='classic'&&(()=>{try{return !!document.createElement('canvas').getContext('webgl2');}catch(e){return false;}})();
 /* ---------- fluid orb (WebGL) ---------- */
 function makeOrb(canvas){
   const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:false});
@@ -199,11 +219,11 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
   function flowerPos(){
     const call=window.__bflyCall;
     if(call&&Date.now()<call.until){const r=call.el.getBoundingClientRect();
-      if(r.bottom>0&&r.top<innerHeight)return {x:r.left+r.width/2-17,y:r.top+r.height*.08};}
+      if(r.bottom>0&&r.top<innerHeight)return {x:r.left+r.width/2-23,y:r.top+r.height*.08-8};}
     if(!flower)return null;
     const r=flower.getBoundingClientRect();
     if(r.top>innerHeight-60||r.bottom<0)return null;
-    return {x:r.left+r.width/2-17, y:r.top-21};
+    return {x:r.left+r.width/2-23, y:r.top-30};
   }
 
   addEventListener('scroll',()=>{idle=0;if(!shown){shown=true;el.classList.add('on');}},{passive:true});
@@ -586,8 +606,8 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
   const root=document.documentElement;
   const still=()=>matchMedia('(prefers-reduced-motion: reduce)').matches||root.dataset.mo==='off';
 
-  // draw the desk in, once
-  if(!still()){
+  // draw the desk in, once (not when the 3D room is about to replace it: then it simply appears sooner)
+  if(!still()&&!want3d()){
     desk.querySelectorAll('.desk-art path,.desk-art rect,.desk-art circle').forEach(el=>el.setAttribute('pathLength','1'));
     desk.classList.add('drawing');
     const scr=desk.querySelector('.desk-screen');scr.classList.add('off');
@@ -879,16 +899,7 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
     let r=null;try{r=window.__screenRect?window.__screenRect():null;}catch(e){}
     if(!r){const s=document.querySelector('.desk-screen');if(s&&s.offsetParent&&getComputedStyle(s).visibility!=='hidden')r=s.getBoundingClientRect();}
     if(!r||r.width<20||r.top+r.height<0||r.top>innerHeight)return null;return r;}
-  function zoom(r,out,done){
-    const sx=r.width/innerWidth, sy=r.height/innerHeight, small='translate('+r.left+'px,'+r.top+'px) scale('+sx+','+sy+')', rad=(8/sx)+'px';
-    vos.classList.add('zooming');vos.style.transformOrigin='0 0';vos.style.transition='none';
-    vos.style.transform=out?'none':small;vos.style.borderRadius=out?'0':rad;vos.getBoundingClientRect();
-    vos.style.transition='transform .6s cubic-bezier(.2,.8,.2,1),border-radius .6s cubic-bezier(.2,.8,.2,1)';
-    vos.style.transform=out?small:'none';vos.style.borderRadius=out?rad:'0';
-    let ended=false;const end=()=>{if(ended)return;ended=true;vos.classList.remove('zooming');
-      ['transform','transition','borderRadius','transformOrigin'].forEach(k=>vos.style[k]='');if(done)done();};
-    vos.addEventListener('transitionend',function te(e){if(e.target===vos&&e.propertyName==='transform'){vos.removeEventListener('transitionend',te);end();}});
-    setTimeout(end,800);}
+  const zoom=(r,out,done)=>zoomEl(vos,r,out,done);
   // wallpaper: the painted forest, the same one as on the wall of the room
   const wall=document.getElementById('vosWall');
   function paintWall(){if(!wall||!window.__forest)return;const d=Math.min(1.5,devicePixelRatio||1),W=Math.round(innerWidth*d),H=Math.round(innerHeight*d);
@@ -965,6 +976,102 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
 
 
 
+/* ---------- the window: click it to look outside, at the same time of day as the room ----------
+   Layered hills, mountains and forest with a soft grain; stars at night, sunrise in the morning, birds by day.
+   Click the sky for a shooting star (night) or a flock of birds (daytime). The buttons switch the time of day. */
+(function(){
+  const dlg=document.getElementById('viewDlg'), btn=document.getElementById('hsWindow'); if(!dlg||!btn)return;
+  const cv=document.getElementById('viewCanvas'), g=cv.getContext('2d'), desc=document.getElementById('viewDesc'), xBtn=document.getElementById('viewClose');
+  const root=document.documentElement, still=()=>matchMedia('(prefers-reduced-motion: reduce)').matches||root.dataset.mo==='off';
+  const DESC={morning:'Early morning. The sun is coming up over the hills and the birds are out. Click the sky to send more birds.',
+    day:'Daytime. A clear sky over the hills, clouds drifting, birds passing. Click the sky to send more birds.',
+    dusk:'Evening. The sun is setting behind the mountains. Click the sky to send more birds.',
+    night:'Night. Stars over the hills and fireflies by the forest. Click the sky for a shooting star.'};
+  const P={
+    morning:{sky:['#2E3F75','#B9879E','#F4B79A','#FBE3BD'],sun:[.66,.42,'255,231,184',.1],mtn:['#A193B0','#827C9C','#606C82'],forest:['#3E5A55','#24413A','#132A24'],mist:'255,214,200',mistA:.35,bird:'40,36,52'},
+    day:{sky:['#3F86C8','#7DB6E0','#BFDDEA','#EAF2E4'],sun:[.24,.2,'255,248,224',.07],mtn:['#93B3C4','#7098A8','#567E82'],forest:['#4C7F62','#2F5E46','#1C3F2E'],mist:'235,245,240',mistA:.25,bird:'40,56,62',clouds:1},
+    dusk:{sky:['#1E1B48','#6E3E73','#D9765C','#F6BF85'],sun:[.56,.66,'255,201,138',.12],mtn:['#6A4D74','#4E3B60','#352C4A'],forest:['#2D3340','#1D2330','#10151E'],mist:'240,160,130',mistA:.25,bird:'30,24,40'},
+    night:{sky:['#03070F','#08142A','#0F2840','#1B3E4C'],moon:[.74,.2],mtn:['#1E3346','#152839','#0D1D2A'],forest:['#0E2026','#0A181C','#061013'],mist:'120,170,190',mistA:.12,stars:1}};
+  let ph='night', W=0, H=0, d=1, layers=null, raf=0, t0=0, last=0, opener=null, par={x:0,y:0,tx:0,ty:0};
+  let stars=[], birds=[], clouds=[], flies=[], shoots=[];
+  function rng(seed){return ()=>(seed=(seed*16807)%2147483647)/2147483647;}
+  function layer(){const c=document.createElement('canvas');c.width=W;c.height=H;return c;}
+  function ridge(x,base,amp,r,ph1,ph2){return base-amp*(.55*Math.sin(x*2.1+ph1)+.3*Math.sin(x*5.3+ph2)+.15*Math.sin(x*11.7+ph1*2)+.12*(r()-.5));}
+  function build(){
+    if(!(W>0&&H>0))return;const p=P[ph], r=rng(42);
+    // sky
+    const sky=layer(), s=sky.getContext('2d'), gr=s.createLinearGradient(0,0,0,H*.8);p.sky.forEach((c,i)=>gr.addColorStop(i/(p.sky.length-1),c));s.fillStyle=gr;s.fillRect(0,0,W,H);
+    if(p.sun){const [sx,sy,c,rad]=p.sun,R=Math.max(W,H)*rad*3.5,gl=s.createRadialGradient(W*sx,H*sy,0,W*sx,H*sy,R);gl.addColorStop(0,'rgba('+c+',.9)');gl.addColorStop(.12,'rgba('+c+',.45)');gl.addColorStop(1,'rgba('+c+',0)');
+      s.fillStyle=gl;s.fillRect(0,0,W,H);s.fillStyle='rgba('+c+',1)';s.beginPath();s.arc(W*sx,H*sy,Math.max(W,H)*rad*.42,0,7);s.fill();}
+    if(p.moon){const [mx,my]=p.moon,R=Math.max(W,H)*.035,gl=s.createRadialGradient(W*mx,H*my,0,W*mx,H*my,R*6);gl.addColorStop(0,'rgba(220,235,255,.32)');gl.addColorStop(.3,'rgba(220,235,255,.1)');gl.addColorStop(.65,'rgba(220,235,255,.025)');gl.addColorStop(1,'rgba(220,235,255,0)');
+      s.fillStyle=gl;s.fillRect(0,0,W,H);s.fillStyle='#F2EEDC';s.beginPath();s.arc(W*mx,H*my,R,0,7);s.fill();s.fillStyle='rgba(180,180,160,.25)';
+      [[-.3,-.2,.22],[.25,.15,.16],[-.1,.35,.12]].forEach(([a,b,c])=>{s.beginPath();s.arc(W*mx+a*R,H*my+b*R,c*R,0,7);s.fill();});}
+    // mountains: three ranges, paler with distance, each fading into mist at its foot
+    const mtn=layer(), m=mtn.getContext('2d');
+    [[.56,.16],[.62,.12],[.68,.09]].forEach(([b,a],i)=>{const ph1=r()*6,ph2=r()*6;m.beginPath();m.moveTo(0,H);
+      for(let x=0;x<=W;x+=W/160)m.lineTo(x,H*ridge(x/W,b,a,r,ph1,ph2));m.lineTo(W,H);m.closePath();
+      const mg=m.createLinearGradient(0,H*(b-a),0,H);mg.addColorStop(0,p.mtn[i]);mg.addColorStop(1,P[ph].forest[0]);m.fillStyle=mg;m.fill();
+      const mist=m.createLinearGradient(0,H*(b-.03),0,H*(b+.1));mist.addColorStop(0,'rgba('+p.mist+',0)');mist.addColorStop(.55,'rgba('+p.mist+','+p.mistA+')');mist.addColorStop(1,'rgba('+p.mist+',0)');m.fillStyle=mist;m.fillRect(0,H*(b-.03),W,H*.13);});
+    // forest: two rows of pines and a meadow in front
+    const fo=layer(), f=fo.getContext('2d');
+    [[.74,.1,26,p.forest[1]],[.84,.15,18,p.forest[2]]].forEach(([b,sz,n,c],li)=>{f.fillStyle=c;f.beginPath();f.moveTo(0,H);for(let x=0;x<=W;x+=W/90)f.lineTo(x,H*(b+.012*Math.sin(x/W*7+li*2)+.008*Math.sin(x/W*17+li)));f.lineTo(W,H);f.fill();
+      for(let i=0;i<n;i++){const x=(i+r()*.9)/n*W*1.08-W*.04,h=H*sz*(.7+r()*.6),w=h*(.3+r()*.08);f.beginPath();
+        for(let k=0;k<3;k++){const ty=H*b-h*(k*.28),tw=w*(1-k*.22),th=h*(.55-k*.05);f.moveTo(x-tw,ty);f.lineTo(x,ty-th);f.lineTo(x+tw,ty);}f.fill();}});
+    f.fillStyle=p.forest[2];f.beginPath();f.moveTo(0,H);for(let x=0;x<=W;x+=W/80)f.lineTo(x,H*(.93+.03*Math.sin(x/W*5+1)));f.lineTo(W,H);f.fill();
+    // grain: the soft gradient-noise texture over everything
+    const gn=document.createElement('canvas');gn.width=gn.height=180;const gx=gn.getContext('2d'),id=gx.createImageData(180,180),rr=rng(7);
+    for(let i=0;i<id.data.length;i+=4){const v=rr()*255;id.data[i]=id.data[i+1]=id.data[i+2]=v;id.data[i+3]=34;}gx.putImageData(id,0,0);
+    layers={sky,mtn,fo,grain:g.createPattern(gn,'repeat')};
+    // living things
+    const rs=rng(5);stars=p.stars?Array.from({length:Math.round(W*H/5200)},()=>({x:rs()*W,y:rs()*H*.6,s:(rs()*1.3+.5)*d,ph:rs()*6})):[];
+    flies=p.stars?Array.from({length:22},()=>({x:rs()*W,y:H*(.78+rs()*.15),ph:rs()*6,v:rs()*.6+.2})):[];
+    clouds=p.clouds?Array.from({length:6},()=>{const sz=W*(.05+rs()*.06),c=document.createElement('canvas');c.width=Math.ceil(sz*2.4);c.height=Math.ceil(sz*1.3);
+      const x=c.getContext('2d');x.filter='blur('+Math.round(sz*.08)+'px)';x.fillStyle='rgba(255,255,255,.82)';x.beginPath();
+      [[.5,.62,.3],[.85,.5,.38],[1.25,.56,.32],[1.6,.66,.24],[1.05,.78,.3]].forEach(([a,b,r])=>{x.moveTo(sz*a+sz*r,sz*b);x.arc(sz*a,sz*b,sz*r,0,7);});x.fill();
+      return {x:rs()*W,y:H*(.06+rs()*.28),s:sz,img:c,v:(4+rs()*8)*d};}):[];
+    birds=[];if(!p.stars)flock(W*.15,H*.3,7);shoots=[];
+  }
+  function flock(x,y,n){const r=Math.random;for(let i=0;i<n;i++)birds.push({x:x-i*18*d*(.6+r()),y:y+(i%2?1:-1)*i*7*d,s:(5+r()*3)*d,v:(40+r()*20)*d,ph:r()*6});}
+  function draw(now){
+    const dt=Math.min(.05,(now-last)/1000||0);last=now;const tm=(now-t0)/1000,calm=still();
+    par.x+=(par.tx-par.x)*.06;par.y+=(par.ty-par.y)*.06;
+    g.drawImage(layers.sky,0,0);
+    stars.forEach(s=>{const a=calm?.8:.55+.45*Math.sin(tm*1.7+s.ph);g.fillStyle='rgba(255,252,235,'+a+')';g.fillRect(s.x,s.y,s.s,s.s);});
+    clouds.forEach(c=>{if(!calm)c.x=(c.x+c.v*dt)%(W+c.img.width);g.drawImage(c.img,c.x-c.img.width,c.y);});
+    shoots=shoots.filter(s=>{s.t+=dt;const k=s.t/.9;if(k>1)return false;const x=s.x+s.dx*k,y=s.y+s.dy*k,gl=g.createLinearGradient(x,y,x-s.dx*.25,y-s.dy*.25);
+      gl.addColorStop(0,'rgba(255,255,240,'+(1-k)+')');gl.addColorStop(1,'rgba(255,255,240,0)');g.strokeStyle=gl;g.lineWidth=2*d;g.beginPath();g.moveTo(x,y);g.lineTo(x-s.dx*.25,y-s.dy*.25);g.stroke();return true;});
+    g.drawImage(layers.mtn,par.x*8*d,par.y*4*d);
+    const bc='rgba('+(P[ph].bird||'0,0,0')+',.85)';g.strokeStyle=bc;g.lineWidth=1.6*d;g.lineCap='round';
+    birds=birds.filter(b=>{if(!calm){b.x+=b.v*dt;b.y+=Math.sin(tm*1.3+b.ph)*.2*d;}const f=calm?.3:Math.sin(tm*9+b.ph);
+      g.beginPath();g.moveTo(b.x-b.s,b.y-f*b.s*.6);g.quadraticCurveTo(b.x-b.s*.4,b.y-b.s*.2,b.x,b.y);g.quadraticCurveTo(b.x+b.s*.4,b.y-b.s*.2,b.x+b.s,b.y-f*b.s*.6);g.stroke();return b.x<W+40*d;});
+    if(!calm&&!P[ph].stars&&birds.length<3&&Math.random()<dt*.15)flock(-20*d,H*(.15+Math.random()*.3),5+Math.floor(Math.random()*4));
+    g.drawImage(layers.fo,par.x*18*d,par.y*8*d);
+    flies.forEach(f=>{const a=calm?.6:(.5+.5*Math.sin(tm*2+f.ph))*.9;const x=f.x+(calm?0:Math.sin(tm*f.v+f.ph)*14*d),y=f.y+(calm?0:Math.cos(tm*f.v*.8+f.ph)*8*d);
+      const gl=g.createRadialGradient(x,y,0,x,y,6*d);gl.addColorStop(0,'rgba(230,255,170,'+a+')');gl.addColorStop(1,'rgba(230,255,170,0)');g.fillStyle=gl;g.fillRect(x-6*d,y-6*d,12*d,12*d);});
+    g.globalCompositeOperation='soft-light';g.fillStyle=layers.grain;g.fillRect(0,0,W,H);g.globalCompositeOperation='source-over';
+    if(!calm&&!dlg.hidden)raf=requestAnimationFrame(draw);
+  }
+  function size(){d=Math.min(1.5,devicePixelRatio||1);W=cv.width=Math.round(innerWidth*d);H=cv.height=Math.round(innerHeight*d);build();}
+  function setPhase(p){ph=p;desc.textContent=DESC[p];dlg.querySelectorAll('.view-t').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===p?'true':'false'));
+    if(!dlg.hidden&&W>0){build();cancelAnimationFrame(raf);last=performance.now();raf=requestAnimationFrame(draw);}}
+  function open(){if(window.__closeDeskPanels)window.__closeDeskPanels();opener=document.activeElement;
+    dlg.hidden=false;document.body.style.overflow='hidden';W=0;setPhase(window.__dayPhase());size();t0=last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(draw);
+    let r=null;try{r=window.__winRect?onScreen(window.__winRect()):null;}catch(e){}
+    if(r&&!still())zoomEl(dlg,r,false);xBtn.focus();}
+  function close(){cancelAnimationFrame(raf);let r=null;try{r=window.__winRect?onScreen(window.__winRect()):null;}catch(e){}
+    const done=()=>{dlg.hidden=true;document.body.style.overflow='';if(opener&&opener.focus)opener.focus();};
+    if(r&&!still())zoomEl(dlg,r,true,done);else done();}
+  btn.addEventListener('click',open);xBtn.addEventListener('click',close);
+  dlg.querySelectorAll('.view-t').forEach(b=>b.addEventListener('click',()=>{setPhase(b.dataset.t);if(window.__setDayPhase)window.__setDayPhase(b.dataset.t);}));
+  cv.addEventListener('pointermove',e=>{par.tx=e.clientX/innerWidth-.5;par.ty=e.clientY/innerHeight-.5;});
+  cv.addEventListener('click',e=>{const x=e.clientX*d,y=e.clientY*d;if(P[ph].stars)shoots.push({x,y,dx:W*.25,dy:H*.12,t:0});else flock(x,y,6);
+    if(still())draw(performance.now());});
+  dlg.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();close();return;}
+    if(e.key!=='Tab')return;const f=[...dlg.querySelectorAll('button')],first=f[0],lastB=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();lastB.focus();}else if(!e.shiftKey&&document.activeElement===lastB){e.preventDefault();first.focus();}});
+  addEventListener('resize',()=>{if(!dlg.hidden){size();if(still())draw(performance.now());}});
+})();
+
 /* ---------- painted forest (wall frame + full-screen painting) ---------- */
 (function(){
   function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);
@@ -1036,7 +1143,7 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
 (function(){
   const sheet=document.getElementById('sheet'); if(!sheet)return;
   const body=document.getElementById('sheetBody'), title=document.getElementById('sheetTitle'), x=document.getElementById('sheetClose');
-  const names={work:'Things I’ve built',research:'What I research',publications:'Papers',about:'About me'};
+  const names={work:'Things I’ve built',research:'What I research',publications:'Papers',teaching:'What I teach',about:'About me'};
   let opener=null;
   function open(id,from){
     const src=document.getElementById(id); if(!src)return;

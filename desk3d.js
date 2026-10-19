@@ -27,10 +27,9 @@ function canvasTex(w, h, paint) {
 function repaint(t) { const c = t.userData.canvas; t.userData.paint(c.getContext('2d'), c.width, c.height, c); t.needsUpdate = true; }
 
 /* ---- time of day: the visitor's own clock ---- */
-const forced = (location.search.match(/[?&]time=(day|dusk|night)\b/) || [])[1];
-function phase() { if (forced) return forced; const d = new Date(), t = d.getHours() + d.getMinutes() / 60;
-  if (t >= 7.5 && t < 17.5) return 'day'; if ((t >= 5.5 && t < 7.5) || (t >= 17.5 && t < 20)) return 'dusk'; return 'night'; }
+const phase = () => (window.__dayPhase ? window.__dayPhase() : 'night');
 const PH = {   // light per time of day: hemisphere fill, key light, sunbeam through the window, fairy lights, dust in the beam
+  morning: { hemi: .7, key: '#FFD6B4', keyI: 1.05, beam: '#FFB57E', beamI: 22, shaft: .32, fairy: .35, mote: .9 },
   day: { hemi: 1.05, key: '#FFF2DC', keyI: 1.5, beam: '#FFE2AE', beamI: 26, shaft: .34, fairy: .25, mote: 1 },
   dusk: { hemi: .5, key: '#FFC8A0', keyI: .8, beam: '#FF9F5A', beamI: 18, shaft: .28, fairy: .8, mote: .7 },
   night: { hemi: .28, key: '#9DB7E8', keyI: .42, beam: '#B4CBF5', beamI: 5, shaft: .1, fairy: 1, mote: .15 },
@@ -73,7 +72,7 @@ function paintNote(g, W, H) { g.fillStyle = COL.note; g.fillRect(0, 0, W, H); g.
   [[.2, .3, .6], [.2, .48, .48], [.2, .66, .3]].forEach(([x, y, w]) => g.fillRect(W * x, H * y, W * w, H * .05)); }
 function paintSky(g, W, H) {
   const ph = phase(), gr = g.createLinearGradient(0, 0, 0, H);
-  const stops = { day: ['#6FAEDB', '#B9DAEA', '#EEF3E6'], dusk: ['#2F3566', '#C9767A', '#F7C68E'], night: ['#060F18', '#0D2030', '#17343F'] }[ph];
+  const stops = { morning: ['#3B4C80', '#E6A0A0', '#FCE0B4'], day: ['#6FAEDB', '#B9DAEA', '#EEF3E6'], dusk: ['#2F3566', '#C9767A', '#F7C68E'], night: ['#060F18', '#0D2030', '#17343F'] }[ph];
   stops.forEach((c, i) => gr.addColorStop(i / 2, c)); g.fillStyle = gr; g.fillRect(0, 0, W, H);
   let s = 11; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
   if (ph === 'night') { for (let i = 0; i < 80; i++) { g.fillStyle = `rgba(255,255,240,${.3 + r() * .7})`; const z = 1 + r() * 1.4; g.fillRect(r() * W, r() * H * .75, z, z); }
@@ -81,7 +80,8 @@ function paintSky(g, W, H) {
   if (ph === 'day') { g.fillStyle = 'rgba(255,250,225,.95)'; g.beginPath(); g.arc(W * .22, H * .2, W * .08, 0, 7); g.fill();
     g.fillStyle = 'rgba(255,255,255,.8)'; [[.5, .3], [.7, .16]].forEach(([x, y]) => { for (let k = 0; k < 4; k++) { g.beginPath(); g.arc(W * (x + k * .06), H * y, W * (.06 + (k % 2) * .03), 0, 7); g.fill(); } }); }
   if (ph === 'dusk') { g.fillStyle = 'rgba(255,214,150,.95)'; g.beginPath(); g.arc(W * .4, H * .82, W * .13, 0, 7); g.fill(); }
-  g.fillStyle = ph === 'day' ? '#4F7F6C' : ph === 'dusk' ? '#2B3A3E' : '#08171B';   // the same forest as the painting
+  if (ph === 'morning') { g.fillStyle = 'rgba(255,236,190,.95)'; g.beginPath(); g.arc(W * .62, H * .78, W * .12, 0, 7); g.fill(); }
+  g.fillStyle = ph === 'day' ? '#4F7F6C' : ph === 'morning' ? '#4A5E66' : ph === 'dusk' ? '#2B3A3E' : '#08171B';   // the same forest as the painting
   for (let i = 0; i < 14; i++) { const x = (i / 13) * W, h = H * (.12 + r() * .14); g.beginPath(); g.moveTo(x - W * .06, H); g.lineTo(x, H - h - H * .05); g.lineTo(x + W * .06, H); g.fill(); }
 }
 function paintClock(g, W, H) {   // the wall clock shows the visitor's own time
@@ -157,13 +157,14 @@ export function startDesk3D(desk) {
 
   /* ---- room ---- */
   const room = new THREE.Group(); scene.add(room);
+  const ink = '#1A2622';
   const wallMat = new THREE.MeshStandardMaterial({ color: '#163029', roughness: .95 }), floorMat = new THREE.MeshStandardMaterial({ color: '#0E221E', roughness: .9 });
   const wall = new THREE.Mesh(new THREE.PlaneGeometry(8, 4), wallMat); wall.position.set(0, .9, -.56); wall.receiveShadow = true; room.add(wall);
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(8, 5), floorMat); floor.rotation.x = -Math.PI / 2; floor.position.set(0, -.78, 1.4); floor.receiveShadow = true; room.add(floor);
   const skirt = new THREE.Mesh(new THREE.BoxGeometry(8, .05, .015), mat('#20392F')); skirt.position.set(0, -.755, -.55); room.add(skirt);
 
   /* window (decorative): the visitor's sky right now */
-  const win = group(null, -1.32, .66, -.555);
+  const win = group('window', -1.32, .66, -.555);
   const skyTex = canvasTex(256, 320, paintSky); const sky = plane(.38, .48, skyTex, true); sky.position.z = .004; win.add(sky);
   [[0, .25, .44, .025], [0, -.25, .44, .025], [-.21, 0, .025, .52], [.21, 0, .025, .52], [0, 0, .015, .48], [0, .02, .4, .015]].forEach(([x, y, w, h]) =>
     mesh(rbox(w, h, .03, .004), mat('winFrame'), win, x, y, .012));
@@ -176,7 +177,7 @@ export function startDesk3D(desk) {
   const face = new THREE.Mesh(new THREE.CircleGeometry(.085, 48), new THREE.MeshStandardMaterial({ map: clockTex, roughness: .8 })); face.position.z = .021; clockG.add(face);
 
   /* wall shelf (decorative): books and a succulent */
-  const shelf = group(null, 1.3, .47, -.5);
+  const shelf = group('books', 1.3, .47, -.5);
   mesh(rbox(.42, .022, .11, .004), mat('shelf'), shelf, 0, 0, 0);
   [-.15, .15].forEach(x => mesh(rbox(.016, .05, .08, .003), mat('leg'), shelf, x, -.036, -.005));
   [['#C0566F', .022, .12], ['#E8B86B', .028, .135], ['#4F6FD6', .02, .11], ['#2A9478', .026, .128], ['#EDE4D0', .018, .1], ['#6C5AA8', .024, .118]].reduce((x, [c, w, h], i) => {
@@ -190,10 +191,15 @@ export function startDesk3D(desk) {
   /* fairy lights along the top of the wall: they glow at dusk and at night */
   const fairyPts = []; for (let i = 0; i <= 60; i++) { const t = i / 60; fairyPts.push(V(-1.02 + t * 2.6, .955 - .06 * Math.abs(Math.sin(t * Math.PI * 3)), -.548)); }
   const fairyCurve = new THREE.CatmullRomCurve3(fairyPts);
-  room.add(new THREE.Mesh(new THREE.TubeGeometry(fairyCurve, 120, .0016, 5), mat('#1A2622')));
+  const lightsG = group('lights', 0, 0, 0); lightsG.userData.outline = null;
+  lightsG.add(new THREE.Mesh(new THREE.TubeGeometry(fairyCurve, 120, .0016, 5), mat(ink)));
   const fairy = []; const bulbGeo = new THREE.SphereGeometry(.0085, 10, 8), FAIRY = ['#FFE3A3', '#FFD27F', '#FFF1D0'];
   for (let i = 0; i < 28; i++) { const b = new THREE.Mesh(bulbGeo, new THREE.MeshBasicMaterial({ color: FAIRY[i % 3], toneMapped: false }));
-    b.position.copy(fairyCurve.getPoint((i + .5) / 28)); b.position.y -= .01; b.userData.c = new THREE.Color(FAIRY[i % 3]); b.userData.ph = i * 1.7; room.add(b); fairy.push(b); }
+    b.position.copy(fairyCurve.getPoint((i + .5) / 28)); b.position.y -= .01; b.userData.c = new THREE.Color(FAIRY[i % 3]); b.userData.ph = i * 1.7; lightsG.add(b); fairy.push(b); }
+  let lightsOn = true; const lightsBtn = desk.querySelector('#hsLights');
+  const syncLights = () => { if (!lightsBtn) return; lightsBtn.setAttribute('aria-pressed', lightsOn ? 'true' : 'false');
+    lightsBtn.querySelector('.lbl').textContent = lightsOn ? 'Fairy lights off' : 'Fairy lights on'; };
+  if (lightsBtn) { syncLights(); lightsBtn.addEventListener('click', () => { lightsOn = !lightsOn; syncLights(); kick(); }); }
 
   /* ---- desk ---- */
   const deskG = group('desk', 0, 0, 0);
@@ -242,6 +248,23 @@ export function startDesk3D(desk) {
     const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,.9)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return c; })());
   const steam = []; for (let i = 0; i < 7; i++) { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: puff, color: '#F3EEE3', transparent: true, opacity: 0, depthWrite: false }));
     s.userData.t = i / 7; scene.add(s); steam.push(s); }
+
+  /* robot: a little helper that opens the same assistant as the orb. It looks at your pointer, blinks, waves on hover */
+  const bot = group('bot', -.18, 0, .05);
+  const botM = mat('#ECE6D8', { roughness: .35 }), botD = mat('#22312C', { roughness: .45 });
+  mesh(rbox(.074, .012, .052, .006), botD, bot, 0, .006, 0);
+  mesh(rbox(.062, .05, .046, .016), botM, bot, 0, .04, 0);
+  const botHead = sub(bot, 0, .103, 0);
+  mesh(rbox(.094, .068, .062, .022), botM, botHead, 0, 0, 0);
+  mesh(rbox(.076, .046, .004, .012), new THREE.MeshStandardMaterial({ color: '#0E1C19', roughness: .3 }), botHead, 0, 0, .03, { outline: false });
+  const eyeMat = new THREE.MeshBasicMaterial({ color: '#9FD8C4', toneMapped: false }), eyes = [];
+  [-.017, .017].forEach(x => { const e = mesh(new THREE.CapsuleGeometry(.0055, .007, 4, 8), eyeMat, botHead, x, .002, .0335, { outline: false, cast: false }); eyes.push(e); });
+  mesh(new THREE.CylinderGeometry(.0022, .0022, .028, 8), botD, botHead, 0, .046, 0, { outline: false });
+  const antMat = new THREE.MeshBasicMaterial({ color: '#9FD8C4', toneMapped: false });
+  mesh(new THREE.SphereGeometry(.0075, 12, 10), antMat, botHead, 0, .064, 0, { outline: false, cast: false });
+  const armL = sub(bot, -.036, .058, 0), armR = sub(bot, .036, .058, 0);
+  [[armL, -1], [armR, 1]].forEach(([a, sd]) => { const m = mesh(new THREE.CapsuleGeometry(.0065, .028, 4, 8), botM, a, sd * .004, -.018, 0); a.rotation.z = sd * .28; });
+  const panel = document.getElementById('panel'); let blinkAt = 0;
 
   /* plant: a leafy pothos-style plant in a ceramic pot, leaves on stems spiralling out */
   const plant = group('plant', -.98, 0, -.08);
@@ -320,7 +343,7 @@ export function startDesk3D(desk) {
   scene.updateMatrixWorld(true); head.localToWorld(spotT.position.set(0, -.7, 0));
 
   /* ---- theme: walls, outlines and light change; objects keep their colour ---- */
-  const T = { light: 0, lamp: 0, screen: 0, intro: 0 };
+  const T = { light: 0, lamp: 0, screen: 0, intro: 0, fairy: 1 };
   const target = { light: 0 };
   let ph = phase();
   function readTheme() {
@@ -334,21 +357,22 @@ export function startDesk3D(desk) {
   const cOff = new THREE.Color('#5C5A52'), cOn = new THREE.Color('#FFF6DE'), tmpC = new THREE.Color();
   function applyLight(now) {   // the room by time of day, then the lamp (light theme) on top
     const l = T.light, P = PH[ph], k = T.intro, lampOn = T.lamp;
-    wallMat.color.set(ph === 'day' ? '#2F4F44' : ph === 'dusk' ? '#26392F' : '#163029').lerp(tmpC.set('#EFE8D8'), l); floorMat.color.set('#0E221E').lerp(tmpC.set('#D9CFB8'), l);
+    wallMat.color.set(ph === 'day' ? '#2F4F44' : ph === 'morning' ? '#2A463D' : ph === 'dusk' ? '#26392F' : '#163029').lerp(tmpC.set('#EFE8D8'), l); floorMat.color.set('#0E221E').lerp(tmpC.set('#D9CFB8'), l);
     wallMat.emissive.set('#F4EFE4'); wallMat.emissiveIntensity = .2 * l * k; floorMat.emissive.set('#F4EFE4'); floorMat.emissiveIntensity = .1 * l * k;
     hemi.intensity = (P.hemi + .55 * l) * k; hemi.color.set('#9FC4BA').lerp(tmpC.set('#FFF1DA'), l);
     key.color.set(P.key); key.intensity = P.keyI * (1 - .25 * l) * k;
     beam.color.set(P.beam); beam.intensity = P.beamI * k; shaftMat.uniforms.color.value.set(P.beam); shaftMat.uniforms.strength.value = P.shaft * (1 - .45 * l) * k;
     spot.intensity = lampOn * 5.5 * k; lampFill.intensity = lampOn * .55 * k; coneMat.uniforms.strength.value = lampOn * .5 * k;
     bulbMat.color.copy(cOff).lerp(cOn, lampOn).multiplyScalar(1 + lampOn * 1.6);
-    const fz = (P.fairy * (1 - .55 * l) + .12) * k;
+    T.fairy += ((lightsOn ? 1 : 0) - T.fairy) * .12; const fz = (P.fairy * (1 - .55 * l) + .12) * k * T.fairy;
     fairy.forEach(b => { const tw = still() ? 1 : .8 + .2 * Math.sin(now / 700 + b.userData.ph); b.material.color.copy(b.userData.c).multiplyScalar(fz * tw * 1.6); });
     glow.intensity = T.screen * (.35 - .2 * l) * k; screen.material.color.setScalar(T.screen);
   }
 
   /* ---- hotspots follow their objects; where two overlap, the smaller one sits on top ---- */
   const PINS = [['#hsFrame', 'frame'], ['#hsPlant', 'plant'], ['#hsMonitor', 'monitor'], ['#hsKeys', 'keys'], ['.hs-laptop', 'laptop'], ['.hs-board', 'board'],
-    ['#hsPhones', 'phones'], ['.hs-papers', 'papers'], ['.hs-mug', 'mug'], ['#hsNote', 'note'], ['#hsDrawer', 'drawer'], ['#hsLamp', 'lamp'], ['#hsClock', 'clock']]
+    ['#hsPhones', 'phones'], ['.hs-papers', 'papers'], ['.hs-mug', 'mug'], ['#hsNote', 'note'], ['#hsDrawer', 'drawer'], ['#hsLamp', 'lamp'], ['#hsClock', 'clock'],
+    ['#hsWindow', 'window'], ['#hsLights', 'lights'], ['.hs-books', 'books'], ['#hsBot', 'bot']]
     .map(([sel, k]) => ({ el: desk.querySelector(sel), g: groups[k] })).filter(p => p.el && p.g);
   const box = new THREE.Box3(), tmpBox = new THREE.Box3(), v = new THREE.Vector3();
   function boundsOf(g) { box.makeEmpty();
@@ -371,6 +395,9 @@ export function startDesk3D(desk) {
   }
   function unpin() { PINS.forEach(p => { const s = p.el.style; s.left = s.top = s.width = s.height = s.zIndex = ''; }); }
   /* VamsiOS grows out of the monitor screen: site.js asks where that screen is on the page */
+  function winRect() { const W = canvas.clientWidth, H = canvas.clientHeight, c = canvas.getBoundingClientRect();
+    camera.updateMatrixWorld(); sky.geometry.computeBoundingBox(); tmpBox.copy(sky.geometry.boundingBox).applyMatrix4(sky.matrixWorld);
+    const r = project(tmpBox, W, H); return { left: c.left + r.x0, top: c.top + r.y0, width: r.x1 - r.x0, height: r.y1 - r.y0 }; }
   function screenRect() { const W = canvas.clientWidth, H = canvas.clientHeight, c = canvas.getBoundingClientRect();
     camera.updateMatrixWorld(); screen.geometry.computeBoundingBox(); tmpBox.copy(screen.geometry.boundingBox).applyMatrix4(screen.matrixWorld);
     const r = project(tmpBox, W, H); return { left: c.left + r.x0, top: c.top + r.y0, width: r.x1 - r.x0, height: r.y1 - r.y0 }; }
@@ -393,7 +420,7 @@ export function startDesk3D(desk) {
   const lerp = (a, b, t) => a + (b - a) * t, eio = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   function frame(now) {
     raf = 0; if (!visible || document.hidden) return; const dt = Math.min(.05, (now - last) / 1000); last = now; const calm = still(); let moving = false;
-    if (T.intro < 1) { T.intro = calm ? 1 : Math.min(1, (now - introT0) / 1800); moving = true; }
+    if (T.intro < 1) { T.intro = calm ? 1 : Math.min(1, (now - introT0) / 1200); moving = true; }
     if (!booted && T.intro >= .85) { booted = true; bootT = now; }
     if (booted && T.screen < 1) { const b = calm ? 1 : Math.min(1, (now - bootT) / 700); T.screen = b < .3 ? b * 3 * (Math.sin(b * 60) * .3 + .7) : .9 + b * .1; if (b >= 1) T.screen = 1; moving = true; }
     const dl = target.light - T.light; if (Math.abs(dl) > .002) { T.light += dl * (calm ? 1 : 1 - Math.pow(.002, dt)); moving = true; } else T.light = target.light;
@@ -409,7 +436,7 @@ export function startDesk3D(desk) {
       if (Math.abs(d) > .002) { g.userData.hi += d * (calm ? 1 : 1 - Math.pow(.0005, dt)); moving = true; } else g.userData.hi = want;
       const h = g.userData.hi, o = g.userData.outline;
       if (o && o.userData.ink) { o.uniforms.color.value.copy(o.userData.ink).lerp(o.userData.accent, h); o.uniforms.opacity.value = lerp(o.userData.baseOpacity, 1, h); o.uniforms.thickness.value = lerp(o.userData.baseThick, .0055, h); }
-      g.position.y = g.userData.base.y + (g === groups.drawer || g === groups.desk || g === groups.clock ? 0 : h * .012); }
+      g.position.y = g.userData.base.y + (g === groups.drawer || g === groups.desk || g === groups.clock || g === groups.window || g === groups.lights || g === groups.books ? 0 : h * .012); }
     const dz = (desk.classList.contains('card-open') ? .2 : 0) + drawer.userData.base.z - drawer.position.z;
     if (Math.abs(dz) > .0005) { drawer.position.z += dz * (calm ? 1 : 1 - Math.pow(.001, dt)); moving = true; }
     // living things: steam, swaying leaves, dust in the sunbeam, twinkling lights. All still when motion is paused
@@ -422,6 +449,12 @@ export function startDesk3D(desk) {
         m.position.copy(WIN).lerp(LAND, u.t); m.position.x += Math.cos(u.a) * u.r * .14; m.position.y += Math.sin(u.a * .7) * u.r * .1; m.position.z += Math.sin(u.a) * u.r * .1;
         m.scale.setScalar(u.s); m.material.opacity = P.mote * .9 * Math.sin(u.t * Math.PI) * (1 - .5 * T.light) * T.intro; });
       groups.phones.scale.setScalar(desk.classList.contains('phones-on') ? 1 + Math.sin(now / 160) * .015 : 1);
+      // robot: follows the pointer with its head, blinks, waves while hovered, its antenna pulses while the assistant is open
+      botHead.rotation.y = lerp(botHead.rotation.y, par.x * .9, .08); botHead.rotation.x = lerp(botHead.rotation.x, par.y * .45, .08);
+      if (now > blinkAt) blinkAt = now + 2600 + Math.random() * 3000; const bl = blinkAt - now < 130 ? .15 : 1, chat = panel && panel.dataset.open === 'true';
+      eyes.forEach(e => { e.scale.y = chat ? .55 : bl; });
+      antMat.color.set('#9FD8C4').multiplyScalar(chat ? 1.4 + Math.sin(now / 180) * .6 : 1);
+      armR.rotation.z = .28 + groups.bot.userData.hi * (1.6 + Math.sin(now / 110) * .5);
       moving = true;
     } else { steam.forEach(s => { s.material.opacity = 0; }); motes.forEach(m => { m.material.opacity = 0; }); }
     renderer.render(scene, camera); pin();
@@ -435,6 +468,7 @@ export function startDesk3D(desk) {
   new MutationObserver(kick).observe(desk, { attributes: true, attributeFilter: ['class'] });
   new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(desk);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) kick(); });
+  window.addEventListener('dayphase', () => { ph = phase(); repaint(skyTex); kick(); });
   setInterval(() => { repaint(clockTex); repaint(osTex); const now = phase(); if (now !== ph) { ph = now; repaint(skyTex); } kick(); }, 30000);
   canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); api.suspend(); });
 
@@ -446,11 +480,11 @@ export function startDesk3D(desk) {
     resume() {   // show the room once the line drawing has finished drawing itself in
       if (running || pending) return; pending = true;
       const go = () => { if (!pending) return; if (desk.classList.contains('drawing')) { setTimeout(go, 200); return; }
-        pending = false; running = true; introT0 = performance.now(); size(); desk.classList.add('is-3d'); window.__screenRect = screenRect; kick(); };
+        pending = false; running = true; introT0 = performance.now(); size(); desk.classList.add('is-3d'); window.__screenRect = screenRect; window.__winRect = winRect; kick(); };
       go();
     },
     suspend() { pending = false; running = false; cancelAnimationFrame(raf); raf = 0; desk.classList.remove('is-3d'); unpin(); hot.clear();
-      if (window.__screenRect === screenRect) delete window.__screenRect; },
+      if (window.__screenRect === screenRect) delete window.__screenRect; if (window.__winRect === winRect) delete window.__winRect; },
   };
   api.resume();
   return api;
