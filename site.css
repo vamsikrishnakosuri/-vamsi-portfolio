@@ -81,8 +81,6 @@ header{position:sticky;top:0;z-index:40;background:linear-gradient(var(--pine) 7
 .nav{display:flex;align-items:center;justify-content:space-between;height:72px;padding:0 24px;flex-wrap:nowrap}
 .brand{font-family:var(--serif);font-size:22px;color:var(--cream);text-decoration:none;white-space:nowrap}
 .nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0}
-.nav ul a{color:var(--sand);text-decoration:none;font-size:15px}
-.nav ul a:hover{color:var(--cream)}
 .nav-right{display:flex;align-items:center;gap:10px;position:relative}
 .nav-right .hub{display:flex;list-style:none;margin:0;padding:0}
 .a11y-wrap{position:relative}
@@ -122,12 +120,11 @@ header{position:sticky;top:0;z-index:40;background:linear-gradient(var(--pine) 7
   .nav{height:64px;padding:0 16px}
   .brand{font-size:19px}
   .nav ul{flex-basis:100%;gap:12px;flex-wrap:wrap}
-  .nav ul a{font-size:14px}
   .nav-right{gap:8px}
   .icon-btn{width:44px;height:44px;flex:0 0 44px;min-width:44px}
   .icon-btn svg{width:22px;height:22px}
   .nav-panel{position:fixed;left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom));min-width:0;border-radius:18px}
-  .nav-panel a{padding:13px 14px}
+  .nav-panel a{padding:13px 14px;font-size:20px}
   .set-panel{position:fixed;left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom));width:auto;
     max-height:70dvh;overflow:auto;border-radius:18px}
 }
@@ -785,7 +782,6 @@ html[data-reading] header{position:static;background:#101010;border-bottom:1px s
 html[data-reading] .nav{display:flex;flex-wrap:wrap;height:auto;padding:12px 22px;row-gap:8px;column-gap:16px;justify-content:flex-start;align-items:center}
 html[data-reading] .brand{font-family:var(--sans);font-weight:700;color:#fff;font-size:18px;white-space:nowrap;margin-right:auto;line-height:1.5}
 html[data-reading] .nav ul{flex-wrap:wrap;gap:14px}
-html[data-reading] .nav ul a{color:#cfcfcf}
 html[data-reading] .nav-panel{background:#1b1b1b;border-color:#444}
 html[data-reading] .nav-panel a{font-family:var(--sans);font-size:18px;color:#eee}
 html[data-reading] .nav-panel a:hover{background:#2a2a2a;color:#8FD6FF}
