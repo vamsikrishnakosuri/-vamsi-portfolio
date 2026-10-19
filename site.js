@@ -1,4 +1,5 @@
 import { CLIPS } from './clips.js';
+import { POSTS } from './blog.js';
 /* ---------- fluid orb (WebGL) ---------- */
 function makeOrb(canvas){
   const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:false});
@@ -646,6 +647,20 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
   window.__paintFrame=paintSmall; addEventListener('resize',()=>{clearTimeout(paintSmall.t);paintSmall.t=setTimeout(paintSmall,150);});
   frameBtn.addEventListener('click',()=>{if(window.__art)window.__art.open(frameBtn);});
 
+  // wall clock (3D room): says the visitor's own time, and Vamsi's in Texas
+  const clockBtn=document.getElementById('hsClock'), clockSay=document.getElementById('clockSay');
+  if(clockBtn){const clockLbl=clockBtn.querySelector('.lbl');
+    clockBtn.addEventListener('click',()=>{const t=o=>new Date().toLocaleTimeString('en-US',Object.assign({hour:'numeric',minute:'2-digit'},o));
+      let tx='';try{tx=t({timeZone:'America/Chicago'});}catch(e){}
+      clockLbl.textContent='Your time '+t()+(tx?'  ·  Texas '+tx:'');
+      clockSay.textContent="It's "+t()+' where you are.'+(tx?" In Texas, where I am, it's "+tx+'.':'');
+      clearTimeout(clockBtn.t);clockBtn.t=setTimeout(()=>{clockLbl.textContent='What time is it?';},6000);});}
+
+  // first visit: a soft dot on everything you can click, until the first click
+  let explored=false;try{explored=localStorage.getItem('desk-explored')==='1';}catch(e){}
+  if(!explored){desk.classList.add('hinting');
+    desk.querySelector('.desk-hs').addEventListener('click',()=>{desk.classList.remove('hinting');try{localStorage.setItem('desk-explored','1');}catch(e){}},{once:true});}
+
   // plant: call the butterfly over
   const plantBtn=document.getElementById('hsPlant'), plantLbl=plantBtn.querySelector('.lbl');
   plantBtn.addEventListener('click',()=>{
@@ -757,13 +772,18 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
 
   function tick(){try{clock.textContent=new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',weekday:'short',hour:'numeric',minute:'2-digit'}).format(new Date())+' in Texas';}catch(e){}}
 
-  function focusables(el){return [...el.querySelectorAll('button,a[href],video[controls],summary,[tabindex]:not([tabindex="-1"])')].filter(n=>!n.closest('[hidden]')&&n.offsetParent!==null);}
+  const still=()=>matchMedia('(prefers-reduced-motion: reduce)').matches||root.dataset.mo==='off';
+  const front=document.getElementById('vosFront');
+  function focusables(el){return [...el.querySelectorAll('button,a[href],video[controls],summary,textarea,input,[tabindex]:not([tabindex="-1"])')].filter(n=>!n.closest('[hidden]')&&n.offsetParent!==null);}
 
   function openWindow(key,from){
     if(key==='notes'){close();const a=document.getElementById('notesAdd');if(a)a.click();return;}
     const w=document.getElementById('win-'+key); if(!w)return;
     if(openWin)closeWindow(false);
     openWin=w; winOpener=from||null; w.hidden=false;
+    if(front)front.textContent=w.querySelector('.win-title').textContent;
+    if(from)from.classList.add('running');
+    if(key==='blog')showBlog();
     if(key==='hello'){
       if(!vidReady){vid.src='videos/intro.mp4';
         const t=document.createElement('track');t.kind='captions';t.label='English';t.srclang='en';t.src='videos/intro.vtt';t.default=true;
@@ -771,50 +791,108 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
       vid.currentTime=0;const p=vid.play();if(p&&p.catch)p.catch(()=>{});
     }
     if(key==='github')loadRepos();
-    w.querySelector('.win-x').focus();
+    (key==='write'?document.getElementById('writeText'):w.querySelector('.win-x')).focus();
   }
-  let reposLoaded=false;
+  // GitHub: repositories load live from GitHub's public API, and each README opens right here in the window
+  let reposLoaded=false, repos=[];
+  const ghBody=()=>document.getElementById('win-github').querySelector('.win-body');
   async function loadRepos(){
-    if(reposLoaded)return;const st=document.getElementById('ghStatus'),ul=document.getElementById('ghList');
+    if(reposLoaded){listRepos();return;}const st=document.getElementById('ghStatus'),ul=document.getElementById('ghList');
     ul.innerHTML='<li class="gh-skel"></li><li class="gh-skel"></li><li class="gh-skel"></li>';
     try{
       const r=await fetch('https://api.github.com/users/vamsikrishnakosuri/repos?sort=pushed&per_page=12',{headers:{Accept:'application/vnd.github+json'}});
       if(!r.ok)throw new Error(r.status);
-      const repos=(await r.json()).filter(x=>!x.fork).slice(0,8);
-      ul.innerHTML='';
-      repos.forEach(x=>{const li=document.createElement('li'),a=document.createElement('a');
-        a.href=x.html_url;a.target='_blank';a.rel='noopener';
-        const n=document.createElement('span');n.className='gh-name';n.textContent=x.name;
-        const d=document.createElement('span');d.className='gh-desc';d.textContent=x.description||'No description yet.';
-        const m=document.createElement('span');m.className='gh-meta';
-        const upd=new Date(x.pushed_at).toLocaleDateString('en-US',{month:'short',year:'numeric'});
-        m.textContent=[x.language,x.stargazers_count?('★ '+x.stargazers_count):'','updated '+upd].filter(Boolean).join('  ·  ');
-        a.append(n,d,m);a.setAttribute('aria-label',x.name+'. '+(x.description||'')+' Opens on GitHub in a new tab.');
-        li.appendChild(a);ul.appendChild(li);});
-      st.textContent=repos.length+' public repositories, most recently updated first.';reposLoaded=true;
+      repos=(await r.json()).filter(x=>!x.fork).slice(0,8);reposLoaded=true;
+      st.textContent=repos.length+' public repositories, most recently updated first. Pick one to read it here.';listRepos();
     }catch(e){ul.innerHTML='';st.textContent="Couldn't reach GitHub just now. The profile link below still works.";}
+  }
+  function listRepos(focusName){
+    const body=ghBody();body.querySelectorAll('.gh-repo').forEach(n=>n.remove());
+    body.querySelectorAll('.gh-status,.gh-list,.gh-profile').forEach(n=>n.hidden=false);
+    const ul=document.getElementById('ghList');ul.innerHTML='';
+    repos.forEach(x=>{const li=document.createElement('li'),b=document.createElement('button');b.type='button';b.className='gh-item';
+      const n=document.createElement('span');n.className='gh-name';n.textContent=x.name;
+      const d=document.createElement('span');d.className='gh-desc';d.textContent=x.description||'No description yet.';
+      const m=document.createElement('span');m.className='gh-meta';
+      const upd=new Date(x.pushed_at).toLocaleDateString('en-US',{month:'short',year:'numeric'});
+      m.textContent=[x.language,x.stargazers_count?('\u2605 '+x.stargazers_count):'','updated '+upd].filter(Boolean).join('  \u00b7  ');
+      b.append(n,d,m);b.addEventListener('click',()=>showRepo(x));li.appendChild(b);ul.appendChild(li);
+      if(focusName===x.name)setTimeout(()=>b.focus());});
+  }
+  let purify=null;
+  async function showRepo(x){
+    const body=ghBody();body.querySelectorAll('.gh-status,.gh-list,.gh-profile').forEach(n=>n.hidden=true);
+    const box=document.createElement('div');box.className='gh-repo';
+    const back=document.createElement('button');back.type='button';back.className='blog-back';back.textContent='\u2190 All repositories';
+    back.addEventListener('click',()=>listRepos(x.name));
+    const h=document.createElement('h3');h.className='gh-repo-name';h.textContent=x.name;h.tabIndex=-1;
+    const meta=document.createElement('p');meta.className='gh-meta';meta.textContent=[x.language,x.stargazers_count?('\u2605 '+x.stargazers_count):'',x.license&&x.license.spdx_id&&x.license.spdx_id!=='NOASSERTION'?x.license.spdx_id:''].filter(Boolean).join('  \u00b7  ');
+    const out=document.createElement('a');out.href=x.html_url;out.target='_blank';out.rel='noopener';out.className='gh-out';out.textContent='Open on GitHub (new tab)';
+    const readme=document.createElement('div');readme.className='gh-readme';readme.textContent='Loading the README\u2026';
+    box.append(back,h,meta,out,readme);body.appendChild(box);body.scrollTop=0;h.focus();
+    try{
+      const [r,mod]=await Promise.all([fetch('https://api.github.com/repos/'+x.full_name+'/readme',{headers:{Accept:'application/vnd.github.html+json'}}),purify?null:import('dompurify')]);
+      if(mod)purify=mod.default;
+      if(!r.ok){readme.textContent=r.status===404?'This repository has no README yet.':"Couldn't load the README just now.";return;}
+      const html=purify.sanitize(await r.text(),{FORBID_TAGS:['style','form','input','button','iframe'],FORBID_ATTR:['style']});
+      readme.innerHTML=html;readme.querySelectorAll('a.anchor,.anchor,svg.octicon').forEach(n=>n.remove());
+      // relative images and links point at the repository itself
+      const raw='https://raw.githubusercontent.com/'+x.full_name+'/HEAD/';
+      readme.querySelectorAll('img').forEach(i=>{const s=i.getAttribute('src')||'';if(!/^(https?:|data:)/.test(s))i.src=raw+s.replace(/^\.?\//,'');i.loading='lazy';if(!i.hasAttribute('alt'))i.alt='';});
+      readme.querySelectorAll('a[href]').forEach(a=>{const u=a.getAttribute('href');if(u.startsWith('#'))return;
+        if(!/^(https?:|mailto:)/.test(u))a.href=x.html_url+'/blob/HEAD/'+u.replace(/^\.?\//,'');a.target='_blank';a.rel='noopener';});
+      readme.querySelectorAll('h1,h2,h3,h4').forEach(n=>{const lv=Math.min(6,+n.tagName[1]+3),r2=document.createElement('p');r2.setAttribute('role','heading');r2.setAttribute('aria-level',lv);r2.className='gh-h';r2.innerHTML=n.innerHTML;n.replaceWith(r2);});
+    }catch(e){readme.textContent="Couldn't load the README just now.";}
   }
   function closeWindow(refocus=true){
     if(!openWin)return;
     if(openWin.id==='win-hello')vid.pause();
     if(openWin.id==='win-web')document.getElementById('webFrame').setAttribute('src','about:blank');
-    openWin.hidden=true;const back=winOpener;openWin=null;winOpener=null;
+    openWin.hidden=true;openWin.classList.remove('is-max','dragged');openWin.style.left=openWin.style.top='';
+    const mx=openWin.querySelector('.win-max');if(mx)mx.setAttribute('aria-pressed','false');
+    if(winOpener)winOpener.classList.remove('running');if(front)front.textContent='Desktop';
+    const back=winOpener;openWin=null;winOpener=null;
     if(refocus&&back)back.focus();
   }
   function open(key,from){
     if(window.__closeDeskPanels)window.__closeDeskPanels();
     opener=from||document.activeElement;
-    const hi=vos.querySelector('.vos-hi-big');if(hi)hi.textContent=matchMedia('(max-width:680px)').matches?'Hi, this is my phone.':'Hi, this is my computer.';
-    vos.hidden=false;vos.classList.add('opening');setTimeout(()=>vos.classList.remove('opening'),450);
+    const ph=matchMedia('(max-width:680px)').matches,hi=vos.querySelector('.vos-hi-big'),tip=vos.querySelector('.vos-tip');
+    if(hi)hi.textContent=ph?'Hi, this is my phone.':'Hi, this is my computer.';
+    if(tip)tip.textContent=ph?'Tap an app or a file to open it.':'Apps are in the dock, files are on the right. Esc closes a window, then the computer.';
+    vos.hidden=false;paintWall();
+    const r=still()?null:screenRect();
+    if(r)zoom(r,false);else{vos.classList.add('opening');setTimeout(()=>vos.classList.remove('opening'),450);}
     document.body.style.overflow='hidden';
     tick();clockT=setInterval(tick,30000);
     if(key)openWindow(key,vos.querySelector('[data-open="'+key+'"]'));
     else document.getElementById('vosClose').focus();
   }
   function close(){
-    closeWindow(false);vos.hidden=true;document.body.style.overflow='';clearInterval(clockT);
-    if(opener&&opener.focus)opener.focus();
+    closeWindow(false);clearInterval(clockT);
+    const done=()=>{vos.hidden=true;if(opener&&opener.focus)opener.focus();};
+    document.body.style.overflow='';const r=still()?null:screenRect();
+    if(r)zoom(r,true,done);else done();
   }
+  // VamsiOS grows out of the monitor (or phone) screen on the desk, and shrinks back into it
+  function screenRect(){
+    let r=null;try{r=window.__screenRect?window.__screenRect():null;}catch(e){}
+    if(!r){const s=document.querySelector('.desk-screen');if(s&&s.offsetParent&&getComputedStyle(s).visibility!=='hidden')r=s.getBoundingClientRect();}
+    if(!r||r.width<20||r.top+r.height<0||r.top>innerHeight)return null;return r;}
+  function zoom(r,out,done){
+    const sx=r.width/innerWidth, sy=r.height/innerHeight, small='translate('+r.left+'px,'+r.top+'px) scale('+sx+','+sy+')', rad=(8/sx)+'px';
+    vos.classList.add('zooming');vos.style.transformOrigin='0 0';vos.style.transition='none';
+    vos.style.transform=out?'none':small;vos.style.borderRadius=out?'0':rad;vos.getBoundingClientRect();
+    vos.style.transition='transform .6s cubic-bezier(.2,.8,.2,1),border-radius .6s cubic-bezier(.2,.8,.2,1)';
+    vos.style.transform=out?small:'none';vos.style.borderRadius=out?rad:'0';
+    let ended=false;const end=()=>{if(ended)return;ended=true;vos.classList.remove('zooming');
+      ['transform','transition','borderRadius','transformOrigin'].forEach(k=>vos.style[k]='');if(done)done();};
+    vos.addEventListener('transitionend',function te(e){if(e.target===vos&&e.propertyName==='transform'){vos.removeEventListener('transitionend',te);end();}});
+    setTimeout(end,800);}
+  // wallpaper: the painted forest, the same one as on the wall of the room
+  const wall=document.getElementById('vosWall');
+  function paintWall(){if(!wall||!window.__forest)return;const d=Math.min(1.5,devicePixelRatio||1),W=Math.round(innerWidth*d),H=Math.round(innerHeight*d);
+    if(wall.width===W&&wall.height===H)return;wall.width=W;wall.height=H;window.__forest(wall,1,23);}
   window.__vos={open,close};
 
   vos.querySelectorAll('.vos-ic[data-open]').forEach(b=>b.addEventListener('click',()=>openWindow(b.dataset.open,b)));
@@ -835,8 +913,54 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
     if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
     else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
   });
+  // window controls: close and enlarge, top left of each title bar
+  vos.querySelectorAll('.vos-win').forEach(w=>{const bar=w.querySelector('.win-bar'),x=bar.querySelector('.win-x'),ctl=document.createElement('div');
+    ctl.className='win-ctl';const mx=document.createElement('button');mx.type='button';mx.className='win-max';mx.textContent='+';
+    mx.setAttribute('aria-label','Enlarge '+w.querySelector('.win-title').textContent+' window');mx.setAttribute('aria-pressed','false');
+    mx.addEventListener('click',()=>{const on=!w.classList.contains('is-max');w.classList.toggle('is-max',on);w.classList.remove('dragged');w.style.left=w.style.top='';mx.setAttribute('aria-pressed',on?'true':'false');});
+    ctl.append(x,mx);bar.prepend(ctl);
+    // drag a window by its title bar (pointer only; keyboard users never need to move windows)
+    bar.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button,a')||w.classList.contains('is-max')||matchMedia('(max-width:680px)').matches)return;
+      const r=w.getBoundingClientRect(),ox=e.clientX-r.left,oy=e.clientY-r.top;w.classList.add('dragged');w.style.left=r.left+'px';w.style.top=r.top+'px';bar.setPointerCapture(e.pointerId);
+      const mv=ev=>{w.style.left=Math.max(-r.width+80,Math.min(innerWidth-80,ev.clientX-ox))+'px';w.style.top=Math.max(40,Math.min(innerHeight-60,ev.clientY-oy))+'px';};
+      const up=()=>{bar.removeEventListener('pointermove',mv);bar.removeEventListener('pointerup',up);};
+      bar.addEventListener('pointermove',mv);bar.addEventListener('pointerup',up);});});
+
+  // Blog: a list of posts, then one post. Drafts show only on preview links, never on the live domain
+  const blog=document.getElementById('blogBody');
+  const live=/(^|\.)vamsikrishnakosuri\.com$/.test(location.hostname);
+  const posts=(Array.isArray(POSTS)?POSTS:[]).filter(p=>!p.draft||!live);
+  const fmt=d=>{try{return new Date(d+'T12:00:00').toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});}catch(e){return d;}};
+  function showBlog(){if(!blog)return;blog.innerHTML='';
+    if(!posts.length){const p=document.createElement('p');p.textContent='No posts yet. The first one is on its way.';blog.appendChild(p);return;}
+    const ul=document.createElement('ul');ul.className='blog-list';
+    posts.forEach(p=>{const li=document.createElement('li'),b=document.createElement('button');b.type='button';b.className='blog-card';
+      const h=document.createElement('h3');h.textContent=p.title;const m=document.createElement('p');m.className='blog-meta';m.textContent=fmt(p.date);
+      if(p.draft){const d=document.createElement('span');d.className='blog-draft';d.textContent='Draft';m.appendChild(d);}
+      const sm=document.createElement('p');sm.textContent=p.summary;b.append(h,m,sm);b.addEventListener('click',()=>showPost(p));li.appendChild(b);ul.appendChild(li);});
+    blog.appendChild(ul);}
+  function showPost(p){blog.innerHTML='';const back=document.createElement('button');back.type='button';back.className='blog-back';back.textContent='\u2190 All posts';
+    back.addEventListener('click',()=>{showBlog();const c=blog.querySelector('.blog-card');if(c)c.focus();});
+    const art=document.createElement('article');art.className='blog-article';const h=document.createElement('h3');h.textContent=p.title;h.tabIndex=-1;
+    const m=document.createElement('p');m.className='blog-meta';m.textContent=fmt(p.date)+(p.draft?'  \u00b7  Draft':'');art.append(h,m);
+    p.body.forEach(t=>{const q=document.createElement('p');q.textContent=t;art.appendChild(q);});blog.append(back,art);blog.scrollTop=0;h.focus();}
+
+  // Write to me: the same mail endpoint as the sticky notes
+  const wf=document.getElementById('writeForm');
+  if(wf)wf.addEventListener('submit',async e=>{e.preventDefault();
+    const txt=document.getElementById('writeText'),mail=document.getElementById('writeMail'),st=document.getElementById('writeStatus'),btn=wf.querySelector('.write-send');
+    const text=txt.value.trim();if(!text){st.textContent='Write a message first.';txt.focus();return;}
+    btn.disabled=true;st.textContent='Sending\u2026';
+    try{const r=await fetch('/api/note',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,email:mail.value.trim(),page:'VamsiOS: Write to me'})});
+      const d=await r.json().catch(()=>({}));
+      if(r.ok&&d.ok){st.textContent='Sent. Thank you, I read every message.';txt.value='';mail.value='';}
+      else if(r.status===501){st.innerHTML='';const a=document.createElement('a');a.href='mailto:kosurivamsi5@gmail.com?subject='+encodeURIComponent('Hello from your website')+'&body='+encodeURIComponent(text);a.textContent='email it instead';st.append('Messages are not set up yet, ',a,'.');}
+      else st.textContent=(d.error||'Could not send')+'. You can also email kosurivamsi5@gmail.com.';
+    }catch(err){st.textContent='Network problem. Try again in a moment.';}
+    btn.disabled=false;});
+
   // clicking the empty desktop closes an open window
-  vos.addEventListener('click',e=>{if(openWin&&!openWin.contains(e.target)&&!e.target.closest('.vos-ic,.vos-bar'))closeWindow();});
+  vos.addEventListener('click',e=>{const path=e.composedPath();if(openWin&&!path.includes(openWin)&&!path.some(n=>n.closest&&n.closest('.vos-ic,.vos-bar')))closeWindow();});
 })();
 
 

@@ -272,7 +272,9 @@
       <button type="button" class="hs hs-note" id="hsNote"><span class="lbl">Leave me a note</span></button>
       <button type="button" class="hs hs-drawer" id="hsDrawer" aria-expanded="false" aria-controls="deskCard"><span class="lbl">My card</span></button>
       <button type="button" class="hs hs-lamp" id="hsLamp" aria-pressed="false"><span class="lbl">Lights on</span></button>
+      <button type="button" class="hs hs-clock" id="hsClock" aria-label="Wall clock: what time is it for you?"><span class="lbl">What time is it?</span></button>
     </div>
+    <p class="sr-only" id="clockSay" aria-live="polite"></p>
   </div>
 
   <div class="desk-audio desk-panel" id="deskAudio" role="region" aria-label="Audio-cue demo" hidden>
@@ -579,25 +581,32 @@
   <button type="button" class="art-x" id="artClose" aria-label="Close the painting">&times;</button>
 </div>
 <div class="vos" id="vos" role="dialog" aria-modal="true" aria-labelledby="vosTitle" hidden>
+  <canvas class="vos-wall" id="vosWall" aria-hidden="true"></canvas>
   <div class="vos-bar">
+    <span class="vos-logo" aria-hidden="true"></span>
     <span class="vos-name" id="vosTitle">VamsiOS</span>
+    <span class="vos-front" id="vosFront" aria-hidden="true">Desktop</span>
+    <span class="vos-status" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2.5 9a14 14 0 0 1 19 0M5.5 12.5a9.5 9.5 0 0 1 13 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg><svg viewBox="0 0 24 24"><rect x="2.5" y="7" width="17" height="10" rx="2.5"/><path d="M21.5 10.5v3"/><rect x="5" y="9.5" width="10" height="5" rx="1" fill="currentColor" stroke="none"/></svg></span>
     <span class="vos-clock" id="vosClock"></span>
     <button type="button" class="vos-x" id="vosClose" aria-label="Close my computer and go back to the desk">&times;</button>
   </div>
-  <ul class="vos-desk" aria-label="Apps and files">
-    <li><button type="button" class="vos-ic vos-app" data-embed="https://strangers-connect.vercel.app" data-name="Strangers Connect" aria-label="Strangers Connect: real-time video chat" style="--a1:#F6B65C;--a2:#E0703E"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="12" width="21" height="15" rx="4" class="f"/><path d="M13 27 L11.5 33 L18 27" class="f"/><rect x="19" y="20" width="21" height="14" rx="4"/><path d="M35 34 L36.5 39 L30 34"/></svg></span><span>Strangers Connect</span></button></li>
-    <li><button type="button" class="vos-ic vos-app" data-embed="https://rubelhassan.github.io/eaf-blockly/" data-name="Accessible Blockly" aria-label="Accessible Blockly: keyboard and audio-cue demo" style="--a1:#8FB7F2;--a2:#4F6FD6"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="10" width="20" height="9" rx="3" class="f"/><rect x="15" y="21" width="24" height="9" rx="3"/><rect x="9" y="32" width="16" height="7" rx="3" class="f"/></svg></span><span>Accessible Blockly</span></button></li>
-    <li><button type="button" class="vos-ic vos-app" data-open="aiac" data-app="aiac" style="--a1:#7FD9C0;--a2:#2A9478"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 24 C12 14 36 14 42 24 C36 34 12 34 6 24 Z"/><circle cx="24" cy="24" r="6" class="f"/></svg></span><span>AI-AC</span></button></li>
-    <li><button type="button" class="vos-ic vos-app" data-open="linkedin" data-app="linkedin" style="--a1:#5E9BE0;--a2:#24589E"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="13" width="32" height="24" rx="4"/><circle cx="18" cy="23" r="4" class="f"/><path d="M11.5 33 C12.5 28.5 23.5 28.5 24.5 33" class="f"/><path d="M28 21 H35 M28 26 H35 M28 31 H32"/></svg></span><span>LinkedIn</span></button></li>
-    <li><button type="button" class="vos-ic vos-app" data-open="github" data-app="github" style="--a1:#5B6470;--a2:#262B31"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M18 15 L9 24 L18 33 M30 15 L39 24 L30 33 M27 12 L21 36"/></svg></span><span>GitHub</span></button></li>
-    <li><button type="button" class="vos-ic vos-app is-locked" data-open="soon" style="--a1:#B9A7E6;--a2:#6C5AA8" aria-label="Adaptive tool for neurodivergent learners: coming soon"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="11" width="18" height="8" rx="3" class="f"/><rect x="15" y="22" width="20" height="8" rx="3"/></svg><span class="app-lock"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="15" y="22" width="18" height="15" rx="3" class="f"/><path d="M19 22 V17 a5 5 0 0 1 10 0 V22"/></svg></span></span><span>Adaptive tool</span></button></li>
-    <li><button type="button" class="vos-ic vos-file" data-open="hello"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="11" width="34" height="26" rx="4"/><path d="M21 19 L29 24 L21 29 Z"/></svg><span>hello.mp4</span></button></li>
-    <li><button type="button" class="vos-ic vos-file" data-open="papers"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 14 V36 Q6 39 9 39 H39 Q42 39 42 36 V18 Q42 15 39 15 H23 L19 10 H9 Q6 10 6 13 Z"/></svg><span>Papers</span></button></li>
-    <li class="vos-resume" hidden><button type="button" class="vos-ic vos-file" data-open="resume"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6 H29 L37 14 V42 H12 Z"/><path d="M29 6 V14 H37 M17 22 H32 M17 28 H32 M17 34 H26"/></svg><span>Resume.pdf</span></button></li>
-    <li><button type="button" class="vos-ic vos-file" data-open="notes"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 9 H39 V31 L31 39 H9 Z"/><path d="M31 39 V31 H39 M15 18 H33 M15 24 H29"/></svg><span>notes.txt</span></button></li>
+  <div class="vos-hi"><p class="vos-hi-big" aria-hidden="true">Hi, this is my computer.</p><p class="vos-tip">Apps are in the dock, files are on the right. Esc closes a window, then the computer.</p></div>
+  <ul class="vos-files" aria-label="Files">
+    <li><button type="button" class="vos-ic vos-file" data-open="hello"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="11" width="34" height="26" rx="4"/><path d="M21 19 L29 24 L21 29 Z"/></svg><span class="vos-lbl">hello.mp4</span></button></li>
+    <li><button type="button" class="vos-ic vos-file" data-open="papers"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 14 V36 Q6 39 9 39 H39 Q42 39 42 36 V18 Q42 15 39 15 H23 L19 10 H9 Q6 10 6 13 Z"/></svg><span class="vos-lbl">Papers</span></button></li>
+    <li class="vos-resume" hidden><button type="button" class="vos-ic vos-file" data-open="resume"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6 H29 L37 14 V42 H12 Z"/><path d="M29 6 V14 H37 M17 22 H32 M17 28 H32 M17 34 H26"/></svg><span class="vos-lbl">Resume.pdf</span></button></li>
+    <li><button type="button" class="vos-ic vos-file" data-open="notes"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 9 H39 V31 L31 39 H9 Z"/><path d="M31 39 V31 H39 M15 18 H33 M15 24 H29"/></svg><span class="vos-lbl">notes.txt</span></button></li>
   </ul>
-  <div class="vos-hi" aria-hidden="true"><p class="vos-hi-big">Hi, this is my computer.</p><p>The apps open things I've built. The files are mine to share.</p></div>
-  <p class="vos-tip">Pick a file. Esc closes a window, then the computer.</p>
+  <nav class="vos-dock" aria-label="Apps"><ul>
+    <li><button type="button" class="vos-ic vos-app" data-embed="https://strangers-connect.vercel.app" data-name="Strangers Connect" aria-label="Strangers Connect: real-time video chat" style="--a1:#F6B65C;--a2:#E0703E"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="12" width="21" height="15" rx="4" class="f"/><path d="M13 27 L11.5 33 L18 27" class="f"/><rect x="19" y="20" width="21" height="14" rx="4"/><path d="M35 34 L36.5 39 L30 34"/></svg></span><span class="vos-lbl">Strangers Connect</span></button></li>
+    <li><button type="button" class="vos-ic vos-app" data-embed="https://rubelhassan.github.io/eaf-blockly/" data-name="Accessible Blockly" aria-label="Accessible Blockly: keyboard and audio-cue demo" style="--a1:#8FB7F2;--a2:#4F6FD6"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="10" width="20" height="9" rx="3" class="f"/><rect x="15" y="21" width="24" height="9" rx="3"/><rect x="9" y="32" width="16" height="7" rx="3" class="f"/></svg></span><span class="vos-lbl">Accessible Blockly</span></button></li>
+    <li><button type="button" class="vos-ic vos-app" data-open="aiac" data-app="aiac" style="--a1:#7FD9C0;--a2:#2A9478"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 24 C12 14 36 14 42 24 C36 34 12 34 6 24 Z"/><circle cx="24" cy="24" r="6" class="f"/></svg></span><span class="vos-lbl">AI-AC</span></button></li>
+    <li><button type="button" class="vos-ic vos-app" data-open="blog" style="--a1:#F2A7B5;--a2:#C0566F"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M13 7 H29 L37 15 V41 H13 Z" class="f"/><path d="M18 22 H32 M18 28 H32 M18 34 H26" stroke="#C0566F"/></svg></span><span class="vos-lbl">Blog</span></button></li>
+    <li><button type="button" class="vos-ic vos-app" data-open="write" style="--a1:#F3D27A;--a2:#C9932E"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="12" width="34" height="24" rx="4" class="f"/><path d="M8 14 L24 26 L40 14" stroke="#C9932E"/></svg></span><span class="vos-lbl">Write to me</span></button></li>
+    <li><button type="button" class="vos-ic vos-app" data-open="linkedin" data-app="linkedin" style="--a1:#5E9BE0;--a2:#24589E"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="13" width="32" height="24" rx="4"/><circle cx="18" cy="23" r="4" class="f"/><path d="M11.5 33 C12.5 28.5 23.5 28.5 24.5 33" class="f"/><path d="M28 21 H35 M28 26 H35 M28 31 H32"/></svg></span><span class="vos-lbl">LinkedIn</span></button></li>
+    <li><button type="button" class="vos-ic vos-app" data-open="github" data-app="github" style="--a1:#5B6470;--a2:#262B31"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M18 15 L9 24 L18 33 M30 15 L39 24 L30 33 M27 12 L21 36"/></svg></span><span class="vos-lbl">GitHub</span></button></li>
+    <li><button type="button" class="vos-ic vos-app is-locked" data-open="soon" style="--a1:#B9A7E6;--a2:#6C5AA8" aria-label="Adaptive tool for neurodivergent learners: coming soon"><span class="app-tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="11" width="18" height="8" rx="3" class="f"/><rect x="15" y="22" width="20" height="8" rx="3"/></svg><span class="app-lock"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="15" y="22" width="18" height="15" rx="3" class="f"/><path d="M19 22 V17 a5 5 0 0 1 10 0 V22"/></svg></span></span><span class="vos-lbl">Adaptive tool</span></button></li>
+  </ul></nav>
   
   <section class="vos-win" id="win-hello" role="dialog" aria-modal="true" aria-labelledby="wt-hello" hidden>
     <header class="win-bar"><h2 class="win-title" id="wt-hello">hello.mp4</h2><button type="button" class="win-x" aria-label="Close hello.mp4">&times;</button></header>
@@ -621,13 +630,13 @@
       </ul>
       <h4 class="li-h">Education</h4>
       <ul class="li-list"><li><strong>PhD, Computer Science and Engineering</strong><span>University of North Texas. Advised by Dr. Stephanie Ludi.</span></li></ul>
-      <p class="win-links li-out"><a href="https://www.linkedin.com/in/vamsikrishnakosuri/" target="_blank" rel="noopener">Open full profile on LinkedIn</a></p></div>
+      <p class="win-links li-out"><a href="https://www.linkedin.com/in/vamsikrishnakosuri/" target="_blank" rel="noopener">Open my full profile on linkedin.com (new tab)</a></p></div>
   </section>
   <section class="vos-win" id="win-github" role="dialog" aria-modal="true" aria-labelledby="wt-github" hidden>
     <header class="win-bar"><h2 class="win-title" id="wt-github">GitHub</h2><button type="button" class="win-x" aria-label="Close GitHub">&times;</button></header>
     <div class="win-body"><div class="gh-status" id="ghStatus" role="status">Loading repositories from GitHub…</div>
       <ul class="gh-list" id="ghList" aria-label="Public repositories"></ul>
-      <p class="win-links"><a href="https://github.com/vamsikrishnakosuri" target="_blank" rel="noopener">Open my GitHub profile</a></p></div>
+      <p class="win-links gh-profile"><a href="https://github.com/vamsikrishnakosuri" target="_blank" rel="noopener">Open my GitHub profile (new tab)</a></p></div>
   </section>
   <section class="vos-win" id="win-aiac" role="dialog" aria-modal="true" aria-labelledby="wt-aiac" hidden>
     <header class="win-bar"><h2 class="win-title" id="wt-aiac">AI-AC</h2><button type="button" class="win-x" aria-label="Close AI-AC">&times;</button></header>
@@ -647,6 +656,23 @@
     </ul></div>
   </section>
   
+  <section class="vos-win" id="win-blog" role="dialog" aria-modal="true" aria-labelledby="wt-blog" hidden>
+    <header class="win-bar"><h2 class="win-title" id="wt-blog">Blog</h2><button type="button" class="win-x" aria-label="Close Blog">&times;</button></header>
+    <div class="win-body blog-body" id="blogBody"></div>
+  </section>
+
+  <section class="vos-win" id="win-write" role="dialog" aria-modal="true" aria-labelledby="wt-write" hidden>
+    <header class="win-bar"><h2 class="win-title" id="wt-write">Write to me</h2><button type="button" class="win-x" aria-label="Close Write to me">&times;</button></header>
+    <div class="win-body"><form class="write-form" id="writeForm" novalidate>
+      <p class="write-to">To: <strong>Vamsi Krishna Kosuri</strong>. A question, an idea, a collaboration, or just hello.</p>
+      <label for="writeText">Your message</label>
+      <textarea id="writeText" rows="7" maxlength="1200" required></textarea>
+      <label for="writeMail">Your email <span>(optional, so I can reply)</span></label>
+      <input id="writeMail" type="email" autocomplete="email" maxlength="120">
+      <div class="write-foot"><button type="submit" class="write-send">Send</button><p class="write-status" id="writeStatus" role="status"></p></div>
+    </form></div>
+  </section>
+
   <section class="vos-win" id="win-resume" role="dialog" aria-modal="true" aria-labelledby="wt-resume" hidden>
     <header class="win-bar"><h2 class="win-title" id="wt-resume">Resume.pdf</h2><button type="button" class="win-x" aria-label="Close Resume.pdf">&times;</button></header>
     <div class="win-body"><p>My resume as a PDF.</p><p class="win-links"><a href="resume.pdf" target="_blank" rel="noopener">Open resume</a><a href="resume.pdf" download>Download</a></p></div>
