@@ -520,11 +520,11 @@ html.desk-in-view .lamp,html.desk-in-view .lamp-hint{opacity:0;pointer-events:no
 @media (max-width:720px){.lamp{height:112px;width:34px;right:10px}.lamp-hint{display:none}}
 
 /* butterfly */
-.bfly{position:fixed;left:0;top:0;width:46px;height:37px;z-index:9;pointer-events:none;opacity:0;transition:opacity .8s;will-change:transform;filter:drop-shadow(0 4px 4px rgba(0,0,0,.28))}
-.bfly.on{opacity:.96}
+.bfly{position:fixed;left:0;top:0;width:31px;height:25px;z-index:9;pointer-events:none;opacity:0;transition:opacity .8s;will-change:transform;filter:drop-shadow(0 2px 3px rgba(0,0,0,.22))}
+.bfly.on{opacity:.88}
 .bfly.landed{opacity:.95!important}
 .bfly svg{width:100%;height:100%;display:block}
-.bfly .bw{transform-origin:60px 48px;animation:flap .3s ease-in-out infinite alternate}
+.bfly .bw{transform-origin:60px 48px;animation:flap .38s ease-in-out infinite alternate}
 .bfly .bw-r{animation-name:flapR}
 .bfly.landed .bw{animation-duration:3s}
 @keyframes flap{from{transform:scaleX(1)}to{transform:scaleX(.28)}}

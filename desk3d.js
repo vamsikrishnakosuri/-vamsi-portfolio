@@ -118,7 +118,7 @@ function volumeMat(color) {   // soft additive light volume: lamp cone, sunbeam 
 }
 /* a leaf: pointed oval, folded along the midrib and curving down toward the tip, darker at the base */
 function leafGeometry(len, wid, curl, fold) {
-  const SL = 12, SW = 6, pos = [], col = [], idx = [], base = new THREE.Color('#2E5E46'), tip = new THREE.Color('#79B58C'), rib = new THREE.Color('#A9D6B4'), c = new THREE.Color();
+  const SL = 12, SW = 6, pos = [], col = [], idx = [], base = new THREE.Color('#3D6A53'), tip = new THREE.Color('#8BB898'), rib = new THREE.Color('#B3D3BB'), c = new THREE.Color();
   for (let i = 0; i <= SL; i++) { const t = i / SL, w = wid * Math.pow(Math.sin(Math.PI * Math.min(t * 1.05, 1)), .85) * (1 - .25 * t);
     for (let j = 0; j <= SW; j++) { const s = j / SW * 2 - 1;
       pos.push(s * w, t * len - curl * len * t * t * .6, curl * len * t * t + fold * Math.abs(s) * w);
@@ -354,10 +354,12 @@ export function startDesk3D(desk) {
       o.uniforms.color.value.copy(ink); o.userData.ink = ink.clone(); o.userData.accent = accent.clone();
       o.uniforms.opacity.value = hc ? 1 : light ? .5 : .42; o.userData.baseOpacity = o.uniforms.opacity.value; o.userData.baseThick = hc ? .005 : .0032; });
   }
+  const WOOD = [[mat('desk'), COL.desk, '#CDB38C'], [mat('leg'), COL.leg, '#A58C6A'], [mat('front'), COL.front, '#C4A67E'], [mat('handle'), COL.handle, '#3E5149']];
   const cOff = new THREE.Color('#5C5A52'), cOn = new THREE.Color('#FFF6DE'), tmpC = new THREE.Color();
   function applyLight(now) {   // the room by time of day, then the lamp (light theme) on top
     const l = T.light, P = PH[ph], k = T.intro, lampOn = T.lamp;
     wallMat.color.set(ph === 'day' ? '#2F4F44' : ph === 'morning' ? '#2A463D' : ph === 'dusk' ? '#26392F' : '#163029').lerp(tmpC.set('#EFE8D8'), l); floorMat.color.set('#0E221E').lerp(tmpC.set('#D9CFB8'), l);
+    WOOD.forEach(([m, dark, light]) => m.color.set(dark).lerp(tmpC.set(light), l));
     wallMat.emissive.set('#F4EFE4'); wallMat.emissiveIntensity = .2 * l * k; floorMat.emissive.set('#F4EFE4'); floorMat.emissiveIntensity = .1 * l * k;
     hemi.intensity = (P.hemi + .55 * l) * k; hemi.color.set('#9FC4BA').lerp(tmpC.set('#FFF1DA'), l);
     key.color.set(P.key); key.intensity = P.keyI * (1 - .25 * l) * k;
@@ -388,12 +390,15 @@ export function startDesk3D(desk) {
     for (const p of PINS) {
       const r = project(boundsOf(p.g), W, H), pad = 4, minS = 28, cx = (r.x0 + r.x1) / 2, cy = (r.y0 + r.y1) / 2,
         w = Math.max(minS, r.x1 - r.x0 + pad * 2), h = Math.max(minS, r.y1 - r.y0 + pad * 2);
-      const s = p.el.style; s.left = ((cx - w / 2) / W * 100).toFixed(3) + '%'; s.top = ((cy - h / 2) / H * 100).toFixed(3) + '%';
-      s.width = (w / W * 100).toFixed(3) + '%'; s.height = (h / H * 100).toFixed(3) + '%'; placed.push([w * h, s]);
+      const s = p.el.style, q = [cx - w / 2, cy - h / 2, w, h], o = p.last;
+      // only move a hotspot when its object really moved, so swaying leaves or steam never make it jitter
+      if (!o || o.W !== W || q.some((n, i) => Math.abs(n - o.q[i]) > 3)) { p.last = { q, W };
+        s.left = (q[0] / W * 100).toFixed(3) + '%'; s.top = (q[1] / H * 100).toFixed(3) + '%'; s.width = (w / W * 100).toFixed(3) + '%'; s.height = (h / H * 100).toFixed(3) + '%'; }
+      placed.push([w * h, s]);
     }
     placed.sort((a, b) => b[0] - a[0]).forEach(([, s], i) => { s.zIndex = 3 + i; });
   }
-  function unpin() { PINS.forEach(p => { const s = p.el.style; s.left = s.top = s.width = s.height = s.zIndex = ''; }); }
+  function unpin() { PINS.forEach(p => { const s = p.el.style; p.last = null; s.left = s.top = s.width = s.height = s.zIndex = ''; }); }
   /* VamsiOS grows out of the monitor screen: site.js asks where that screen is on the page */
   function winRect() { const W = canvas.clientWidth, H = canvas.clientHeight, c = canvas.getBoundingClientRect();
     camera.updateMatrixWorld(); sky.geometry.computeBoundingBox(); tmpBox.copy(sky.geometry.boundingBox).applyMatrix4(sky.matrixWorld);

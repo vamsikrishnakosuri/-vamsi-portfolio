@@ -219,11 +219,11 @@ document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>
   function flowerPos(){
     const call=window.__bflyCall;
     if(call&&Date.now()<call.until){const r=call.el.getBoundingClientRect();
-      if(r.bottom>0&&r.top<innerHeight)return {x:r.left+r.width/2-23,y:r.top+r.height*.08-8};}
+      if(r.bottom>0&&r.top<innerHeight)return {x:r.left+r.width/2-15,y:r.top+r.height*.08-5};}
     if(!flower)return null;
     const r=flower.getBoundingClientRect();
     if(r.top>innerHeight-60||r.bottom<0)return null;
-    return {x:r.left+r.width/2-23, y:r.top-30};
+    return {x:r.left+r.width/2-15, y:r.top-20};
   }
 
   addEventListener('scroll',()=>{idle=0;if(!shown){shown=true;el.classList.add('on');}},{passive:true});
